@@ -1,0 +1,16 @@
+{% block footer %}
+<!--begin::Footer-->
+<footer class="app-footer">
+    <!--begin::To the end-->
+    <div class="float-end d-none d-sm-inline">Painel administrativo.</div>
+    <!--end::To the end-->
+    <!--begin::Copyright-->
+    <strong>
+        Copyright &copy; {{info.anoAtual}} <a href="https://www.desv.com.br" class="text-decoration-none">www.desv.com.br</a>.
+    </strong>
+    Todos os direitos reservados.
+    <!--end::Copyright-->
+    {% block end %}{% endblock %}
+</footer>
+<!--end::Footer-->
+{% endblock %}

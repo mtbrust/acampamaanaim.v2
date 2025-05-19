@@ -1,0 +1,8 @@
+/* Retirar depois da base pronta. */
+.default,
+#content_page {
+    margin: 10px;
+    padding: 10px;
+    box-shadow: #000 0 0 7px -4px;
+    border-radius: 10px;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+
+<head>
+    <!-- Head -->
+    {% block head %}{% endblock %}
+
+    <!-- ESTILOS CSS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in styles.libs %}
+    <link href="{{base.dir_relative}}template/assets/libs/{{item}}" rel="stylesheet">
+    {% endfor %}
+    <!-- CSS -->
+    {% for item in styles.css %}
+    <link href="{{base.dir_relative}}template/assets/css/{{item}}" rel="stylesheet">
+    {% endfor %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Topo -->
+    <div id="top">
+        {% block top %}{% endblock %}
+    </div>
+
+    <!-- Cabeçalho -->
+    <div id="header">
+        {% block header %} {% endblock %}
+    </div>
+
+    <!-- Antes do conteúdo -->
+    <div id="content_top">
+        {% block content_top %}{% endblock %}
+    </div>
+
+    <!-- Conteúdo -->
+    <div id="content_page">
+        <div id="FeedBackMessagens">
+            {{info.FeedBackMessagens|raw}}
+        </div>
+        {% block content_page %}
+        {% endblock %}
+        
+    </div>
+
+    <!-- Depois do conteúdo -->
+    <div id="content_end">
+        {% block content_end %}{% endblock %}
+    </div>
+
+    <!-- Rodapé -->
+    <div id="footer">
+        {% block footer %}{% endblock %}
+    </div>
+
+    <!-- Base -->
+    <div id="end">
+        {% block end %}{% endblock %}
+    </div>
+
+
+
+    <!-- CÓDIGOS JAVASCRIPTS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in scripts.libs %}
+    <script src="{{base.dir_relative}}template/assets/libs/{{item}}"></script>
+    {% endfor %}
+    <!-- JS -->
+    {% for item in scripts.js %}
+    <script defer src="{{base.dir_relative}}template/assets/js/{{item}}"></script>
+    {% endfor %}
+
+    <!-- Scripts abertos da página -->
+    <script>
+        {{ info.scriptBody | raw }}
+
+        // Código que chama os plugins após 500 milissegundos.
+        $(window).on("load", function () {
+            // página totalmente carregada (DOM, imagens etc.)
+            setTimeout(function () {
+
+                // Plugins da página.
+                plugins = ['{{ plugins|join("', '")|raw }}'];
+
+                // Carrega plugins de acordo com sequência que foi cadastrado.
+                if (plugins[0] != '') {
+                    plugins.forEach(plugin => {
+                        getPlugin(plugin);
+                    });
+                }
+            }, 500);
+        });
+
+        // Função que carrega plugin async.
+        async function getPlugin(plugin) {
+            console.log('Plugin: ' + plugin);
+            $.ajax({
+                url: '{{base.dir_relative}}api/plugins/js/' + plugin,
+                dataType: 'script',
+                async: true
+            });
+        }
+    </script>
+
+</body>
+
+</html>

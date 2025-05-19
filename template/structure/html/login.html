@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+
+<head>
+    <!-- Head -->
+    {% block head %}{% endblock %}
+
+
+
+
+    <!-- ESTILOS CSS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in styles.libs %}
+    <link href="{{base.dir_relative}}template/assets/libs/{{item}}" rel="stylesheet">
+    {% endfor %}
+    <!-- CSS -->
+    {% for item in styles.css %}
+    <link href="{{base.dir_relative}}template/assets/css/{{item}}" rel="stylesheet">
+    {% endfor %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/admin/index.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/admin/overlayscrollbars.min.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/admin/adminlte.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/admin/apexcharts.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/admin/jsvectormap.min.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}template/assets/css/default.min.css" />
+
+
+</head>
+
+
+<body class="login-page bg-body-secondary app-loaded">
+
+
+    <div class="login-box">
+        <div class="login-logo">
+
+            <!-- Antes do conteúdo -->
+            {% block content_top %}{% endblock %}
+            <!-- Notificações -->
+            <div id="FeedBackMessagens">
+                {{info.FeedBackMessagens|raw}}
+            </div>
+
+            <a href="{{base.url}}">
+                <img src="{{base.dir_relative}}template\assets\midias\logo\favicon.ico" alt="User Avatar"
+                    class="img-size-50 me-3" />
+                <b>DESV</b> - Painel</a>
+        </div>
+
+        <!-- Conteúdo -->
+        {% block content_page %}{% endblock %}
+        <!-- Depois do conteúdo -->
+        {% block content_end %}{% endblock %}
+
+
+
+        <!-- Rodapé -->
+        {% block footer %}{% endblock %}
+    </div>
+
+
+
+
+    <!-- CÓDIGOS JAVASCRIPTS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in scripts.libs %}
+    <script src="{{base.dir_relative}}template/assets/libs/{{item}}"></script>
+    {% endfor %}
+    <!-- JS -->
+    {% for item in scripts.js %}
+    <script defer src="{{base.dir_relative}}template/assets/js/{{item}}"></script>
+    {% endfor %}
+
+    <script src="{{base.dir_relative}}template/assets/js/admin/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/popper.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/adminlte.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/Sortable.min.js"></script>
+    <!-- <script src="{{base.dir_relative}}template/assets/js/admin/world.js"></script> -->
+
+    <!-- Scripts abertos da página -->
+    <script>
+        { { info.scriptBody | raw } }
+
+        // Código que chama os plugins após 500 milissegundos.
+        $(window).on("load", function () {
+            // página totalmente carregada (DOM, imagens etc.)
+            setTimeout(function () {
+
+                // Plugins da página.
+                plugins = ['{{ plugins|join("', '")|raw }}'];
+
+                // Carrega plugins de acordo com sequência que foi cadastrado.
+                if (plugins[0] != '') {
+                    plugins.forEach(plugin => {
+                        getPlugin(plugin);
+                    });
+                }
+            }, 500);
+        });
+
+        // Função que carrega plugin async.
+        async function getPlugin(plugin) {
+            console.log('Plugin: ' + plugin);
+            $.ajax({
+                url: '{{base.dir_relative}}api/plugins/js/' + plugin,
+                dataType: 'script',
+                async: true
+            });
+        }
+    </script>
+
+</body>
+
+</html>

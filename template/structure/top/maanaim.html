@@ -1,0 +1,28 @@
+{% block top %}
+
+<div class="bg-vermelho">
+    <div class="container">
+
+        {# MOBILE #}
+        <div class="row d-md-none py-3">
+            <div class="col text-center">
+                <span class="mx-2 text-light">Participe dos nossos próximos eventos!</span>
+                <br>
+                <a href="#" class="btn btn-warning bg-amarelo mx-1">Me inscrever</a>
+                <a href="#" class="btn btn-light mx-1">Fazer doação</a>
+            </div>
+        </div>
+
+        {# DESKTOP #}
+        <div class="row d-none d-md-block py-3">
+            <div class="col text-end">
+                <span class="mx-2 text-light">Participe dos nossos próximos eventos!</span>
+                <a href="#" class="btn btn-warning bg-amarelo mx-2">Me inscrever</a>
+                <a href="#" class="btn btn-light mx-2">Fazer doação</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

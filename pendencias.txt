@@ -1,0 +1,8 @@
+PENDENCIAS
+
+
+Pasta de instalação
+
+    * Atualizar a pasta de instalação com o menu default
+
+    * copiar para dentro da pasta de instalação arquivos para acessar o painel administrativo, login, etc.

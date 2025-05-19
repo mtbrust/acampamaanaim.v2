@@ -1,0 +1,123 @@
+{{html|raw}}
+
+<br><br><h1>Variáveis da página</h1>
+<p>Clique no código para copiar para área de transferência.</p>
+
+{% set item_inicio = '<br><b onclick="cpTransferenciaText(this)">&#123;&#123;' %}
+{% set item_fim = '&#125;&#125;</b>' %}
+
+
+{# Nível 0 ************************************************************************************* #}
+{% for kparams, params in _context %}
+    {# Pega apenas parâmetros da página. #}
+    {% if params is iterable and kparams != 'html' and kparams != '_parent' %}
+        <br>{{item_inicio|raw}}{{kparams}}{{item_fim|raw}}: Array
+
+        
+
+        {# Nível 1 ************************************************************************************* #}
+        {% for knivel1, nivel1 in params %}
+            {% if nivel1 is not iterable %}
+                {{item_inicio|raw}}{{kparams}}.{{knivel1}}{{item_fim|raw}}: {{nivel1}}
+            {% else %}
+                {{item_inicio|raw}}{{kparams}}.{{knivel1}}{{item_fim|raw}}: Array
+
+
+
+                {# Nível 2 ************************************************************************************* #}
+                {% for knivel2, nivel2 in nivel1 %}
+                    {% if nivel2 is not iterable %}
+                        {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}{{item_fim|raw}}: {{nivel2}}
+                    {% else %}
+                    {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}{{item_fim|raw}}: Array
+
+
+
+                    {# Nível 3 ************************************************************************************* #}
+                    {% for knivel3, nivel3 in nivel2 %}
+                        {% if nivel3 is not iterable %}
+                            {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}{{item_fim|raw}}: {{nivel3}}
+                        {% else %}
+                        {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}{{item_fim|raw}}: Array
+
+
+
+                        {# Nível 4 ************************************************************************************* #}
+                        {% for knivel4, nivel4 in nivel3 %}
+                            {% if nivel4 is not iterable %}
+                                {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}{{item_fim|raw}}: {{nivel4}}
+                            {% else %}
+                            {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}{{item_fim|raw}}: Array
+
+
+
+                            {# Nível 5 ************************************************************************************* #}
+                            {% for knivel5, nivel5 in nivel4 %}
+                                {% if nivel5 is not iterable %}
+                                    {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}{{item_fim|raw}}: {{nivel5}}
+                                {% else %}
+                                {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}{{item_fim|raw}}: Array
+
+
+
+                                {# Nível 6 ************************************************************************************* #}
+                                {% for knivel6, nivel6 in nivel5 %}
+                                    {% if nivel6 is not iterable %}
+                                        {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}.{{knivel6}}{{item_fim|raw}}: {{nivel6}}
+                                    {% else %}
+                                    {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}.{{knivel6}}{{item_fim|raw}}: Array
+
+
+
+                                    {# Nível 7 ************************************************************************************* #}
+                                    {% for knivel7, nivel7 in nivel6 %}
+                                        {% if nivel7 is not iterable %}
+                                            {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}.{{knivel6}}.{{knivel7}}{{item_fim|raw}}: {{nivel7}}
+                                        {% else %}
+                                        {{item_inicio|raw}}{{kparams}}.{{knivel1}}.{{knivel2}}.{{knivel3}}.{{knivel4}}.{{knivel5}}.{{knivel6}}.{{knivel7}}{{item_fim|raw}}: Array
+                                        
+                                        {% endif %}
+                                    {% endfor %}
+                                    {# Nível 7 ************************************************************************************* #}
+                    
+                                    
+                                    
+                                    {% endif %}
+                                {% endfor %}
+                                {# Nível 6 ************************************************************************************* #}
+                
+                                
+                                
+                                {% endif %}
+                            {% endfor %}
+                            {# Nível 5 ************************************************************************************* #}
+            
+                            
+                        
+                            {% endif %}
+                        {% endfor %}
+                        {# Nível 4 ************************************************************************************* #}
+        
+                        
+                        
+                        {% endif %}
+                    {% endfor %}
+                    {# Nível 3 ************************************************************************************* #}
+    
+    
+    
+                    {% endif %}
+                {% endfor %}
+                {# Nível 2 ************************************************************************************* #}
+
+
+
+            {% endif %}
+        {% endfor %}
+        {# Nível 1 ************************************************************************************* #}
+
+
+
+    {% endif %}
+{% endfor %}
+{# Nível 0 ************************************************************************************* #}

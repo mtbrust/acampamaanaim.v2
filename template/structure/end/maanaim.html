@@ -1,0 +1,49 @@
+{% block end %}
+
+<div class="bg-preto border-top border-secondary">
+    <div class="container">
+
+        {# MOBILE #}
+        <div class="row d-md-none">
+            <div class="col-12 text-center mt-3 fs-10">
+                <span class="t-cinza">Todos os direitos reservados © {{info.anoAtual}}<br>Acampamento Maanaim</span>
+            </div>
+            
+            <div class="col-12 text-center">
+                <span class="t-cinza fs-10">
+                    Desenvolvido por:
+                    <a href="www.desv.com.br" class="link-light link-opacity-75 link-underline-opacity-0 t-cinza fs-10">www.<b>desv</b>.com.br</a>
+                </span>
+            </div>
+
+            <div class="col-12 text-end my-1">
+                <a href="#top" class="link-light link-underline-opacity-0 fs-10">
+                    <span class="t-cinza">TOPO</span>
+                </a>
+            </div>
+        </div>
+
+        {# DESKTOP #}
+        <div class="row d-none d-md-flex align-items-center py-3">
+            <div class="col text-start">
+                <span class="t-cinza">Todos os direitos reservados © {{info.anoAtual}} Acampamento Maanaim</span>
+            </div>
+            
+            <div class="col text-center">
+                <span class="t-cinza">
+                    Desenvolvido por:
+                    <a href="www.desv.com.br" class="link-light link-opacity-75 link-underline-opacity-0 t-cinza">www.<b>desv</b>.com.br</a>
+                </span>
+            </div>
+
+            <div class="col-1 text-end">
+                <a href="#top" class="link-light link-underline-opacity-0">
+                    <span class="t-cinza">TOPO</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{
+    "name": "desv/base-app-desv",
+    "authors": [
+        {
+            "name": "Mateus Brust",
+            "email": "contato@desv.com.br"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.3",
+        "cocur/slugify": "^4.0",
+        "nette/http": "^3.1",
+        "respect/validation": "^2.2",
+        "intervention/image": "^2.6",
+        "phpmailer/phpmailer": "^6.5",
+        "dompdf/dompdf": "^1.0",
+        "imangazaliev/didom": "^1.18",
+        "twig/intl-extra": "^3.3",
+        "twig/extra-bundle": "^3.3",
+        "phpoffice/phpspreadsheet": "^1.23",
+        "firebase/php-jwt": "^6.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "desv\\": "desv/",
+            "template\\": "template/"
+        }
+    }
+}

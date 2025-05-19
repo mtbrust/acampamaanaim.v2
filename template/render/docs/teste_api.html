@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>TESTE API PÁGINA ATUAL</h4>
+            <button type="button" class="btn btn-success"
+                onclick="ajaxDados('{{base.url}}{{infoUrl.url_relative}}api/', {},function(){}, 'GET')">GET na API da
+                página.</button>
+            <button type="button" class="btn btn-success" onclick="api_post()">POST na API da página.</button>
+            <button type="button" class="btn btn-success" onclick="api_put()">PUT na API da página.</button>
+            <button type="button" class="btn btn-success" onclick="post()">POST na página.</button>
+            <button type="button" class="btn btn-success" onclick="patch()">PATCH na página.</button>
+            <p>{{base.url}}{{infoUrl.url_relative}}api/</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            
+            <form action="#" method="post">
+                <input type="hidden" name="campo" value="valor">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function api_post() {
+
+        // Preparação dos dados.
+        dados = new FormData(/* ID formulário */);
+        dados.append('campo', 'valor'); // Exemplo de inclusão de valores.
+
+        ajaxDados('{{base.url}}{{infoUrl.url_relative}}api/', dados, function () { }, 'POST');
+    }
+
+    function api_put() {
+
+        // Preparação dos dados.
+        dados = new FormData(/* ID formulário */);
+        dados.append('metodo', 'put'); // Exemplo de inclusão de valores.
+
+        ajaxDados('{{base.url}}{{infoUrl.url_relative}}api/', dados, function () { }, 'PUT');
+    }
+
+    function post() {
+
+        // Preparação dos dados.
+        dados = new FormData(/* ID formulário */);
+        dados.append('metodo', 'post'); // Exemplo de inclusão de valores.
+
+        ajaxDados('{{base.url}}{{infoUrl.url_relative}}', dados, function () { }, 'POST');
+    }
+
+    function patch() {
+
+        // Preparação dos dados.
+        dados = new FormData(/* ID formulário */);
+        dados.append('metodo', 'patch'); // Exemplo de inclusão de valores.
+
+        ajaxDados('{{base.url}}{{infoUrl.url_relative}}', dados, function () { }, 'PATCH');
+    }
+</script>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+
+<head>
+    <!-- Head -->
+    {% block head %}{% endblock %}
+
+
+    
+
+    <!-- ESTILOS CSS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in styles.libs %}
+    <link href="{{base.dir_relative}}desv/assets/libs/{{item}}" rel="stylesheet">
+    {% endfor %}
+    <!-- CSS -->
+    {% for item in styles.css %}
+    <link href="{{base.dir_relative}}desv/assets/css/{{item}}" rel="stylesheet">
+    {% endfor %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/admin/index.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/admin/overlayscrollbars.min.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/admin/adminlte.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/admin/apexcharts.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/admin/jsvectormap.min.css" />
+    <link rel="stylesheet" href="{{base.dir_relative}}desv/assets/css/default.min.css" />
+
+
+</head>
+
+
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+        <!--begin::Header-->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <!-- Topo -->
+            {% block top %}{% endblock %}
+        </nav>
+        <!-- Cabeçalho -->
+        {% block header %} {% endblock %}
+
+
+        <!--begin::App Main-->
+        <main class="app-main">
+            <!--begin::App Content Header-->
+            <div class="app-content-header">
+                <!--begin::Container-->
+                <div class="container-fluid">
+                    <!--begin::Row-->
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Antes do conteúdo -->
+                            {% block content_top %}{% endblock %}
+                            <!-- Notificações -->
+                            <div id="FeedBackMessagens">
+                                {{info.FeedBackMessagens|raw}}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- todo - Título da página. ajustar para ser dinâmico. -->
+                            <h3 class="mb-0">Início</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <!-- todo - Ajustar para ser dinâmico. -->
+                                <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Início</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::App Content Header-->
+            <!--begin::App Content-->
+            <div class="app-content">
+                <!--begin::Container-->
+                <div class="container-fluid">
+                    <!-- Conteúdo -->
+                    {% block content_page %}{% endblock %}
+                    <!-- Depois do conteúdo -->
+                    {% block content_end %}{% endblock %}
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::App Content-->
+        </main>
+        <!--end::App Main-->
+
+
+        <!-- Rodapé -->
+        {% block footer %}{% endblock %}
+
+    </div>
+    <!--end::App Wrapper-->
+
+
+
+    
+    <!-- CÓDIGOS JAVASCRIPTS DA PÁGINA -->
+    <!-- LIBS -->
+    {% for item in scripts.libs %}
+    <script src="{{base.dir_relative}}template/assets/libs/{{item}}"></script>
+    {% endfor %}
+    <!-- JS -->
+    {% for item in scripts.js %}
+    <script defer src="{{base.dir_relative}}template/assets/js/{{item}}"></script>
+    {% endfor %}
+
+    <script src="{{base.dir_relative}}template/assets/js/admin/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/popper.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/adminlte.min.js"></script>
+    <script src="{{base.dir_relative}}template/assets/js/admin/Sortable.min.js"></script>
+    <!-- <script src="{{base.dir_relative}}template/assets/js/admin/world.js"></script> -->
+
+    <!-- Scripts abertos da página -->
+    <script>
+        {{ info.scriptBody | raw }}
+
+        // Código que chama os plugins após 500 milissegundos.
+        $(window).on("load", function () {
+            // página totalmente carregada (DOM, imagens etc.)
+            setTimeout(function () {
+
+                // Plugins da página.
+                plugins = ['{{ plugins|join("', '")|raw }}'];
+
+                // Carrega plugins de acordo com sequência que foi cadastrado.
+                if (plugins[0] != '') {
+                    plugins.forEach(plugin => {
+                        getPlugin(plugin);
+                    });
+                }
+            }, 500);
+        });
+
+        // Função que carrega plugin async.
+        async function getPlugin(plugin) {
+            console.log('Plugin: ' + plugin);
+            $.ajax({
+                url: '{{base.dir_relative}}api/plugins/js/' + plugin,
+                dataType: 'script',
+                async: true
+            });
+        }
+    </script>
+
+</body>
+
+</html>

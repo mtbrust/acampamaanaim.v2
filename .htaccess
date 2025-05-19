@@ -1,0 +1,43 @@
+# Não listar diretórios.
+Options -Indexes
+
+# Habilita o mod_rewrite
+RewriteEngine on
+
+# Envia o que não for arquivo e o que não for diretório para index.php na raiz.
+RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L,NC]
+
+# Permite acessar o arquivo de instalação em php.
+RewriteCond %{REQUEST_FILENAME} .*(desv/install.php)$
+RewriteRule ^(.*)$ $1 [QSA,L,NC]
+
+# Caso seja um caminho de um arquivo em php, transfere para index.
+RewriteCond %{REQUEST_FILENAME} .*\.(php)$
+# Passa a informação da url.
+RewriteRule (.*)(\.php)$ index.php?url=$1 [QSA,L,NC]
+# Mais informações
+# RewriteRule (.*)\.(php)$ index.php?url=$1&request_filename=%{REQUEST_FILENAME}&request_uri=%{REQUEST_URI}&the_request=%{THE_REQUEST}&remote_host=%{REMOTE_HOST}&user_agente=%{HTTP_USER_AGENT}&http_refer=%{HTTP_REFERER} [QSA,L,NC]
+
+# Caso seja um caminho de um arquivo em php, transfere para index.
+RewriteCond %{REQUEST_FILENAME} .*\.(php)$
+# Passa a informação da url.
+RewriteRule (.*(\.php)*)$ index.php?url=$1 [QSA,L,NC]
+
+
+# bloqueia acesso de outros sites as imagens do nosso servidor.
+# RewriteEngine on
+# RewriteCond %{HTTP_REFERER} !^$
+# RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?meusite.com [NC]
+# RewriteRule \.(jpg|jpeg|png|gif)$ - [NC,F,L]
+# RewriteRule .*\.(jpg|jpeg|png|gif)$ /imagens/imagemalerta.jpg [L] # caso tente acessar alguma imagem, mostra essa imagem padrão.
+# RewriteRule .*\.(jpg|jpeg|png|gif)$ - [F] # caso queira apenas mostrar erro Forbidden
+
+
+# proteger o arquivo htacces.
+# <files ~ "^.*\.([Hh][Tt][Aa])">
+# order allow,deny
+# deny from all
+# satisfy all
+# </files>

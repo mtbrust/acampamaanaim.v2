@@ -1,0 +1,81 @@
+
+
+
+
+/* 
+    * PERSONALIZAÇÃO GERAL
+    * ****************************************************************************
+*/
+
+*, .montserrat-font {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.oswald {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.fs-10 {
+    font-size: 10px;
+}
+
+
+/* 
+    * CORES DO PROJETO 
+    * ****************************************************************************
+*/
+
+.t-vermelho {
+    color: #B1202F;
+}
+
+.bg-vermelho {
+    background-color: #B1202F;
+}
+
+.t-amarelo {
+    color: #EFBB51;
+}
+
+.bg-amarelo {
+    background-color: #EFBB51;
+}
+
+.t-creme {
+    color: #F1EBDD;
+}
+
+.bg-creme {
+    background-color: #F1EBDD;
+}
+
+.t-preto {
+    color: #000000;
+}
+
+.bg-preto {
+    background-color: #000000;
+}
+
+.t-cinza {
+    color: #757575;
+}
+
+.bg-cinza {
+    background-color: #000000;
+}
+
+
+/* 
+    * PERSONALIZAÇÃO BOOTSTRAP 5
+    * ****************************************************************************
+*/
+
+button.btn, a.btn {
+    border-radius: 20px;
+    font-weight: bold;
+}

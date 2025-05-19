@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+
+<head>
+    <!-- Head -->
+    {% block head %}{% endblock %}
+
+</head>
+
+<body>
+
+    <!-- Topo -->
+    <div id="top">
+        {% block top %}{% endblock %}
+    </div>
+
+    <!-- Cabeçalho -->
+    <div id="header">
+        {% block header %} {% endblock %}
+    </div>
+
+    <!-- Antes do conteúdo -->
+    <div id="content_top">
+        {% block content_top %}{% endblock %}
+    </div>
+
+    <!-- Conteúdo -->
+    <div id="content_page">
+        <div id="FeedBackMessagens">
+            {{info.FeedBackMessagens|raw}}
+        </div>
+        {% block content_page %}
+        {% endblock %}
+
+    </div>
+
+    <!-- Depois do conteúdo -->
+    <div id="content_end">
+        {% block content_end %}{% endblock %}
+    </div>
+
+    <!-- Rodapé -->
+    <div id="footer">
+        {% block footer %}{% endblock %}
+    </div>
+
+    <!-- Base -->
+    <div id="end">
+        {% block end %}{% endblock %}
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+{% block nav %}
+<div class="default">
+    <h4>nav</h4>
+
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h6>Páginas raiz.</h6>
+            <a href="{{base.url}}">Início</a>
+            | <a href="{{base.url}}teste/">Teste</a>
+            | <a href="{{base.url}}teste/teste">Teste/teste</a>
+            | <a href="{{base.url}}teste/teste/attr1/attr2">Teste/teste/attr1/attr2</a>
+            | <a href="{{base.url}}model_lite/">model_lite</a>
+            | <a href="{{base.url}}model/">model</a>
+            | <a href="{{base.url}}pagina/">pagina</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h6>Subpáginas.</h6>
+            <a href="{{base.url}}subpagina/">subpagina/</a>
+            | <a href="{{base.url}}subpagina/pagina_2">subpagina/pagina_2</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h6>Páginas restrito.</h6>
+            <a href="{{base.url}}restrito/">Restrito/index</a>
+            | <a href="{{base.url}}restrito/page2">Restrito/page2</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h6>Banco de dados.</h6>
+            <a href="#" onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_create', null, function (response) {},'GET')">Criar tabelas</a>
+            | <a href="#" onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_delete', null, function (response) {},'GET')">Deletar tabelas</a>
+            | <a href="#" onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_insert', null, function (response) {},'GET')">Carga nas tabelas</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h6>Painel Administrativo Template</h6>
+            <a href="{{base.url}}admin/">Administração Inicial</a>
+            | <a href="{{base.url}}login">Login</a>
+            | <a href="#" onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_insert', null, function (response) {},'GET')">Carga nas tabelas</a>
+        </div>
+    </div>
+
+
+    <div>
+        <hr>
+
+
+        | <a href="{{base.url}}admin/init">admin/init</a>
+        | <a href="{{base.url}}admin/login">admin/login</a>
+        | <a href="{{base.url}}api/ping">api/ping</a>
+        | <a href="{{base.url}}api/plugins/js">api/plugins</a>
+
+    </div>
+    <hr>
+    <div>
+
+        <a href="{{base.url}}subpagina">subpagina</a>
+        | <a href="{{base.url}}subpagina/index">subpagina/index</a>
+        | <a href="{{base.url}}subpagina/pagina_2">subpagina/pagina_2</a>
+        | <a href="{{base.url}}subpagina/login">subpagina/login</a>
+
+    </div>
+</div>
+{% endblock %}
