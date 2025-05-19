@@ -23,6 +23,34 @@
     font-size: 10px;
 }
 
+.fs-20 {
+    font-size: 20px;
+}
+
+.underline-none {
+    text-decoration: none;
+}
+
+.list-style-none {
+    list-style: none;
+}
+
+.rs {
+    background-color: red;
+    padding: 4px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border-radius: 7px;
+}
+
+.rs i{
+    padding: 5px;
+    line-height: 22px;
+}
 
 /* 
     * CORES DO PROJETO 
