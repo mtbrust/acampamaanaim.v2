@@ -52,6 +52,30 @@
     line-height: 22px;
 }
 
+.banner-home {
+    background-size: cover;
+    background-position: center;
+    padding: 90px 0;
+}
+
+.banner-title {
+    font-size: 78px;
+}
+    
+.banner-pre-title {
+    font-size: 24px;
+}
+
+@media (max-width: 768px) {
+    .banner-title {
+        font-size: 40px;
+    }
+    
+    .banner-pre-title {
+        font-size: 14px;
+    }
+}
+
 /* 
     * CORES DO PROJETO 
     * ****************************************************************************

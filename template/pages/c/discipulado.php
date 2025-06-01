@@ -10,7 +10,7 @@ use desv\controllers\EndPoint;
  * Login para o painel administrativo da DESV
  * 
  */
-class index extends EndPoint
+class discipulado extends EndPoint
 {
 
 	/**
@@ -57,7 +57,7 @@ class index extends EndPoint
 
 		// Configuração personalizada do endpoins.
 		self::$params['config'] = [
-			'title' => 'INÍCIO',  // Título da página exibido na aba/janela navegador.
+			'title' => 'DISCIPULADO',  // Título da página exibido na aba/janela navegador.
 		];
 
 		// Carrega estrutura html. Somente pages.
