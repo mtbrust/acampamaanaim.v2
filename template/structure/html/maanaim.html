@@ -5,6 +5,12 @@
     <!-- Head -->
     {% block head %}{% endblock %}
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="{{base.dir_relative}}template/assets/libs/fontawesome/css/all.min.css" rel="stylesheet">
+
     <!-- ESTILOS CSS DA PÁGINA -->
     <!-- LIBS -->
     {% for item in styles.libs %}
@@ -14,14 +20,6 @@
     {% for item in styles.css %}
     <link href="{{base.dir_relative}}template/assets/css/{{item}}" rel="stylesheet">
     {% endfor %}
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-
-    
-    <link href="{{base.dir_relative}}template/assets/libs/fontawesome/css/all.min.css" rel="stylesheet">
 
 </head>
 
@@ -78,6 +76,10 @@
     {% for item in scripts.js %}
     <script defer src="{{base.dir_relative}}template/assets/js/{{item}}"></script>
     {% endfor %}
+
+    <script>
+    var $ = jQuery.noConflict();
+    </script>
 
     <!-- Scripts abertos da página -->
     <script>

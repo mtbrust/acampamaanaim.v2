@@ -66,6 +66,89 @@
     font-size: 24px;
 }
 
+.data-regressiva-info {
+    font-size: 10px;
+}
+
+.data-regressiva {
+    width: 80px;
+}
+
+
+/* carrousel */
+.slider.js_multislides.multislides {
+    position: relative;
+}
+
+.frame, .events_log {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.frame li {
+    position: relative;
+    display: inline-block;
+    font-family: 'Source Sans Pro', sans-serif;
+    width: 50%;
+    margin-right: 10px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 30px;
+    background: #2E435A;
+    color: #fff;
+}
+
+span.js_prev.prev {
+    left: 0px;
+}
+
+span.js_next.next {
+    right: 0px;
+}
+
+span.js_prev.prev, span.js_next.next{
+    position: absolute;
+    top: 45%;
+    background-color: #f1ebdd9e;
+    border-radius: 50%;
+}
+
+.accordion-button:focus {
+    z-index: 3;
+    outline: 0;
+    box-shadow: none;
+}
+
+div#o-acampamento {
+    padding-top: 160px;
+}
+
+.box-item {
+    padding: 90px 40px 20px 40px;
+    border-radius: 30px;
+    height: 330px;
+}
+
+.box-item-icone {
+    margin-bottom: -70px;
+}
+
+.box-item-linha {
+    width: 60%;
+    margin: auto;
+    height: 16px;
+    border-radius: 50px;
+    margin-top: -8px;
+}
+
+div#home-discipulado {
+    background-size: cover;
+}
+
+div#formulario-discipulado {
+    border-radius: 30px;
+}
+
 @media (max-width: 768px) {
     .banner-title {
         font-size: 40px;
@@ -74,7 +157,18 @@
     .banner-pre-title {
         font-size: 14px;
     }
+
+    .frame li {
+        width: 100%;
+    }
+
+    div#o-acampamento {
+    padding-top: 90px;
 }
+}
+
+
+
 
 /* 
     * CORES DO PROJETO 
@@ -113,12 +207,44 @@
     background-color: #000000;
 }
 
+.t-branco {
+    color: #fff;
+}
+
+.bg-branco {
+    background-color: #fff;
+}
+
+.t-marrom {
+    color: #413C33;
+}
+
+.bg-marrom {
+    background-color: #413C33;
+}
+
+.t-marrom-escuro {
+    color: #39342C;
+}
+
+.bg-marrom-escuro {
+    background-color: #39342C;
+}
+
 .t-cinza {
     color: #757575;
 }
 
 .bg-cinza {
-    background-color: #000000;
+    background-color: #757575;
+}
+
+.t-cinza-claro {
+    color: #EEEEEE;
+}
+
+.bg-cinza-claro {
+    background-color: #EEEEEE;
 }
 
 
@@ -130,4 +256,9 @@
 button.btn, a.btn {
     border-radius: 20px;
     font-weight: bold;
+}
+
+.py-90 {
+    padding-top: 90px;
+    padding-bottom: 90px;
 }

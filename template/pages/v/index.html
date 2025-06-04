@@ -1,9 +1,9 @@
 {{html|raw}}
 
 
-{# 
-    BANNER
-    *****************************************************************************    
+{#
+BANNER
+*****************************************************************************
 #}
 <div class="banner-home" style="background-image: url({{base.dir_relative}}template/assets/midias/site/HOME/banner-home-tem-que-ver-ovideo-depois.jpg);">
 
@@ -16,9 +16,9 @@
                 </p>
 
                 <h1 class="oswald text-bold t-creme banner-title">
-                    ENCONTROS QUE 
+                    ENCONTROS QUE
                     <br>
-                    TRANSFORMAM 
+                    TRANSFORMAM
                     <br>
                     E INSPIRAM A
                     <br>REFLETIR JESUS!
@@ -27,7 +27,7 @@
                 <p class="t-creme">
                     Confira nossos próximos eventos e viva essa transformação!
                     <br>
-                    <a href="#" class="btn btn-danger bg-vermelho mx-2 mt-4">Eventos</a>
+                    <a href="{{base.url}}eventos/" class="btn btn-danger bg-vermelho mx-2 mt-4">Eventos</a>
                 </p>
             </div>
         </div>
@@ -38,112 +38,398 @@
 
 
 
-{# 
-    PRÓXIMO EVENTO
-    *****************************************************************************    
+{#
+PRÓXIMO EVENTO
+*****************************************************************************
 #}
-<div>
+<div class="bg-cinza-claro">
     <div class="container">
-        <div class="row">
-            <div class="col"></div>
+        <div class="row py-1">
+            <div class="col">
+
+                <div class="text-center">
+                    <h4 class="d-inline-block oswald m-3 align-middle">PRÓXIMO EVENTO EM:</h4>
+
+                    {# DIAS #}
+                    <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
+                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <span class="data-regressiva-info text-light">DIAS</span>
+                    </div>
+
+                    {# HORAS #}
+                    <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
+                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <span class="data-regressiva-info text-light">HORAS</span>
+                    </div>
+
+                    {# MINUTOS #}
+                    <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
+                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <span class="data-regressiva-info text-light">MINUTOS</span>
+                    </div>
+
+                    {# SEGUNDOS #}
+                    <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
+                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <span class="data-regressiva-info text-light">SEGUNDOS</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    TEMPORADAS
-    *****************************************************************************    
+{#
+TEMPORADAS
+*****************************************************************************
 #}
-<div>
+<div class="py-90">
     <div class="container">
         <div class="row">
             <div class="col"></div>
+            <div class="col-md-3">
+                <h1 class="oswald">
+                    TEMPORADAS
+                    <br>
+                    E EVENTOS FIXOS
+                </h1>
+            </div>
+            <div class="col-md-3">
+                <p>
+                    Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!
+                </p>
+            </div>
+            <div class="col"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 m-auto">
+
+                <div class="slider js_multislides multislides">
+                    <div class="frame js_frame">
+                        <ul class="slides js_slides">
+                            <li class="js_slide rounded active">
+                                <div class="">
+                                    <a href="{{base.url}}eventos/evento01/">
+                                        <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/HOME/evento-01.jpg" alt="">
+                                    </a>
+                                    <a href="{{base.url}}eventos/evento01/" class="btn btn-success position-absolute" style="bottom: 20px; right: 20px;">Inscrever</a>
+                                </div>
+                            </li>
+                            <li class="js_slide rounded">
+                                <div class="">
+                                    <a href="{{base.url}}eventos/evento02/">
+                                        <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/HOME/evento-02.jpg" alt="">
+                                    </a>
+                                    <a href="{{base.url}}eventos/evento02/" class="btn btn-success position-absolute" style="bottom: 20px; right: 20px;">Inscrever</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <span class="js_prev prev">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 501.5 501.5">
+                            <g>
+                                <path fill="#2E435A" d="M302.67 90.877l55.77 55.508L254.575 250.75 358.44 355.116l-55.77 55.506L143.56 250.75z"></path>
+                            </g>
+                        </svg>
+                    </span>
+
+                    <span class="js_next next">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 501.5 501.5">
+                            <g>
+                                <path fill="#2E435A" d="M199.33 410.622l-55.77-55.508L247.425 250.75 143.56 146.384l55.77-55.507L358.44 250.75z"></path>
+                            </g>
+                        </svg>
+                    </span>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var multiSlides = document.querySelector('.js_multislides');
+
+                        lory(multiSlides, {
+                            infinite: 2,
+                            slidesToScroll: 1,
+                            slideSpeed: 100,
+                            rewind: false
+                        });
+                    });
+                </script>
+            
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    CONHEÇA O ACAMPAMENTO
-    *****************************************************************************    
+{#
+CONHEÇA O ACAMPAMENTO
+*****************************************************************************
 #}
-<div>
-    <div class="container">
+<div class="bg-marrom py-90">
+    <div class="container" style="margin-bottom: -250px;">
         <div class="row">
-            <div class="col"></div>
+            <div class="col-md-6">
+                <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/HOME/sobre.jpg" alt="">
+            </div>
+            <div class="col-md-6">
+                <div class="m-5">
+                    <h1 class="oswald t-creme">
+                        CONHEÇA O
+                        <br>
+                        ACAMPAMENTO
+                    </h1>
+                    <p class="t-creme">
+                        Nossos eventos são feitos para criar memórias duradouras, incentivando jovens a tomarem decisões que os ajudem a viver o propósito e a vocação de Deus.
+                    </p>
+                    <a href="{{base.url}}sobre_nos/" class="btn btn-danger bg-vermelho">Saiba Mais</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg-marrom-escuro p-5"></div>
+
+
+{#
+RESUMO - O ACAMPAMANTO
+*****************************************************************************
+#}
+<div class="bg-preto pb-5" id="o-acampamento">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="oswald t-creme">
+                    O ACAMPAMENTO MAANAIM É PARA
+                    <br>
+                    JOVENS QUE BUSCAM:
+                </h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-4 text-center my-3">
+                <img class="box-item-icone" src="{{base.dir_relative}}template/assets/midias/site/HOME/crescimento.png" alt="crescimento">
+                <div class="box-item bg-amarelo">
+                    <h3 class="oswald text-bold">CRESCIMENTO<br>ESPIRITUAL</h3>
+                    <p class="mt-4">
+                        Um tempo de conexão profunda com Deus, através da Palavra, louvor e momentos de reflexão que fortalecem a fé.
+                    </p>
+                </div>
+                <div class="box-item-linha bg-vermelho"></div>
+            </div>
+            <div class="col-md-4 text-center my-3">
+                <img class="box-item-icone" src="{{base.dir_relative}}template/assets/midias/site/HOME/amizades.png" alt="amizades">
+                <div class="box-item bg-marrom t-creme">
+                    <h3 class="oswald text-bold">AMIZADES<br>VERDADEIRAS</h3>
+                    <p class="mt-4 t-creme">
+                        Aqui, você encontra uma comunidade que caminha junto, compartilha experiências e fortalece uns aos outros na jornada cristã.
+                    </p>
+                </div>
+                <div class="box-item-linha bg-vermelho"></div>
+            </div>
+            <div class="col-md-4 text-center my-3">
+                <img class="box-item-icone" src="{{base.dir_relative}}template/assets/midias/site/HOME/experiências.png" alt="experiências">
+                <div class="box-item bg-branco">
+                    <h3 class="oswald text-bold">EXPERIÊNCIAS<br>TRANSFORMADORAS</h3>
+                    <p class="mt-4">
+                        Vivencie momentos únicos de adoração, desafios e aprendizado que impactam sua vida dentro e fora do acampamento.
+                    </p>
+                </div>
+                <div class="box-item-linha bg-vermelho"></div>
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    RESUMO - O ACAMPAMANTO
-    *****************************************************************************    
+{#
+FOTOS
+*****************************************************************************
 #}
-<div>
+<div class="bg-vermelho">
     <div class="container">
-        <div class="row">
-            <div class="col"></div>
+        <div class="row align-items-center">
+            <div class="col-md-6 my-3">
+                <h1 class="oswald text-bold t-creme">
+                    REVIVA NOSSOS MELHORES MOMENTOS
+                </h1>
+
+                <p class="t-creme my-3">
+                    Veja como foram os encontros anteriores e prepare-se para viver tudo isso de perto!
+                </p>
+
+                <a href="{{base.url}}galeria/" class="btn btn-warning bg-amarelo mx-2">Ver mais fotos</a>
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b1.jpg" alt="">
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b2.jpg" alt="">
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b3.jpg" alt="">
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b4.jpg" alt="">
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b5.jpg" alt="">
+            </div>
+            <div class="col-6 col-md-3 p-1">
+                <img class="w-100" src="{{base.dir_relative}}template/assets/midias/site/HOME/b6.jpg" alt="">
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    FOTOS
-    *****************************************************************************    
+{#
+DISCIPULADO
+*****************************************************************************
 #}
-<div>
+<div class="bg-vermelho py-90">
     <div class="container">
-        <div class="row">
-            <div class="col"></div>
+        <div class="row bg-amarelo p-4 m-3 rounded align-items-center">
+            <div class="col-md-6">
+                <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/HOME/discipulado-digital.jpg" alt="">
+            </div>
+            <div class="col-md-6">
+                <h1 class="oswald text-bold">
+                    DISCIPULADO DIGITAL
+                </h1>
+
+                <p class="my-4">
+                    Tenha acesso a devocionais, estudos bíblicos e conteúdos exclusivos para continuar crescendo espiritualmente antes e depois dos eventos.
+                </p>
+                
+                <a href="{{base.url}}galeria/" class="btn btn-danger bg-vermelho mx-2 t-creme">Acesse agora!</a>
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    DISCIPULADO
-    *****************************************************************************    
+{#
+VAGA - TROCAR PARA NEWSLETTER DE DISCIPULADO.
+*****************************************************************************
 #}
-<div>
+<div id="home-discipulado" class="py-90" style="background-image: url('{{base.dir_relative}}template/assets/midias/site/HOME/bg-formulário.jpg');">
     <div class="container">
-        <div class="row">
-            <div class="col"></div>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="{{base.dir_relative}}template/assets/midias/logo/maanaim-logo.png" alt="">
+
+                <h1 class="oswald text-bold t-creme my-3">
+                    FIQUE POR DENTRO DE TODAS AS NOVIDADES!
+                </h1>
+
+                <p class="t-creme mb-5">
+                    Preencha o formulário e nossa equipe entrará em contato com você! Vamos enviar novidades do Acampamento Maanaim e material de discipulado!
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div id="formulario-discipulado" class="p-3 p-md-5 bg-branco">
+                    <h2 class="oswald">Assine!</h2>
+                    <form id="form-discipulado">
+
+                        <input class="form-control form-control-lg mt-3" type="text" placeholder="Nome completo" aria-label="Nome completo" aria-describedby="helpNomeCompleto">
+                        <div id="helpNomeCompleto" class="form-text">
+                            Preencha seu nome completo.
+                        </div>
+
+                        <input class="form-control form-control-lg mt-3" type="date" placeholder="Data Nascimento" aria-label="Data de Nascimento" aria-describedby="helpDataNascimento">
+                        <div id="helpDataNascimento" class="form-text">
+                            Preencha sua data de nascimento.
+                        </div>
+
+                        <input class="form-control form-control-lg mt-3" type="text" placeholder="Telefone" aria-label="Telefone" aria-describedby="helpTelefone">
+                        <div id="helpTelefone" class="form-text">
+                            Preencha com seu número de celular. Se tiver redes sociais nesse número, será cadastrado na nossa transmissão.
+                        </div>
+
+                        <input class="form-control form-control-lg mt-3" type="mail" placeholder="E-mail" aria-label="E-mail" aria-describedby="helpEmail">
+                        <div id="helpEmail" class="form-text">
+                            As informações com conteúdo dinâmico serão enviadas para esse e-mail, é necessário utilizar esse e-mail para validar sua inscrição.
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 bg-amarelo mt-4">Assinar</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
 
-{# 
-    VAGA
-    *****************************************************************************    
+{#
+PERGUNTAS FREQUENTES
+*****************************************************************************
 #}
-<div>
+<div class="bg-amarelo py-90">
     <div class="container">
         <div class="row">
-            <div class="col"></div>
-        </div>
-    </div>
-</div>
+            <div class="col-12 text-center">
+                <h1 class="oswald">
+                    PERGUNTAS FREQUENTES
+                </h1>
+            </div>
+            <div class="col-12 mt-5">
+                
+                <div class="accordion mt-2" id="p1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-preto t-creme" type="button" data-bs-toggle="collapse" data-bs-target="#pi1" aria-expanded="true" aria-controls="pi1">
+                            1. Accordion Item
+                        </button>
+                        </h2>
+                        <div id="pi1" class="accordion-collapse collapse" data-bs-parent="#p1">
+                        <div class="accordion-body">
+                            <strong>This is the first item’s accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion mt-2" id="p2">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-preto t-creme" type="button" data-bs-toggle="collapse" data-bs-target="#pi2" aria-expanded="true" aria-controls="pi2">
+                            2. Accordion Item
+                        </button>
+                        </h2>
+                        <div id="pi2" class="accordion-collapse collapse" data-bs-parent="#p2">
+                        <div class="accordion-body">
+                            <strong>This is the first item’s accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion mt-2" id="p3">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-preto t-creme" type="button" data-bs-toggle="collapse" data-bs-target="#pi3" aria-expanded="true" aria-controls="pi3">
+                            3. Accordion Item
+                        </button>
+                        </h2>
+                        <div id="pi3" class="accordion-collapse collapse" data-bs-parent="#p3">
+                        <div class="accordion-body">
+                            <strong>This is the first item’s accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
-
-
-{# 
-    PERGUNTAS FREQUENTES
-    *****************************************************************************    
-#}
-<div>
-    <div class="container">
-        <div class="row">
-            <div class="col"></div>
+            </div>
         </div>
     </div>
 </div>

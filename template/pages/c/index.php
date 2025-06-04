@@ -77,6 +77,26 @@ class index extends EndPoint
 			'end'          => 'maanaim',   // Fim da página.
 		];
 
+		// Carrega na página scripts (template/assets/js/) Somente pages.
+		self::$params['scripts']     = [
+			// pasta libs.
+			'libs' => [
+				// 'owlcarousel/owl.carousel.js',
+				// 'splide/splide.min.js',
+				// 'loryjs/lory.min.js'
+			],
+		];
+
+		// Carrega na página estilos (template/assets/css/) Somente pages.
+		self::$params['styles']      = [
+			// pasta libs.
+			'libs' => [
+				// 'owlcarousel/owl.carousel.min.css',
+				// 'owlcarousel/owl.theme.default.css',
+				// 'splide/splide.min.css',
+			],
+		];
+
 		// Carrega na página plugins (template/assets/css/) Somente pages.
 		self::$params['plugins']     = [
 			'modelo',   // Exemplo.
