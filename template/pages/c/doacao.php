@@ -3,6 +3,7 @@
 namespace pages;
 
 use desv\controllers\EndPoint;
+use desv\controllers\Render;
 
 /**
  * INDEX LOGIN
@@ -94,6 +95,13 @@ class doacao extends EndPoint
 	 */
 	public function get($params)
 	{
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'Sua doação via Pix faz a diferença! Com sua contribuição, podemos proporcionar momentos inesquecíveis, fortalecer valores e impactar vidas.',
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }

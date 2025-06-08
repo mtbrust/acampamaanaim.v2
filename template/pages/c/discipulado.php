@@ -3,6 +3,7 @@
 namespace pages;
 
 use desv\controllers\EndPoint;
+use desv\controllers\Render;
 
 /**
  * INDEX LOGIN
@@ -94,6 +95,13 @@ class discipulado extends EndPoint
 	 */
 	public function get($params)
 	{
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'O discipulado não termina quando o acampamento acaba. É o começo de uma jornada profunda com Cristo.',
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }

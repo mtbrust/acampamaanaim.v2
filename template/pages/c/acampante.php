@@ -3,6 +3,7 @@
 namespace pages;
 
 use desv\controllers\EndPoint;
+use desv\controllers\Render;
 
 /**
  * INDEX LOGIN
@@ -94,6 +95,13 @@ class acampante extends EndPoint
 	 */
 	public function get($params)
 	{
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'Tudo o que você precisa saber para viver o acampamento com leveza, segurança, propósito e experiências que ficam pra sempre.',
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }

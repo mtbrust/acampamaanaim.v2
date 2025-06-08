@@ -3,6 +3,7 @@
 namespace pages;
 
 use desv\controllers\EndPoint;
+use desv\controllers\Render;
 
 /**
  * INDEX LOGIN
@@ -114,6 +115,7 @@ class index extends EndPoint
 	 */
 	public function get($params)
 	{
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }

@@ -7,28 +7,8 @@
 #}
 
 
-{#
-BANNER
-*****************************************************************************
-#}
-<div class="banner-home" style="background-image: url({{base.dir_relative}}template/assets/midias/site/SOBRE/BANNER-TOPO.jpg);">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-
-                <h1 class="oswald text-bold t-creme banner-title">
-                    SOBRE NÓS
-                </h1>
-
-                <p class="t-creme">
-                    O Acampamento Maanaim proporciona um encontro transformador com Deus em meio à natureza, fortalecendo a fé por meio da reflexão, louvor e comunhão.
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="box-item-linha bg-vermelho"></div>
-
+{# BANNER TITULO #}
+{{tituloPagina|raw}}
 
 
 {#
@@ -196,8 +176,6 @@ PROGRAMAÇÃO
     </div>
 </div>
 
-
-
 {#
 TESTEMUNHOS
 *****************************************************************************
@@ -275,54 +253,5 @@ TESTEMUNHOS
     </div>
 </div>
 
-
-{#
-VAGA - TROCAR PARA NEWSLETTER DE DISCIPULADO.
-*****************************************************************************
-#}
-<div id="home-discipulado" class="py-90" style="background-image: url('{{base.dir_relative}}template/assets/midias/site/HOME/bg-formulário.jpg');">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <img src="{{base.dir_relative}}template/assets/midias/logo/maanaim-logo.png" alt="">
-
-                <h1 class="oswald text-bold t-creme my-3">
-                    FIQUE POR DENTRO DE TODAS AS NOVIDADES!
-                </h1>
-
-                <p class="t-creme mb-5">
-                    Preencha o formulário e nossa equipe entrará em contato com você! Vamos enviar novidades do Acampamento Maanaim e material de discipulado!
-                </p>
-            </div>
-            <div class="col-md-6">
-                <div id="formulario-discipulado" class="p-3 p-md-5 bg-branco">
-                    <h2 class="oswald">Assine!</h2>
-                    <form id="form-discipulado">
-
-                        <input class="form-control form-control-lg mt-3" type="text" placeholder="Nome completo" aria-label="Nome completo" aria-describedby="helpNomeCompleto">
-                        <div id="helpNomeCompleto" class="form-text">
-                            Preencha seu nome completo.
-                        </div>
-
-                        <input class="form-control form-control-lg mt-3" type="date" placeholder="Data Nascimento" aria-label="Data de Nascimento" aria-describedby="helpDataNascimento">
-                        <div id="helpDataNascimento" class="form-text">
-                            Preencha sua data de nascimento.
-                        </div>
-
-                        <input class="form-control form-control-lg mt-3" type="text" placeholder="Telefone" aria-label="Telefone" aria-describedby="helpTelefone">
-                        <div id="helpTelefone" class="form-text">
-                            Preencha com seu número de celular. Se tiver redes sociais nesse número, será cadastrado na nossa transmissão.
-                        </div>
-
-                        <input class="form-control form-control-lg mt-3" type="mail" placeholder="E-mail" aria-label="E-mail" aria-describedby="helpEmail">
-                        <div id="helpEmail" class="form-text">
-                            As informações com conteúdo dinâmico serão enviadas para esse e-mail, é necessário utilizar esse e-mail para validar sua inscrição.
-                        </div>
-
-                        <button type="submit" class="btn btn-warning w-100 bg-amarelo mt-4">Assinar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{# ASSINE #}
+{{htmlAssine|raw}}

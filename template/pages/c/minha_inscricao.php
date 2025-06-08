@@ -3,6 +3,7 @@
 namespace pages;
 
 use desv\controllers\EndPoint;
+use desv\controllers\Render;
 
 /**
  * INDEX LOGIN
@@ -94,6 +95,13 @@ class minha_inscricao extends EndPoint
 	 */
 	public function get($params)
 	{
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'Acompanhe a sua inscrição. Saiba como anda o status da sua inscrição e se necessita entrar em contato.',
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }
