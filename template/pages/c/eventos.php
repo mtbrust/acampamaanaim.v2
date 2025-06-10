@@ -95,8 +95,19 @@ class eventos extends EndPoint
 	 */
 	public function get($params)
 	{
+		$eventos['eventos'] = [
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
+				'id' => 'evento01',
+			],
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
+				'id' => 'evento02',
+			],
+		];
+		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
 		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRIÇÃO/inscrição.jpg',
 			'title' => $params['config']['title'],
 			'texto' => 'Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!',
 		];

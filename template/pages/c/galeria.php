@@ -96,7 +96,7 @@ class galeria extends EndPoint
 	public function get($params)
 	{
 		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/GALERIA/galeria_.jpg',
 			'title' => $params['config']['title'],
 			'texto' => 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe.',
 		];

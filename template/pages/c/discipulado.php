@@ -96,7 +96,7 @@ class discipulado extends EndPoint
 	public function get($params)
 	{
 		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/DISCIPULADO/discipulado.jpg',
 			'title' => $params['config']['title'],
 			'texto' => 'O discipulado não termina quando o acampamento acaba. É o começo de uma jornada profunda com Cristo.',
 		];

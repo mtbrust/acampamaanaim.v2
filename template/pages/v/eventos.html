@@ -5,14 +5,32 @@
     EVENTOS
     *****************************************************************************    
 #}
+
 {# BANNER TITULO #}
 {{tituloPagina|raw}}
 
+{# Eventos #}
+{{htmlEventos|raw}}
 
-<div>
+<div class="pb-5">
     <div class="container">
         <div class="row">
-            <div class="col"><h1 class="oswald">Em Contrução</h1></div>
+            <div class="col-12">
+                <div class="p-3 mb-3 rounded bg-creme">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/INSCRIÇÃO/logo-acamp.jpg" alt="">
+                        </div>
+                        <div class="col-md-9 ps-md-5 ps-3 mt-2">
+                            <h2 class="oswald text-bold">JÁ FIZ MINHA INSCRIÇÃO</h2>
+                            <p class="mt-4">
+                                Se você já se inscreveu, é só acompanhar as próximas etapas por aqui.
+                            </p>
+                            <a href="{{base.url}}minha_inscricao/" class="btn btn-success">Acompanhar minha inscrição</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

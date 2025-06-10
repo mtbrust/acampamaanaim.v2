@@ -115,6 +115,17 @@ class index extends EndPoint
 	 */
 	public function get($params)
 	{
+		$eventos['eventos'] = [
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
+				'id' => 'evento01',
+			],
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
+				'id' => 'evento02',
+			],
+		];
+		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}

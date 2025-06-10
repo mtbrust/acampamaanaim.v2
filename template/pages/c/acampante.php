@@ -96,7 +96,7 @@ class acampante extends EndPoint
 	public function get($params)
 	{
 		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/ACAMPANTE/acampante.jpg',
 			'title' => $params['config']['title'],
 			'texto' => 'Tudo o que você precisa saber para viver o acampamento com leveza, segurança, propósito e experiências que ficam pra sempre.',
 		];
