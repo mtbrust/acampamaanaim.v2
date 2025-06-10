@@ -107,7 +107,7 @@ class eventos extends EndPoint
 		];
 		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
 		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/inscricao.jpg',
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/Inscricao.jpg',
 			'title' => $params['config']['title'],
 			'texto' => 'Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!',
 		];
