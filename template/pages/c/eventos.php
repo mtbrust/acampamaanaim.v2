@@ -2,6 +2,7 @@
 
 namespace pages;
 
+use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 
@@ -95,6 +96,40 @@ class eventos extends EndPoint
 	 */
 	public function get($params)
 	{
+
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/Inscricao.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!',
+		];
+
+
+		// Verifico se é um evento específico.
+		if (isset($params['infoUrl']['attr'][0])) {
+			$params['page_tipo'] = 'evento';
+			$options['title'] = $params['infoUrl']['attr'][0];
+			$options['texto'] = 'Evento tralala';
+			self::$params['config']['title'] = 'EVENTO - ' . $params['infoUrl']['attr'][0];
+			$this->pagina_evento($params);
+		} else {
+			// Caso seja para mostrar todos os eventos.
+			$params['page_tipo'] = 'eventos';
+			$this->pagina_eventos($params);
+		}
+
+
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
+	}
+
+	public function pagina_evento($params)
+	{
+		// todo brust - obter o evento que o usuário selecionou.
+		self::$params['htmlEvento'] = "Evento: " . $params['infoUrl']['attr'][0];
+	}
+
+	public function pagina_eventos($params)
+	{
 		$eventos['eventos'] = [
 			[
 				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
@@ -106,13 +141,6 @@ class eventos extends EndPoint
 			],
 		];
 		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
-		$options = [
-			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/Inscricao.jpg',
-			'title' => $params['config']['title'],
-			'texto' => 'Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!',
-		];
-		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
-		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }

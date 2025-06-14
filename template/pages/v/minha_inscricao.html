@@ -1,18 +1,46 @@
 {{html|raw}}
 
 
-{# 
-    MNINHAS INSCRIÇÃO
-    *****************************************************************************    
+{#
+MNINHAS INSCRIÇÃO
+*****************************************************************************
 #}
 {# BANNER TITULO #}
 {{tituloPagina|raw}}
 
 
-<div>
+<div class="banner-home" style="background-image: url({{base.dir_relative}}template/assets/midias/site/ACOMPANHAMENTO/bg-forms.jpg);">
     <div class="container">
-        <div class="row">
-            <div class="col"><h1 class="oswald">Em Contrução</h1></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="box-minha-inscricao bg-branco p-5 my-5 rounded">
+                    <h1 class="oswald text-bold text-center">
+                        ACOMPANHE
+                        <br>
+                        SUA INSCRIÇÃO
+                    </h1>
+                    <p class=" text-center">
+                        Aqui você acompanha a situação da sua inscrição.
+                    </p>
+                    <h6 class="oswald text-bold text-center">
+                        INSIRA O <b class="oswald t-vermelho">CPF</b> E O <b class="oswald t-vermelho">ID DA INSCRIÇÃO</b> E VEJA O STATUS.
+                    </h6>
+
+                    <form action="" class="mt-5" method="post">
+                        <input class="form-control form-control-lg my-2" type="number" name="f-cpf" placeholder="CPF" aria-label="CPF">
+                        <div class="form-text">
+                            Digite apenas os números. CPF do inscrito.
+                        </div>
+
+                        <input class="form-control form-control-lg my-2" type="number" name="f-idInscricao" placeholder="ID Inscrição" aria-label="ID da Inscrição">
+                        <div class="form-text">
+                            Digite apenas os números. ID da inscrição. O <b>ID da Inscrição</b> fica no documento gerado após confirmar a sua inscrição. Este documento é automaticamente baixado para seu computador ou celular.
+                        </div>
+
+                        <button type="submit" class="btn btn-warning bg-amarelo btn-lg w-100 my-2">Acompanhar</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -2,6 +2,7 @@
 
 namespace pages;
 
+use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 
@@ -95,6 +96,23 @@ class galeria extends EndPoint
 	 */
 	public function get($params)
 	{
+		if ($this->mostrar_album()) return;
+
+		$eventos['eventos'] = [
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
+				'id' => 'evento01',
+				'title' => 'Transbordar',
+				'descricao' => 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe'
+			],
+			[
+				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
+				'id' => 'evento02',
+				'title' => 'Alta Frequência',
+				'descricao' => 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe'
+			],
+		];
+		self::$params['htmlEventosAlbuns'] = Render::obj('blocos/eventos_albuns.html', $eventos);
 		$options = [
 			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/GALERIA/galeria_.jpg',
 			'title' => $params['config']['title'],
@@ -103,5 +121,16 @@ class galeria extends EndPoint
 		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
+	}
+
+	private function mostrar_album() {
+
+		if(!isset(self::$params['infoUrl']['attr'][0])) return false;
+
+		// todo - Pegar as fotos.
+
+		self::$params['html'] = '<div class="container">Sem fotos para este albúm.</div>';
+
+		return true;
 	}
 }

@@ -104,4 +104,9 @@ class minha_inscricao extends EndPoint
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
+
+	public function post($params) 
+	{
+		$this->get($params);
+	}
 }

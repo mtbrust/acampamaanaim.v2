@@ -151,6 +151,8 @@ function cpTransferencia(value) {
 
     // Realiza o comando copiar.
     document.execCommand('copy');
+    
+    alertMin("Copiado para Área de Transferência");
 }
 
 /**
@@ -163,7 +165,6 @@ function cpTransferencia(value) {
  */
 function cpTransferenciaText(e) {
     cpTransferencia($(e).text());
-    alertMin("Copiado para Área de Transferência");
 }
 
 /**

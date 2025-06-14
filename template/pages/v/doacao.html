@@ -1,18 +1,33 @@
 {{html|raw}}
 
 
-{# 
-    DOAÇÃO
-    *****************************************************************************    
+{#
+DOAÇÃO
+*****************************************************************************
 #}
 {# BANNER TITULO #}
 {{tituloPagina|raw}}
 
 
-<div>
+<div class="mt-5">
     <div class="container">
-        <div class="row">
-            <div class="col"><h1 class="oswald">Em Contrução</h1></div>
+        <div class="row align-items-center">
+            <div class="col"></div>
+            <div class="col-md-4">
+                <h1 class="oswald">AJUDE O ACAMPAMENTO MAANAIM A TRANSFORMAR VIDAS!</h1>
+                <p class="my-5">
+                    Sua doação via Pix faz a diferença! Com sua contribuição, podemos proporcionar momentos inesquecíveis, fortalecer valores e impactar vidas.
+                </p>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" value="valorteste" disabled>
+                    <button class="btn btn-outline-secondary" type="button" onclick="cpTransferencia('valorteste');"><i class="far fa-copy"></i> Copiar</button>
+                </div>
+            </div>
+            <div class="col"></div>
+            <div class="col-md-4">
+                <img class="rounded w-100" src="{{base.dir_relative}}template/assets/midias/site/DOAÇÃO/qr code.jpg" alt="">
+            </div>
         </div>
     </div>
 </div>
