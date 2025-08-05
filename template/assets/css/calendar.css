@@ -1,0 +1,25 @@
+.fc-event-time {
+    display: none !important;
+}
+
+div.fc-header-toolbar.fc-toolbar > div:nth-child(3){
+    display: none;
+}
+
+.fc-header-toolbar.fc-toolbar2 {
+    display: none;
+}
+
+.fc-daygrid-day-events {
+    display: none;
+}
+
+.fc .fc-daygrid-day-number {
+    color: #000;
+    text-decoration: none;
+}
+
+.fc .fc-col-header-cell-cushion {
+    text-decoration: none;
+    color: #000;
+}

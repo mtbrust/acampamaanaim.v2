@@ -81,7 +81,7 @@
 
     <!-- Scripts abertos da página -->
     <script>
-        { { info.scriptBody | raw } }
+        {{ info.scriptBody | raw }}
 
         // Código que chama os plugins após 500 milissegundos.
         $(window).on("load", function () {

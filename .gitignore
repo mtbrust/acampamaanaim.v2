@@ -1,7 +1,7 @@
 /vendor/
 * copy.php
 * copy.html
-/template/assets/midias/tmp/*
+/template/assets/midias/*
 /app/cache/endpoint/*
 cache/*
 logs/*

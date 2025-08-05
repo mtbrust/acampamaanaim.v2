@@ -11,11 +11,13 @@
     <!-- ESTILOS CSS DA PÁGINA -->
     <!-- LIBS -->
     {% for item in styles.libs %}
-    <link href="{{base.dir_relative}}desv/assets/libs/{{item}}" rel="stylesheet">
+    <link href="{{base.dir_relative}}template/assets/libs/{{item}}" rel="stylesheet">
     {% endfor %}
     <!-- CSS -->
     {% for item in styles.css %}
-    <link href="{{base.dir_relative}}desv/assets/css/{{item}}" rel="stylesheet">
+        {% if item != 'maanaim.css' %}
+        <link href="{{base.dir_relative}}template/assets/css/{{item}}" rel="stylesheet">
+        {% endif %}
     {% endfor %}
 
     <!-- CSS -->

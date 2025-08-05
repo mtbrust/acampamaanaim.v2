@@ -1,0 +1,295 @@
+<div class="container">
+	<form class="row" method="post" enctype="multipart/form-data">
+		<div class="col-12">
+			{% if evento %}
+			<h3>Atualizar evento.</h3>
+			{% else %}
+			<h3>Cadastrar novo evento.</h3>
+			{% endif %}
+
+		</div>
+
+		<div class="col-12">
+			<h4>Informações Evento</h4>
+		</div>
+
+		<!-- nome_evento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Nome do Evento</h6>
+				<div class="input-group">
+					<input id="f-nome_evento" name="f-nome_evento" type="text" class="form-control" value="{{evento.nome_evento}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Nome técnico do evento. Ex: Acampamento de páscoa 2023 Tema x.
+				</small>
+			</div>
+		</div>
+
+		<!-- titulo_evento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Título do evento</h6>
+				<div class="input-group">
+					<input id="f-titulo_evento" name="f-titulo_evento" type="text" class="form-control" value="{{evento.titulo_evento}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Título do Evento. Ex: Shine
+				</small>
+			</div>
+		</div>
+
+		<!-- msg_espera -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Mensagem Espera</h6>
+				<div class="input-group">
+					<input id="f-msg_espera" name="f-msg_espera" type="text" class="form-control" value="{% if evento %} {{evento.msg_espera}} {% else %}Aguarde a liberação das inscrições.{% endif %}" required>
+				</div>
+				<small class="form-text text-muted">
+					Mensagem que aparece na página inicial antes de liberar as inscrições. Ex: Aguarde a liberação das inscrições.
+				</small>
+			</div>
+		</div>
+
+		<!-- nome_preletor -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Nome Preletor</h6>
+				<div class="input-group">
+					<input id="f-nome_preletor" name="f-nome_preletor" type="text" class="form-control" value="{{evento.nome_preletor}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Nome do preletor ou preletores. Ex: Pr. Smith e Miss. João.
+				</small>
+			</div>
+		</div>
+
+		<!-- obs_preletor -->
+		<div class="col-sm-12 mt-4">
+			<div class="form-group">
+				<h6>Informações do Preletor</h6>
+				<div class="input-group">
+					<textarea id="f-obs_preletor" name="f-obs_preletor" cols="30" class="form-control" rows="10" required>{{evento.obs_preletor}}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Detalhes sobre o preletor, biografia, mensagem, etc.
+				</small>
+			</div>
+		</div>
+
+		<!-- obs_evento -->
+		<div class="col-sm-12 mt-4">
+			<div class="form-group">
+				<h6>Observações do Evento</h6>
+				<div class="input-group">
+					<textarea id="f-obs_evento" name="f-obs_evento" cols="30" class="form-control" rows="10" required>{{evento.obs_evento}}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Observações gerais sobre o evento. Ex: Preleção com Pastor Smith, apresentação de dança profética com o grupo "Dos Céus".
+				</small>
+			</div>
+		</div>
+
+		<!-- obs_atividades -->
+		<div class="col-sm-12 mt-4">
+			<div class="form-group">
+				<h6>Descrição das Atividades</h6>
+				<div class="input-group">
+					<textarea id="f-obs_atividades" name="f-obs_atividades" cols="30" class="form-control" rows="10" required>{{evento.obs_atividades}}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Atividades gerais sobre o evento. Ex: trilha, jantar de gala.
+				</small>
+			</div>
+		</div>
+
+		<!-- id_midia_banner -->
+		<div class="col-sm-6 mt-4">
+			{% if evento.url_midia_banner %}
+			<img class="rounded" src="{{base.url}}{{evento.url_midia_banner}}" alt="" style="max-height: 100px; max-width: 100px;">
+			{% else %}
+			{% endif %}
+			<div class="form-group">
+				<h6>Foto Banner</h6>
+				<div class="input-group">
+					<input class="form-control" type="file" id="f-id_midia_banner" name="f-id_midia_banner">
+				</div>
+				<small class="form-text text-muted">
+					Foto Banner do evento (Proporção ideal 16:9). Banner que aparece ao entrar nos detalhes do evento.
+				</small>
+			</div>
+		</div>
+
+		<!-- id_midia_01 -->
+		<div class="col-sm-6 mt-4">
+			{% if evento.url_midia_01 %}
+			<img class="rounded" src="{{base.url}}{{evento.url_midia_01}}" alt="" style="max-height: 100px; max-width: 100px;">
+			{% else %}
+			{% endif %}
+			<div class="form-group">
+				<h6>Foto 01</h6>
+				<div class="input-group">
+					<input class="form-control" type="file" id="f-id_midia_01" name="f-id_midia_01">
+				</div>
+				<small class="form-text text-muted">
+					Foto 01 do evento (Proporção ideal 1:1). Foto que aparece na lista de eventos na página inicial e na lista de eventos para edição no menu de administração.
+				</small>
+			</div>
+		</div>
+
+		<!-- id_midia_02 -->
+		<div class="col-sm-6 mt-4">
+			{% if evento.url_midia_02 %}
+			<img class="rounded" src="{{base.url}}{{evento.url_midia_02}}" alt="" style="max-height: 100px; max-width: 100px;">
+			{% else %}
+			{% endif %}
+			<div class="form-group">
+				<h6>Foto 02</h6>
+				<div class="input-group">
+					<input class="form-control" type="file" id="f-id_midia_02" name="f-id_midia_02">
+				</div>
+				<small class="form-text text-muted">
+					Foto 02 do evento (Proporção ideal 1:1).
+				</small>
+			</div>
+		</div>
+
+		<!-- id_midia_03 -->
+		<div class="col-sm-6 mt-4">
+			{% if evento.url_midia_03 %}
+			<img class="rounded" src="{{base.url}}{{evento.url_midia_03}}" alt="" style="max-height: 100px; max-width: 100px;">
+			{% else %}
+			{% endif %}
+			<div class="form-group">
+				<h6>Foto 03</h6>
+				<div class="input-group">
+					<input class="form-control" type="file" id="f-id_midia_03" name="f-id_midia_03">
+				</div>
+				<small class="form-text text-muted">
+					Foto 03 do evento (Proporção ideal 1:1).
+				</small>
+			</div>
+		</div>
+
+		<!-- link_album -->
+		<div class="col-sm-12 mt-4">
+			<div class="form-group">
+				<h6>Link Álbum</h6>
+				<div class="input-group">
+					<input id="f-link_album" name="f-link_album" type="text" class="form-control" value="{{evento.link_album}}">
+				</div>
+				<small class="form-text text-muted">
+					Link para acessar Google Driver, ou Album de fotos externas. Caso não tenha link, não aparece na página inicial.
+				</small>
+			</div>
+		</div>
+
+
+
+
+
+		<!-- DIVISÃO -->
+		<div class="col-12 mt-5">
+			<h4>Parâmetros do Evento</h4>
+		</div>
+
+
+		<!-- qtd_vagas_masculino -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Vagas Masculinas</h6>
+				<div class="input-group">
+					<input id="f-qtd_vagas_masculino" name="f-qtd_vagas_masculino" type="number" class="form-control" value="{{evento.qtd_vagas_masculino}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Quantidade de vagas públicas masculinas. ex: 50.
+				</small>
+			</div>
+		</div>
+
+		<!-- qtd_vagas_feminino -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Vagas Femininas</h6>
+				<div class="input-group">
+					<input id="f-qtd_vagas_feminino" name="f-qtd_vagas_feminino" type="number" class="form-control" value="{{evento.qtd_vagas_feminino}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Quantidade de vagas públicas femininas. Ex: 50.
+				</small>
+			</div>
+		</div>
+
+		<!-- dt_inicio_evento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Data Início Evento</h6>
+				<div class="input-group">
+					<input id="f-dt_inicio_evento" name="f-dt_inicio_evento" type="datetime-local" class="form-control" value="{{evento.dt_inicio_evento}}" onchange="verificaMaior()" required>
+				</div>
+				<small class="form-text text-muted">
+					Data Hora início do evento. Ex: 24/02/2023 14:00.
+				</small>
+			</div>
+		</div>
+
+		<!-- dt_fim_evento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Data Fim Evento</h6>
+				<div class="input-group">
+					<input id="f-dt_fim_evento" name="f-dt_fim_evento" type="datetime-local" class="form-control" value="{{evento.dt_fim_evento}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Data Hora Fim do evento. Ex: 24/02/2023 14:00.
+				</small>
+			</div>
+		</div>
+
+		<!-- idade_minima -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Idade Mínima</h6>
+				<div class="input-group">
+					<input id="f-idade_minima" name="f-idade_minima" type="number" class="form-control" value="{{evento.idade_minima}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Idade mínima que pode realizar a inscrição. Ex: 13.
+				</small>
+			</div>
+		</div>
+
+		<!-- DIVISÃO -->
+		<div class="col-12 mt-5">
+			<h4>Controle do Evento</h4>
+		</div>
+
+		<!-- status -->
+		<div class="col-12 col-sm-6 col-lg-4 my-2">
+			<div class="form-group">
+				<h6>Status</h6>
+				<div class="input-group">
+					<select id="f-status" name="f-status" class="form-select" required>
+						<option value="1" {% if evento.idStatus or not event %}selected{% endif %}>Ativo</option>
+						<option value="0" {% if evento and evento.idStatus == 0 %}selected{% endif %}>Inativo</option>
+					</select>
+				</div>
+				<small class="form-text text-muted">
+					Status da situação do evento.
+				</small>
+			</div>
+		</div>
+
+
+		<!-- DIVISÃO -->
+		<div class="col-12 text-right">
+			{% if evento %}
+			<button type="submit" value="{{evento.id}}" class="btn btn-secondary">Atualizar Evento</button>
+			{% else %}
+			<button type="submit" class="btn btn-secondary">Adicionar Novo Evento</button>
+			{% endif %}
+		</div>
+
+	</form>
+</div>

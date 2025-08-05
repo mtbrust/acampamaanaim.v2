@@ -4,7 +4,14 @@ namespace template\classes;
 
 class Model
 {
-    static function ping() {
+    /**
+     * ping
+     * 
+     * Teste de chamada na classe.
+     *
+     * @return string
+     */
+    public static function ping() {
         return 'pong';
     }
 }

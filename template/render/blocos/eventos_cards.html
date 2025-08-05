@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        {% for key, evento in eventos %}
+
+        <div class="col-md-4 col-sm-6">
+            <div class="card {% if evento.idStatus == 0 %}border border-5 border-danger{% endif %} mt-3">
+                <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_01}}" alt="">
+                <div class="card-body">
+                    <h3 class="mb-0">[{{evento.id}}] - {{evento.nome_evento}}</h3>
+                    <br>
+                    <p class="card-text">
+                        {{ evento.dt_inicio_evento|date("d/m/Y") }} até {{ evento.dt_fim_evento|date("d/m/Y") }}
+                        <br>
+                    </p>
+                    <div id="calendar-{{evento.id}}"></div>
+                    <a href="{{base.url}}adm/eventos/editar/{{evento.id}}" class="btn btn-primary mt-3">Editar Evento</a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar-{{evento.id}}');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: '{{evento.dt_inicio_evento|date("Y-m-d","America/Sao_Paulo")}}',
+                    title: '',
+                    locale: 'pt-BR',
+                    aspectRatio: 1.30,
+                    // contentHeight: 300,
+                    // height: 240,
+                    // contentHeight: 240,
+                    events: [
+                        {
+                            start: '{{evento.dt_inicio_evento|date("Y-m-d")}}',
+                            end: '{{evento.dt_fim_evento|date("Y-m-d")}}',
+                        },
+                        {
+                            start: '{{evento.dt_fim_evento|date("Y-m-d")}}',
+                            end: '{{evento.dt_fim_evento|date("Y-m-d")}}',
+                        }
+                    ],
+                    eventDisplay: 'background',
+                });
+                calendar.render();
+            });
+        </script>
+
+        {% endfor %}
+    </div>
+</div>

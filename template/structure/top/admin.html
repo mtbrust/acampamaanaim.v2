@@ -11,8 +11,13 @@
         </li>
 
         <!-- todo - Montar o menu interno dinâmico por parâmetro. -->
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+        {# <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li> #}
+
+        <li class="nav-item d-none d-md-block"><a href="{{base.url}}{{infoUrl.url_relative}}" class="nav-link {% if infoUrl.attr.0 == '' %}active{% endif %}">Início</a></li>
+        {% for kparams, params in subMenus %}
+            <li class="nav-item d-none d-md-block"><a href="{{base.url}}{{infoUrl.url_relative}}{{params}}" class="nav-link {% if infoUrl.attr.0 == params %}active{% endif %}">{{params}}</a></li>
+        {% endfor %}
 
 
     </ul>
@@ -20,7 +25,7 @@
 
 
     <!--begin::End Navbar Links-->
-    <ul class="navbar-nav ms-auto">
+    <ul class="navbar-nav ms-auto d-none">
         <!--begin::Navbar Search-->
         <li class="nav-item">
             <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -145,14 +150,14 @@
         <!--begin::User Menu Dropdown-->
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img src="{{base.dir_relative}}template\assets\midias\user\{{_session.user.id}}.png" class="user-image rounded-circle shadow"
+                <img src="{{base.dir_relative}}template/assets/midias/user/{{_session.user.id}}.png" class="user-image rounded-circle shadow"
                     alt="User Image" />
                 <span class="d-none d-md-inline">{{_session.user.fullName}}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
-                    <img src="{{base.dir_relative}}template\assets\midias\user\{{_session.user.id}}.png" class="rounded-circle shadow bg-white" alt="User Image" />
+                    <img src="{{base.dir_relative}}template/assets/midias/user/{{_session.user.id}}.png" class="rounded-circle shadow bg-white" alt="User Image" />
                     <p>
                         {{_session.user.fullName}}
                         <small>Desde {{_session.user.dtCreate}}</small>
@@ -173,7 +178,7 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                     <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                    <a href="{{base.url}}desv/" class="btn btn-default btn-flat float-end" onclick="ajaxDados('http://localhost/desv/app_base_php/desv/api/v1/session/end', {},function(){}, 'GET')">Sair</a>
+                    <a href="{{base.url}}desv/" class="btn btn-default btn-flat float-end" onclick="ajaxDados('{{base.url}}api/v1/session/end', {},function(){}, 'GET')">Sair</a>
                 </li>
                 <!--end::Menu Footer-->
             </ul>
@@ -182,6 +187,13 @@
     </ul>
     <!--end::End Navbar Links-->
 
+    <div class="float-end">
+        {% if _session.user.id == 2 %}
+        <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}adm/api/atualizar', {},function(){}, 'POST')">Apoio</a>
+        {% endif %}
+        <a href="./" class="btn btn-info btn-flat" onclick="ajaxDados('{{base.url}}adm/api/atualizar', {},function(){}, 'POST')">Atualizar</a>
+        <a href="{{base.url}}" class="btn btn-danger btn-flat" onclick="ajaxDados('{{base.url}}api/v1/session/end', {},function(){}, 'GET')">Sair</a>
+    </div>
 
 
 </div>

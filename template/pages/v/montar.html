@@ -1,0 +1,31 @@
+{{html|raw}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+
+            <h5 class="mt-4">Teste</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/teste/', {},function(){}, 'POST')">Teste API</a>
+
+            <h5 class="mt-4">Banco de dados Sistema</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/teste_bd/', {},function(){}, 'POST')">Teste BD</a>
+            <a href="#" class="btn btn-success btn-flat"  onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_create', null, function (response) {},'GET')">Criar tabelas</a>
+            <a href="#" class="btn btn-success btn-flat"  onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_delete', null, function (response) {},'GET')">Deletar tabelas</a>
+            <a href="#" class="btn btn-success btn-flat"  onclick="ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_insert', null, function (response) {},'GET')">Carga nas tabelas</a>
+
+            <h5 class="mt-4">Banco de dados MAANAIM</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/criar_tabelas/', {},function(){}, 'POST')">Criar Tabelas</a>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/deletar_tabelas/', {},function(){}, 'POST')">Deletar Tabelas</a>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/cria_permissoes/', {},function(){}, 'POST')">Cria Permissoes Mateus</a>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/criar_eventos/', {},function(){}, 'POST')">Criar Eventos TESTE</a>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/criar_Ingressos/', {},function(){}, 'POST')">Criar Ingressos TESTE</a>
+
+            <h5 class="mt-4">Classe MAANAIM</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/teste_maanaim/', {},function(){}, 'POST')">Teste Classe Maanaim</a>
+
+            <h5 class="mt-4">TESTES</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/arquivos/', {},function(){}, 'POST')">Arquivos</a>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="container">
+    {% if not ingressoInfo.id %}
+    <div class="row">
+        <div class="col my-5">
+            <h1 class="oswald text-bold text-center">INSCRIÇÕES</h1>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+
+        {% if not ingressoInfo.id %}
+        <div class="col-12">
+            <div class="rounded bg-vermelho p-3">
+                <h4 class="oswald text-bold t-creme">Selecione a inscrição desejada</h4>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not evento.ingressos %}
+        <div class="col-12">
+            <h3 class="oswald mt-5">{{evento.msg_espera}}</h3>
+        </div>
+        {% endif %}
+
+        {% for key, ingresso in evento.ingressos %}
+
+
+        <div class="col-12 mb-4">
+            <div class="rounded border border-danger-subtle p-2 mt-4 bg-creme" style="box-shadow: #000 5px 5px 17px -7px;">
+                <form class="row align-items-center" method="POST">
+                    <div class="col-md-2">
+                        <img class="rounded border border-3 w-100" src="{{base.dir_relative}}template/assets/midias/site/INSCRICAO/logo-acamp.jpg" alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="oswald t-vermelho">{{ingresso.titulo}}</h4>
+                        <h2 class="oswald text-success text-bold">R$ {{ingresso.valor_ingresso|number_format(2, ',', '.')}}</h2>
+                        <span>{{ingresso.desc_ingresso}}</span>
+                        <br>
+                        <span>Este ingresso está disponível do dia <b>{{ ingresso.dt_ini_ingresso|date("d/m/Y à\\s H:m") }}</b> até dia <b>{{ ingresso.dt_fim_ingresso|date("d/m/Y à\\s H:m") }}</b></span>
+                        <br>
+                        <span>Este ingresso deve ser pago até a data final <b>{{ ingresso.dt_limit_pagamento|date("d/m/Y à\\s H:m") }}</b>.</span>
+                        <br>
+                        <span class="text-success">{{ingresso.desc_tipo_pagamento}}</span>
+                    </div>
+                    {% if not ingressoInfo.id %}
+                    <div class="col-md-2 text-end">
+                        <button type="submit" class="btn btn-success" name="f-ingresso" value="{{ingresso.id}}">Inscrever</button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+
+        </div>
+
+        {% endfor %}
+    </div>
+</div>

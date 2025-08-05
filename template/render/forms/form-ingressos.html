@@ -1,0 +1,233 @@
+<div class="container">
+	<form class="row" method="post" enctype="multipart/form-data">
+		<div class="col-12">
+			{% if ingresso %}
+			<h3>Atualizar ingresso.</h3>
+			{% else %}
+			<h3>Cadastrar novo ingresso.</h3>
+			{% endif %}
+			
+		</div>
+
+		<div class="col-12">
+			<h4>Informações Ingresso</h4>
+		</div>
+
+		<!-- titulo -->
+		<div class="col-sm-4 mt-4">
+			<div class="form-group">
+				<h6>Nome do Ingresso</h6>
+				<div class="input-group">
+					<input id="f-titulo" name="f-titulo" type="text" class="form-control" value="{{ingresso.titulo}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Nome técnico do ingresso. Ex: Lote antecipação.
+				</small>
+			</div>
+		</div>
+
+		<!-- id_evento -->
+		<div class="col-sm-4 mt-4">
+			<div class="form-group">
+				<h6>ID do Evento</h6>
+				<div class="input-group">
+					<input id="f-id_evento" name="f-id_evento" type="number" class="form-control" value="{{ingresso.id_evento}}" required>
+				</div>
+				<small class="form-text text-muted">
+					ID do evento desse ingresso.
+				</small>
+			</div>
+		</div>
+
+		<!-- qtd -->
+		<div class="col-sm-4 mt-4">
+			<div class="form-group">
+				<h6>Quantidade do Ingresso</h6>
+				<div class="input-group">
+					<input id="f-qtd" name="f-qtd" type="number" class="form-control" value="{% if ingresso.qtd %}{{ingresso.qtd}}{% else %}0{% endif %}" required>
+				</div>
+				<small class="form-text text-muted">
+					Quantidade do ingresso. Deixe [0] para ilimitado, isto é, até a data fim do ingresso.
+				</small>
+			</div>
+		</div>
+
+		<!-- dt_ini_ingresso -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Data Início Ingresso</h6>
+				<div class="input-group">
+					<input id="f-dt_ini_ingresso" name="f-dt_ini_ingresso" type="datetime-local" class="form-control" value="{{ingresso.dt_ini_ingresso}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Data Hora início da liberação do ingresso. Ingresso liberado. Ex: 24/02/2023 14:00.
+				</small>
+			</div>
+		</div>
+
+		<!-- dt_fim_ingresso -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Data Fim Ingresso</h6>
+				<div class="input-group">
+					<input id="f-dt_fim_ingresso" name="f-dt_fim_ingresso" type="datetime-local" class="form-control" value="{{ingresso.dt_fim_ingresso}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Data Hora Fim da liberação do ingresso. Encerramento do ingresso. Ingresso sai do ar. Ex: 24/02/2023 14:00.
+				</small>
+			</div>
+		</div>
+		
+		<!-- desc_ingresso -->
+		<div class="col-12 my-2">
+			<div class="form-group">
+				<h6>Descrição do Ingresso</h6>
+				<div class="input-group">
+					<textarea id="f-desc_ingresso" name="f-desc_ingresso" class="form-control" rows="5" aria-label="With textarea">{% if ingresso.desc_ingresso %}{{ingresso.desc_ingresso}}{% else %}Este é um ingresso promocional.{% endif %}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Descrição do ingresso.
+				</small>
+			</div>
+		</div>
+
+
+
+		<!-- DIVISÃO -->
+		<div class="col-12 mt-5">
+			<h4>Financeiro do Ingresso</h4>
+		</div>
+
+		<!-- valor_ingresso -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Valor do Ingresso</h6>
+				<div class="input-group">
+					<input id="f-valor_ingresso" name="f-valor_ingresso" type="decimal(10.2)" class="form-control" value="{{ingresso.valor_ingresso}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Valor do ingresso sem descontos. Ex: 240.50 ou 1000.00.
+					<span>Atenção</span> Use o ponto (.) para separar as casas decimais (centavos). Não separe os milhares.
+				</small>
+			</div>
+		</div>
+
+		<!-- link_pagamento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>Link de pagamento</h6>
+				<div class="input-group">
+					<input id="f-link_pagamento" name="f-link_pagamento" type="text" class="form-control" value="{{ingresso.link_pagamento}}" >
+				</div>
+				<small class="form-text text-muted">
+					Link de pagamento gerado por adquirente. (pag seguro, mercado pago, etc.).
+				</small>
+			</div>
+		</div>
+
+		<!-- dt_limit_pagamento -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>dt_limit_pagamento</h6>
+				<div class="input-group">
+					<input id="f-dt_limit_pagamento" name="f-dt_limit_pagamento" type="datetime-local" class="form-control" value="{{ingresso.dt_limit_pagamento}}" required>
+				</div>
+				<small class="form-text text-muted">
+					Data limite para efetuar o pagamento do ingresso e garantir a vaga. Ex: 24/02/2023 14:00.
+				</small>
+			</div>
+		</div>
+
+		<!-- chave_pix -->
+		<div class="col-sm-6 mt-4">
+			<div class="form-group">
+				<h6>chave_pix</h6>
+				<div class="input-group">
+					<input id="f-chave_pix" name="f-chave_pix" type="text" class="form-control" value="{{ingresso.chave_pix}}" >
+				</div>
+				<small class="form-text text-muted">
+					Chave para pagamento via PIX. Ex: financeiromaanaim1971@gmail.com
+				</small>
+			</div>
+		</div>
+
+
+		<!-- DIVISÃO -->
+		<div class="col-12 mt-5">
+			<h4>Observações extras do Ingresso</h4>
+		</div>
+
+		<!-- desc_tipo_pagamento -->
+		<div class="col-12 my-2">
+			<div class="form-group">
+				<h6>Tipo do pagamento</h6>
+				<div class="input-group">
+					<textarea id="f-desc_tipo_pagamento" name="f-desc_tipo_pagamento" class="form-control" rows="5" aria-label="With textarea">{% if ingresso.desc_tipo_pagamento %}{{ingresso.desc_tipo_pagamento}}{% else %}O pagamento é do tipo pix.{% endif %}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Descrição do tipo de pagamento. Ex: O pagamento é do tipo pix.
+				</small>
+			</div>
+		</div>
+		
+		<!-- desc_orientacao -->
+		<div class="col-12 my-2">
+			<div class="form-group">
+				<h6>Orientação</h6>
+				<div class="input-group">
+					<textarea id="f-desc_orientacao" name="f-desc_orientacao" class="form-control" rows="5" aria-label="With textarea">{% if ingresso.desc_orientacao %}{{ingresso.desc_orientacao}}{% else %}Este ingresso tem uma validade. Após o vencimento deste ingresso, sua inscrição será cancelada. Este ingresso tem um valor, é necessário realizar o pagamento integral deste valor, para validar sua inscrição. Após realizar o pagamento, é necessário enviar o comprovante para o whatsapp (35 9 9963-5624).{% endif %}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Orientação para o pagamento do ingresso. Essa orientação é exibida após a realização da inscrição quando o status é "Aguardando Pagamento". Orientando como o inscrito deve proceder com o pagamento.
+				</small>
+			</div>
+		</div>
+		
+		<!-- desc_cuidados -->
+		<div class="col-12 my-2">
+			<div class="form-group">
+				<h6>Cuidados</h6>
+				<div class="input-group">
+					<textarea id="f-desc_cuidados" name="f-desc_cuidados" class="form-control" rows="5" aria-label="With textarea">{% if ingresso.desc_cuidados %}{{ingresso.desc_cuidados}}{% else %}Confira os links e os destinatários para não cair em golpes.{% endif %}</textarea>
+				</div>
+				<small class="form-text text-muted">
+					Cuidados com o pagamento.
+				</small>
+			</div>
+		</div>
+
+
+		
+		<!-- DIVISÃO -->
+		<div class="col-12 mt-5">
+			<h4>Controle do Ingresso</h4>
+		</div>
+
+		<!-- status -->
+		<div class="col-12 col-sm-6 col-lg-4 my-2">
+			<div class="form-group">
+				<h6>Status</h6>
+				<div class="input-group">
+					<select id="f-status" name="f-status" class="form-select" required>
+						<option value="1" {% if ingresso.idStatus or not event %}selected{% endif %}>Ativo</option>
+						<option value="0" {% if ingresso and ingresso.idStatus == 0 %}selected{% endif %}>Inativo</option>
+					</select>
+				</div>
+				<small class="form-text text-muted">
+					Status da situação do ingresso.
+				</small>
+			</div>
+		</div>
+
+
+		<!-- DIVISÃO -->
+		<div class="col-12 text-right">
+			{% if ingresso.id %}
+			<button type="submit" value="{{evento.id}}" class="btn btn-secondary">Atualizar Ingresso</button>
+			{% else %}
+			<button type="submit" class="btn btn-secondary">Adicionar Novo Ingresso</button>
+			{% endif %}
+		</div>
+
+	</form>
+</div>

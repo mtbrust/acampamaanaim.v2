@@ -3,7 +3,10 @@
 namespace pages;
 
 use desv\classes\AccessControl;
+use desv\classes\bds\BdLogins;
+use desv\classes\bds\BdPermissions;
 use desv\classes\DevHelper;
+use desv\controllers\DataBase;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 
@@ -79,7 +82,7 @@ class login extends EndPoint
 	public function post($params)
 	{
 		if (empty($_POST['redirect_url'])) {
-			$_POST['redirect_url'] = $params['base']['url'] . 'desv/';
+			$_POST['redirect_url'] = $params['base']['url'] . 'adm/';
 		}
 
 		// Tenta realizar o login.

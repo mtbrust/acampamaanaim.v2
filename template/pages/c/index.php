@@ -4,6 +4,7 @@ namespace pages;
 
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
+use template\classes\maanaim\Maanaim;
 
 /**
  * INDEX LOGIN
@@ -115,17 +116,8 @@ class index extends EndPoint
 	 */
 	public function get($params)
 	{
-		$eventos['eventos'] = [
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
-				'id' => 'evento01',
-			],
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
-				'id' => 'evento02',
-			],
-		];
-		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
+		$params['eventos'] = Maanaim::listarEventos(['ativos' => 1]);
+		self::$params['htmlEventos'] = Render::obj('blocos/eventos_simples.html', $params);
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}

@@ -5,6 +5,7 @@ namespace pages;
 use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
+use template\classes\maanaim\Maanaim;
 
 /**
  * INDEX LOGIN
@@ -110,7 +111,22 @@ class eventos extends EndPoint
 			$options['title'] = $params['infoUrl']['attr'][0];
 			$options['texto'] = 'Evento tralala';
 			self::$params['config']['title'] = 'EVENTO - ' . $params['infoUrl']['attr'][0];
-			$this->pagina_evento($params);
+			self::$params['evento'] = $this->pagina_evento($params);
+			self::$params['evento']['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
+
+			if (!isset(self::$params['evento']['titulo_evento']))
+			{
+				self::$params['evento']['titulo_evento'] = 'Evento não encontrado';
+				self::$params['evento']['obs_evento'] = 'Evento não encontrado';
+				self::$params['html'] = '<h1 class="mt-5 my-3">Evento não encontrado</h1>';
+			}
+
+			$options = [
+				'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/Inscricao.jpg',
+				'title' => self::$params['evento']['titulo_evento'],
+				'texto' => self::$params['evento']['obs_evento'],
+			];
+			self::$params['config']['title'] = self::$params['evento']['titulo_evento'];
 		} else {
 			// Caso seja para mostrar todos os eventos.
 			$params['page_tipo'] = 'eventos';
@@ -124,23 +140,38 @@ class eventos extends EndPoint
 
 	public function pagina_evento($params)
 	{
-		// todo brust - obter o evento que o usuário selecionou.
-		self::$params['htmlEvento'] = "Evento: " . $params['infoUrl']['attr'][0];
+		$idEvento = $params['infoUrl']['attr'][0];
+		$evento = Maanaim::listarEvento($idEvento);
+		$evento['maior_valor'] = Maanaim::maiorValorIngresso($idEvento);
+		$evento['ingressos'] = Maanaim::listarIngressosEvento($idEvento);
+		return $evento;
 	}
 
 	public function pagina_eventos($params)
 	{
-		$eventos['eventos'] = [
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
-				'id' => 'evento01',
-			],
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
-				'id' => 'evento02',
-			],
-		];
-		self::$params['htmlEventos'] = Render::obj('blocos/eventos.html', $eventos);
+		$params['eventos'] = Maanaim::listarEventos(['ativos' => 1]);
+		self::$params['htmlEventos'] = Render::obj('blocos/eventos_simples.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
+	}
+
+	public function post($params)
+	{
+		$idEvento = $params['infoUrl']['attr'][0];
+		$evento = Maanaim::listarEvento($idEvento);
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/INSCRICAO/Inscricao.jpg',
+			'title' => $evento['titulo_evento'],
+			'texto' => $evento['obs_evento'],
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
+
+		self::$params['ingressoInfo'] = Maanaim::listarIngresso($_POST['f-ingresso']);
+		self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
+		// DevHelper::printr(self::$params['ingresso']);
+		self::$params['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
+
+		// Formulário de inscrição.
+		self::$params['formInscricaoHtml'] = Render::obj('forms/form-inscricao.html', $params);
 	}
 }

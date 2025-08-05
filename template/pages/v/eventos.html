@@ -1,8 +1,7 @@
-{{html|raw}}
-
-
 {# BANNER TITULO #}
 {{tituloPagina|raw}}
+
+{{html|raw}}
 
 {#
 EVENTOS
@@ -22,7 +21,7 @@ EVENTOS
                 <div class="p-3 mb-3 rounded bg-creme">
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            <img class="w-100 rounded" src="{{base.dir_relative}}template/assets/midias/site/INSCRICAO/logo-acamp.jpg" alt="">
+                            <img class="w-100 rounded" src="{{base.dir_relative}}{{evento.url_midia_banner}}" alt="">
                         </div>
                         <div class="col-md-9 ps-md-5 ps-3 mt-2">
                             <h2 class="oswald text-bold">JÁ FIZ MINHA INSCRIÇÃO</h2>
@@ -47,15 +46,15 @@ EVENTO ESPECÍFICO
 *****************************************************************************
 #}
 
-{% if infoUrl.attr[0] %}
+{% if infoUrl.attr[0] and evento.id %}
 
 <div class="py-90 bg-cinza-claro"></div>
 
 <div class="pt-90">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <img class="rounded" src="{{base.dir_relative}}template/assets/midias/site/INSCRICAO/logo-acamp.jpg" alt="" style="max-height: 200px; max-width: 100%; margin-top: -200px;">
+            <div class="col-md-12 text-center">
+                <img class="rounded" src="{{base.dir_relative}}{{evento.url_midia_banner}}" alt="" style="max-width: 100%; margin-top: -200px;">
             </div>
         </div>
         <div class="row">
@@ -67,34 +66,34 @@ EVENTO ESPECÍFICO
             <div class="col-md-6 mt-5">
                 <div class="rounded bg-creme p-3 h-100">
                     <h6 class="oswald text-bold t-vermelho">EVENTO</h6>
-                    <span>Acampáscoa</span>
+                    <span>{{evento.nome_evento}}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">TÍTULO</h6>
-                    <span>Acampáscoa</span>
+                    <span>{{evento.titulo_evento}}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">DATA</h6>
-                    <span>Data início: 01/01/2024 14:00</span>
+                    <span>Data início: {{ evento.dt_inicio_evento|date("d/m/Y H:m") }}.</span>
                     <br>
-                    <span>Data término: 05/01/2024 14:00</span>
+                    <span>Data término: {{ evento.dt_fim_evento|date("d/m/Y H:m") }}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">VALOR</h6>
-                    <span>R$ 250,00</span>
+                    <span>R$ {{evento.maior_valor|number_format(2, ',', '.')}}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">ATIVIDADES</h6>
-                    <span>Cultos, ministrações, oficinas, esportes, gincanas, momentos devocionais, fogueira, etc.</span>
+                    <span>{{evento.obs_atividades}}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">OBSERVAÇÕES</h6>
-                    <span>Para este evento tempo 2 tipos de inscrição. Pré venda e inscrição normal.</span>
+                    <span>{{evento.obs_evento}}</span>
                     <hr>
                 </div>
             </div>
             <div class="col-md-6 mt-5">
                 <div class="rounded bg-creme p-3 h-100">
                     <h6 class="oswald text-bold t-vermelho">PRELETOR</h6>
-                    <span>Hudson Zanoni</span>
+                    <span>{{evento.nome_preletor}}</span>
                     <hr>
                     <h6 class="oswald text-bold t-vermelho">DESCRIÇÃO</h6>
-                    <span>Hudson Zanoni, também conhecido como palhaço Adalberto Pé de Chinelo, mora em Maringá – Pr, é casado com Flaviana e são pais de 4 filhos, Kalel, Melina, Lilie e Lavi. Formado em Marketing, ator e palhaço profissional, membro da IPVO (2ª Igreja Presbiteriana do Brasil em Maringá), estudou na JOCUM Almirante Tamandaré (ETED) em 1997 e hoje é missionário itinerante em tempo integral desde 2007. Fundador e Diretor da Cia de Teatro Expressão de Amor e da Associação Terapia da Alegria, projeto de capelania que utiliza a linguagem do “palhaço” em hospitais, asilos e escolas. Nos últimos 15 anos tem viajado por todo o Brasil e mundo afora para dar suporte artístico e treinamento a diversas agências missionárias em mais de 40 países..</span>
+                    <span>{{evento.obs_preletor}}</span>
                     <hr>
                 </div>
             </div>
@@ -103,73 +102,18 @@ EVENTO ESPECÍFICO
 </div>
 
 <div class="pb-90">
-    <div class="container">
-        <div class="row">
-            <div class="col my-5">
-                <h1 class="oswald text-bold text-center">INSCRIÇÕES</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="rounded bg-vermelho p-3">
-                    <h4 class="oswald text-bold t-creme">Selecione a inscrição desejada</h4>
-                </div>
-            </div>
-            <div class="col-12">
 
-                <div class="rounded border border-danger-subtle p-2 mt-4">
-                    <form class="row align-items-center">
-                        <div class="col-md-2">
-                            <h5 class="oswald t-vermelho">lote 01</h5>
-                            <img class="rounded w-100" src="{{base.dir_relative}}template/assets/midias/site/INSCRICAO/logo-acamp.jpg" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <span><b>Valor</b>: R$ 250,00</span>
-                            <br>
-                            <span><b>Data início</b>: 01/01/2024 00:00</span>
-                            <br>
-                            <span><b>Data término</b>: 03/01/2024 23:59</span>
-                            <br>
-                            <span><b>Pagamento</b>: Pagamento via PIX, com envio do comprovante para nosso whatsapp.</span>
-                            <br>
-                            <span><b>Observações</b>: Lote promocional com valor reduzido para os acampantes que gostam de planejar.</span>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="hidden" name="evento" value="evento-01">
-                            <button type="submit" class="btn btn-success" name="lote" value="lote-01">Me inscrever</button>
-                        </div>
-                    </form>
-                </div>
+    {{evento.ingressosHtml|raw}}
 
-                <div class="rounded border border-danger-subtle p-2 mt-4">
-                    <form class="row align-items-center">
-                        <div class="col-md-2">
-                            <h5 class="oswald t-vermelho">lote 02</h5>
-                            <img class="rounded w-100" src="{{base.dir_relative}}template/assets/midias/site/INSCRICAO/logo-acamp.jpg" alt="">
-                        </div>
-                        <div class="col-md-8">
-                            <span><b>Valor</b>: R$ 300,00</span>
-                            <br>
-                            <span><b>Data início</b>: 01/01/2024 00:00</span>
-                            <br>
-                            <span><b>Data término</b>: 03/01/2024 23:59</span>
-                            <br>
-                            <span><b>Pagamento</b>: Pagamento via PIX, com envio do comprovante para nosso whatsapp.</span>
-                            <br>
-                            <span><b>Observações</b>: Inscrição padrão de acampante.</span>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="hidden" name="evento" value="evento-02">
-                            <button type="submit" class="btn btn-success" name="lote" value="lote-02">Me inscrever</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
 </div>
 
+{% endif %}
+
+
+{% if ingressoInfo.id %}
+    {{ingressosHtml|raw}}
+
+    {{formInscricaoHtml|raw}}
 {% endif %}
 
 
