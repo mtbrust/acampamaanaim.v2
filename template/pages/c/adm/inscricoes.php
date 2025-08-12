@@ -8,6 +8,7 @@ use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\Maanaim;
+use template\classes\maanaim\MaanaimCarga;
 
 /**
  * INDEX LOGIN
@@ -99,6 +100,7 @@ class inscricoes extends EndPoint
 		// Sub menus da página.
 		self::$params['subMenus'] = ['adicionar', 'editar'];
 
+		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 		self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
 

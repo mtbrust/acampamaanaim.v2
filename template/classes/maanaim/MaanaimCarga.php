@@ -76,4 +76,53 @@ class MaanaimCarga
 		$r = $bdPermissions->addPermissionsLogin(2, 'adm/inscricoes/');
 		$r = $bdPermissions->addPermissionsLogin(2, 'adm/pessoas/');
     }
+
+	static function fakeInscricao()
+	{
+		return [
+			"idEvento" => "7",
+			"idIngresso" => "",
+			"nome" => "Mateus Rocha Brust",
+			"email" => "mtbrust@gmail.com",
+			"telefone" => "31993265491",
+			"telefoneContato" => "31993265491",
+			"cpf" => "10401141640",
+			"sexo" => "Masculino",
+			"dtNascimento" => "2020-09-25",
+			"paiNome" => "Mateus Rocha Brust",
+			"maeNome" => "Mateus Rocha Brust",
+			"endCEP" => "37750-000",
+			"endPais" => "Brasil",
+			"endEstado" => "MG",
+			"endCidade" => "Machado",
+			"endBairro" => "nobres",
+			"endRua" => "frança",
+			"endNumero" => "118",
+			"endComplemento" => "ap 120",
+			"RepNome" => "Mateus Rocha Brust",
+			"RepEmail" => "mtbrust@gmail.com",
+			"RepTelefone" => "31993265491",
+			"RepCpf" => "10401141640",
+			"RepSexo" => "Masculino",
+			"RepDtNascimento" => "1989-09-25",
+			"alergiaR" => "0",
+			"alergia" => "Nenhum",
+			"medicamentoR" => "0",
+			"medicamento" => "Nenhum",
+			"nadarR" => "1",
+			"ideia" => "Nenhum",
+			"conselheiro" => "Nenhum",
+			"termos" => 1,
+			"status" => "",
+			"statusEquipe" => "",
+			"obsPreAcampa" => "",
+			"obsAcampa" => "",
+			"obsPosAcampa" => "",
+			"documentacao" => "",
+			"alojamento" => "",
+			"quarto" => "",
+			"checkin" => "",
+			"obsCheckin" => ""
+		];
+	}
 }

@@ -39,7 +39,7 @@ function ajaxDados(url_api, dados, callback, type = 'POST') {
                 response = { response: '', msg: 'Erro na chamada AJAX.' };
             } else {
                 // Mensagem do servidor.
-                response = { response: '', msg: JSON.parse(response.responseText).msg, status: response.status };
+                response = { response: response.responseJSON, msg: JSON.parse(response.responseText).msg, status: response.status };
             }
             this.myCallback(response);
 

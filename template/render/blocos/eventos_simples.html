@@ -24,25 +24,27 @@ TEMPORADAS
         <div class="row">
             <div class="col-md-10 m-auto">
 
-                {% for key, evento in eventos %}
+                <div class="container">
+                    <div class="row">
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div style="position: relative;">
-                            <span class="badge text-bg-light" style="position: absolute; top: 10px; left: 10px;">{{evento.titulo_evento}}</span>
-                            <span class="badge text-bg-light" style="position: absolute; top: 35px; left: 10px;">{{ evento.dt_inicio_evento|date("d/m/Y") }} até {{ evento.dt_fim_evento|date("d/m/Y") }}</span>
-                            <a href="{{base.url}}eventos/{{evento.id}}/">
-                                {% if not evento.url_midia_banner %}
-                                {% set evento = {'url_midia_banner': config.image} %}
-                                {% endif %}
-                                <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_banner}}" alt="">
-                            </a>
-                            <a href="{{base.dir_relative}}eventos/{{evento.id}}/" class="btn btn-success position-absolute" style="bottom: 20px; right: 20px;">Inscrição</a>
+                        {% for key, evento in eventos %}
+                        <div class="col-md-6">
+                            <div style="position: relative;" class="m-2 rounded">
+                                <span class="badge text-bg-light" style="position: absolute; top: 10px; left: 10px;">{{evento.titulo_evento}}</span>
+                                <span class="badge text-bg-light" style="position: absolute; top: 35px; left: 10px;">{{ evento.dt_inicio_evento|date("d/m/Y") }} até {{ evento.dt_fim_evento|date("d/m/Y") }}</span>
+                                <a href="{{base.url}}eventos/{{evento.id}}/">
+                                    {% if not evento.url_midia_banner %}
+                                    {% set evento = {'url_midia_banner': config.image} %}
+                                    {% endif %}
+                                    <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_banner}}" alt="">
+                                </a>
+                                <a href="{{base.dir_relative}}eventos/{{evento.id}}/" class="btn btn-success position-absolute" style="bottom: 20px; right: 20px;">Inscrição</a>
+                            </div>
                         </div>
+                        {% endfor %}
+
                     </div>
                 </div>
-
-                {% endfor %}
             </div>
         </div>
     </div>

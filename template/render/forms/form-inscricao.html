@@ -23,8 +23,18 @@
 							<h6>Auto Preenchimento da inscrição <span id="resultCPF"></span></h6>
 							<p>
 								Aqui nós te ajudamos a preencher de acordo com sua última inscrição.
-								Basta informar o CPF e o ID de inscrição antiga.
-								E ai é só revisar e atualizar as informações antigas.
+								<br>
+								Basta seguir 4 passos:
+								<br>
+								1 - Preencher com o seu CPF.
+								<br>
+								2 - Preencher com o ID de uma inscrição que você fez.
+								<br>
+								3 - Clique em "Alto Preencher".
+								<br>
+								Caso a gente tenha essas informações na nossa base de dados, iremos preencher os campos.
+								<br>
+								4 - Agora é só revisar e atualizar as informações antigas. E realizar a inscrição.
 							</p>
 							<div class="input-group">
 								<span class="input-group-text" id="auto-preenchimento">CPF</span>
@@ -54,6 +64,46 @@
                 **************************************************************************************************************
             -->
 				<div class="col-12 mt-4 pt-5">
+					<h4>Dados da inscrição</h4>
+					<p>Informações do evento e do tipo de inscrição.</p>
+				</div>
+
+				<!-- EVENTO -->
+				<div class="col-12 col-sm-6 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Evento</h6>
+						<div class="input-group">
+							<select id="f-idEvento" name="f-idEvento" class="form-select" required>
+								{% if formInscricao %}
+								<option value="{{evento.id}}" selected>{{evento.titulo_evento}}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- INGRESSO -->
+
+				<div class="col-12 col-sm-6 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Ingresso</h6>
+						<div class="input-group">
+							<select id="f-idIngresso" name="f-idIngresso" class="form-select" required>
+								{% if formInscricao %}
+								<option value="{{evento.ingressos[0].id}}" selected>R$ {{evento.ingressos[0].valor_ingresso|number_format(2, ',', '.')}} - {{evento.ingressos[0].titulo}}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- 
+                Dados do inscrito 
+                **************************************************************************************************************
+            -->
+				<div class="col-12 mt-4 pt-5">
 					<h4>Dados do Inscrito</h4>
 					<p>Dados do inscrito/acampante. Preencha com cuidado. O preenchimento correto das informações garante sua vaga.</p>
 				</div>
@@ -64,7 +114,7 @@
 					<div class="form-group">
 						<h6>Nome Completo (*)</h6>
 						<div class="input-group">
-							<input id="f-nome" name="f-nome" type="text" class="form-control" value="{{page.inscricao.nome}}" style="text-transform: uppercase;" required>
+							<input id="f-nome" name="f-nome" type="text" class="form-control" value="{{inscricao.nome}}" style="text-transform: uppercase;" required>
 						</div>
 						<small class="form-text text-muted">
 							Nome completo igual em documento.
@@ -79,7 +129,7 @@
 					<div class="form-group">
 						<h6>E-Mail (*)</h6>
 						<div class="input-group">
-							<input id="f-email" name="f-email" type="text" class="form-control" value="{{page.inscricao.email}}" style="text-transform: lowercase;" required>
+							<input id="f-email" name="f-email" type="text" class="form-control" value="{{inscricao.email}}" style="text-transform: lowercase;" required>
 						</div>
 						<small class="form-text text-muted">
 							E-mail para identificação do cadastro e pagamento.
@@ -93,7 +143,7 @@
 					<div class="form-group">
 						<h6>Telefone (*)</h6>
 						<div class="input-group">
-							<input id="f-telefone" name="f-telefone" type="text" maxlength="14" class="form-control" value="{{page.inscricao.telefone}}" required>
+							<input id="f-telefone" name="f-telefone" type="text" maxlength="14" class="form-control" value="{{inscricao.telefone}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Telefone pessoal.
@@ -107,7 +157,7 @@
 					<div class="form-group">
 						<h6>Telefone Contato (*)</h6>
 						<div class="input-group">
-							<input id="f-telefoneContato" name="f-telefoneContato" type="text" maxlength="14" class="form-control" value="{{page.inscricao.telefoneContato}}" required>
+							<input id="f-telefoneContato" name="f-telefoneContato" type="text" maxlength="14" class="form-control" value="{{inscricao.telefoneContato}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Telefone de contato externo (Emergência).
@@ -121,7 +171,7 @@
 					<div class="form-group">
 						<h6>CPF (*)</h6>
 						<div class="input-group">
-							<input id="f-cpf" name="f-cpf" type="text" class="form-control mask-cpf" value="{{page.inscricao.cpf}}" required>
+							<input id="f-cpf" name="f-cpf" type="text" class="form-control mask-cpf" value="{{inscricao.cpf}}" required>
 
 						</div>
 						<small class="form-text text-muted">
@@ -130,37 +180,6 @@
 					</div>
 				</div>
 
-
-				<!-- RG -->
-				<!-- <div class="col-12 col-sm-6 col-lg-4 my-2">
-                <div class="form-group">
-                    <h6>RG</h6>
-                    <div class="input-group">
-                        <input id="f-rg" name="f-rg" type="text" class="form-control" value="{{page.inscricao.rg}}">
-
-                    </div>
-                    <small class="form-text text-muted">
-                        Documento de registro geral (RG).
-                    </small>
-                </div>
-            </div> -->
-
-
-				<!-- CNH -->
-				<!-- <div class="col-12 col-sm-6 col-lg-4 my-2">
-                <div class="form-group">
-                    <h6>CNH</h6>
-                    <div class="input-group">
-                        <input id="f-cnh" name="f-cnh" type="text" class="form-control" value="{{page.inscricao.cnh}}">
-
-                    </div>
-                    <small class="form-text text-muted">
-                        Carteira nacional de habilitação (CNH).
-                    </small>
-                </div>
-            </div> -->
-
-
 				<!-- Sexo -->
 				<div class="col-12 col-sm-6 col-lg-4 my-2">
 					<div class="form-group">
@@ -168,8 +187,8 @@
 						<div class="input-group">
 							<select id="f-sexo" name="f-sexo" class="form-select" required>
 								<option value=""></option>
-								<option value="Masculino">Masculino</option>
-								<option value="Feminino">Feminino</option>
+								<option value="Masculino" {% if inscricao.sexo=="Masculino" %}selected{% endif %}>Masculino</option>
+								<option value="Feminino" {% if inscricao.sexo=="Feminino" %}selected{% endif %}>Feminino</option>
 							</select>
 						</div>
 						<small class="form-text text-muted">
@@ -184,19 +203,19 @@
 					<div class="form-group">
 						<h6>Data Nascimento (*)</h6>
 						<div class="input-group">
-							<input id="f-dtNascimento" name="f-dtNascimento" type="date" class="form-control" value="{{page.inscricao.dtNascimento}}" onchange="verificaMaior()" required>
+							<input id="f-dtNascimento" name="f-dtNascimento" type="date" class="form-control" value="{{inscricao.dtNascimento}}" onchange="verificaMaior()" required>
 						</div>
 						<small class="form-text text-muted">
 							Data de nascimento.
 						</small>
-						<h6 id="menorLimite" style="display: none;"><span class="badge bg-danger">Inscrição inválida. Somente maior de {{page.info.INFO_IDADE_MINIMA}} anos.</span></h6>
-						<h6 style="display: none;" class="menor"><span class="badge bg-danger">Necessita de Representante</span></h6>
+						<small id="menorLimite" style="display: none;"><br><span class="badge bg-danger">Idade Mínima {{evento.idade_minima}}</span> A idade mínima para o evento é de {{evento.idade_minima}} anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
+						<small style="display: none;" class="menor"><br><span class="badge bg-danger">Representante</span> Sua inscrição necessita dos dados e aprovação do representante legal, pois você é menor de idade.</small>
 					</div>
 				</div>
 
 
 				<!-- Foto Perfil -->
-				<div class="col-12 col-sm-6 col-lg-4 my-2">
+				{# <div class="col-12 col-sm-6 col-lg-4 my-2 d-none">
 					<div class="form-group">
 						<h6>Foto Perfil</h6>
 						<div class="input-group">
@@ -206,7 +225,7 @@
 							Foto de perfil para identificação.
 						</small>
 					</div>
-				</div>
+				</div> #}
 
 
 				<!-- Nome Pai -->
@@ -214,7 +233,7 @@
 					<div class="form-group">
 						<h6>Nome Completo Pai</h6>
 						<div class="input-group">
-							<input id="f-paiNome" name="f-paiNome" type="text" class="form-control" value="{{page.inscricao.paiNome}}" style="text-transform: uppercase;">
+							<input id="f-paiNome" name="f-paiNome" type="text" class="form-control" value="{{inscricao.paiNome}}" style="text-transform: uppercase;">
 						</div>
 						<small class="form-text text-muted">
 							Nome completo Pai igual em documento.
@@ -228,7 +247,7 @@
 					<div class="form-group">
 						<h6>Nome Completo Mãe</h6>
 						<div class="input-group">
-							<input id="f-maeNome" name="f-maeNome" type="text" class="form-control" value="{{page.inscricao.maeNome}}" style="text-transform: uppercase;">
+							<input id="f-maeNome" name="f-maeNome" type="text" class="form-control" value="{{inscricao.maeNome}}" style="text-transform: uppercase;">
 						</div>
 						<small class="form-text text-muted">
 							Nome completo Mãe igual em documento.
@@ -248,8 +267,8 @@
                 **************************************************************************************************************
             -->
 					<div class="col-12 mt-4 pt-5">
-						<h4>Dados do Representante</h4>
-						<p>Dados do REPRESENTANTE LEGAL. Preencha com cuidado. O preenchimento correto das informações garante a vaga.</p>
+						<h4>Dados do Representante Legal</h4>
+						<p>Dados do REPRESENTANTE LEGAL. Preencha com cuidado. O preenchimento correto das informações garante a inscrição.</p>
 					</div>
 
 
@@ -258,7 +277,7 @@
 						<div class="form-group">
 							<h6>Nome Completo Representante (*)</h6>
 							<div class="input-group">
-								<input id="f-RepNome" name="f-RepNome" type="text" class="form-control" value="{{page.inscricao.RepNome}}" style="text-transform: uppercase;">
+								<input id="f-RepNome" name="f-RepNome" type="text" class="form-control" value="{{inscricao.RepNome}}" style="text-transform: uppercase;">
 							</div>
 							<small class="form-text text-muted">
 								Nome completo Representante igual em documento.
@@ -273,7 +292,7 @@
 						<div class="form-group">
 							<h6>E-Mail Representante (*)</h6>
 							<div class="input-group">
-								<input id="f-RepEmail" name="f-RepEmail" type="text" class="form-control" value="{{page.inscricao.RepEmail}}" style="text-transform: lowercase;">
+								<input id="f-RepEmail" name="f-RepEmail" type="text" class="form-control" value="{{inscricao.RepEmail}}" style="text-transform: lowercase;">
 							</div>
 							<small class="form-text text-muted">
 								E-mail Representante para identificação do cadastro e pagamento.
@@ -287,7 +306,7 @@
 						<div class="form-group">
 							<h6>Telefone Representante (*)</h6>
 							<div class="input-group">
-								<input id="f-RepTelefone" name="f-RepTelefone" type="text" maxlength="14" class="form-control" value="{{page.inscricao.RepTelefone}}">
+								<input id="f-RepTelefone" name="f-RepTelefone" type="text" maxlength="14" class="form-control" value="{{inscricao.RepTelefone}}">
 							</div>
 							<small class="form-text text-muted">
 								Telefone pessoal Representante.
@@ -301,7 +320,7 @@
 						<div class="form-group">
 							<h6>CPF Representante (*)</h6>
 							<div class="input-group">
-								<input id="f-RepCpf" name="f-RepCpf" type="text" class="form-control mask-cpf" value="{{page.inscricao.RepCpf}}">
+								<input id="f-RepCpf" name="f-RepCpf" type="text" class="form-control mask-cpf" value="{{inscricao.RepCpf}}">
 
 							</div>
 							<small class="form-text text-muted">
@@ -310,37 +329,6 @@
 						</div>
 					</div>
 
-
-					<!-- RG Representante -->
-					<!-- <div class="col-12 col-sm-6 col-lg-4 my-2">
-                <div class="form-group">
-                    <h6>RG Representante</h6>
-                    <div class="input-group">
-                        <input id="f-RepRg" name="f-RepRg" type="text" class="form-control" value="{{page.inscricao.RepRg}}">
-
-                    </div>
-                    <small class="form-text text-muted">
-                        Documento de registro geral (RG) Representante.
-                    </small>
-                </div>
-            </div> -->
-
-
-					<!-- CNH Representante -->
-					<!-- <div class="col-12 col-sm-6 col-lg-4 my-2">
-                <div class="form-group">
-                    <h6>CNH Representante</h6>
-                    <div class="input-group">
-                        <input id="f-RepCnh" name="f-RepCnh" type="text" class="form-control" value="{{page.inscricao.RepCnh}}">
-
-                    </div>
-                    <small class="form-text text-muted">
-                        Carteira nacional de habilitação (CNH) Representante.
-                    </small>
-                </div>
-            </div> -->
-
-
 					<!-- Sexo Representante -->
 					<div class="col-12 col-sm-6 col-lg-4 my-2">
 						<div class="form-group">
@@ -348,8 +336,8 @@
 							<div class="input-group">
 								<select id="f-RepSexo" name="f-RepSexo" class="form-select">
 									<option value=""></option>
-									<option value="Masculino">Masculino</option>
-									<option value="Feminino">Feminino</option>
+									<option value="Masculino" {% if inscricao.RepSexo=="Masculino" %}selected{% endif %}>Masculino</option>
+									<option value="Feminino" {% if inscricao.RepSexo=="Feminino" %}selected{% endif %}>Feminino</option>
 								</select>
 							</div>
 							<small class="form-text text-muted">
@@ -364,7 +352,7 @@
 						<div class="form-group">
 							<h6>Data Nascimento Representante (*)</h6>
 							<div class="input-group">
-								<input id="f-RepDtNascimento" name="f-RepDtNascimento" type="date" class="form-control" value="{{page.inscricao.RepDtNascimento}}">
+								<input id="f-RepDtNascimento" name="f-RepDtNascimento" type="date" class="form-control" value="{{inscricao.RepDtNascimento}}">
 							</div>
 							<small class="form-text text-muted">
 								Data de nascimento Representante.
@@ -394,7 +382,7 @@
 					<div class="form-group">
 						<h6>CEP (*)</h6>
 						<div class="input-group">
-							<input id="f-endCEP" name="f-endCEP" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endCEP}}" required>
+							<input id="f-endCEP" name="f-endCEP" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endCEP}}" required>
 						</div>
 						<small class="form-text text-muted">
 							CEP de residência.
@@ -408,12 +396,7 @@
 					<div class="form-group">
 						<h6>País</h6>
 						<div class="input-group">
-							<select id="f-endPais" name="f-endPais" class="form-select" {% if page.inscricao.endPais %}disabled{% endif %}>
-								<option value=""></option>
-								{% for item in page.pais %}
-								<option value="{{ item.id|e }}" {% if page.inscricao.endPais==item.id %}selected{% endif %}>{{ item.nome|e }}</option>
-								{% endfor %}
-							</select>
+							<input id="f-endPais" name="f-endPais" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endPais}}" required>
 						</div>
 						<small class="form-text text-muted">
 							País residente.
@@ -428,12 +411,7 @@
 					<div class="form-group">
 						<h6>Estado UF (*)</h6>
 						<div class="input-group">
-							<select id="f-endEstado" name="f-endEstado" class="form-select" required>
-								<option value=""></option>
-								{% for item in page.uf %}
-								<option value="{{ item.id|e }}" {% if page.inscricao.endEstado==item.id %}selected{% endif %}>{{ item.nome|e }}</option>
-								{% endfor %}
-							</select>
+							<input id="f-endEstado" name="f-endEstado" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endEstado}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Unidade federativa (UF) de residência.
@@ -447,7 +425,7 @@
 					<div class="form-group">
 						<h6>Cidade (*)</h6>
 						<div class="input-group">
-							<input id="f-endCidade" name="f-endCidade" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endCidade}}" required>
+							<input id="f-endCidade" name="f-endCidade" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endCidade}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Cidade de residência.
@@ -461,7 +439,7 @@
 					<div class="form-group">
 						<h6>Bairro (*)</h6>
 						<div class="input-group">
-							<input id="f-endBairro" name="f-endBairro" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endBairro}}" required>
+							<input id="f-endBairro" name="f-endBairro" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endBairro}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Bairro de residência.
@@ -475,7 +453,7 @@
 					<div class="form-group">
 						<h6>Rua (*)</h6>
 						<div class="input-group">
-							<input id="f-endRua" name="f-endRua" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endRua}}" required>
+							<input id="f-endRua" name="f-endRua" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endRua}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Rua de residência.
@@ -489,7 +467,7 @@
 					<div class="form-group">
 						<h6>Número (*)</h6>
 						<div class="input-group">
-							<input id="f-endNumero" name="f-endNumero" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endNumero}}" required>
+							<input id="f-endNumero" name="f-endNumero" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endNumero}}" required>
 						</div>
 						<small class="form-text text-muted">
 							Número de residência.
@@ -503,7 +481,7 @@
 					<div class="form-group">
 						<h6>Complemento</h6>
 						<div class="input-group">
-							<input id="f-endComplemento" name="f-endComplemento" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{page.inscricao.endComplemento}}">
+							<input id="f-endComplemento" name="f-endComplemento" type="text" class="form-control" placeholder="" style="text-transform: uppercase;" value="{{inscricao.endComplemento}}">
 						</div>
 						<small class="form-text text-muted">
 							Complemento de residência.
@@ -535,14 +513,14 @@
 							<div class="input-group-text">
 								<div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="0" checked> Não
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="0" {% if not inscricao.alergiaR %}checked{% endif %}> Não
 									</div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="1"> Sim
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="1" {% if inscricao.alergiaR %}checked{% endif %}> Sim
 									</div>
 								</div>
 							</div>
-							<textarea id="f-alergia" name="f-alergia" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?"></textarea>
+							<textarea id="f-alergia" name="f-alergia" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?">{% if inscricao.alergia %}{{inscricao.alergia}}{% endif %}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Tem alergia ou algum tipo de cuidado com locais, comida, etc.
@@ -559,40 +537,20 @@
 							<div class="input-group-text">
 								<div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="0" checked> Não
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="0" {% if not inscricao.medicamentoR %}checked{% endif %}> Não
 									</div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="1"> Sim
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="1" {% if inscricao.medicamentoR %}checked{% endif %}> Sim
 									</div>
 								</div>
 							</div>
-							<textarea id="f-medicamento" name="f-medicamento" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?"></textarea>
+							<textarea id="f-medicamento" name="f-medicamento" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?">{% if inscricao.medicamento %}{{inscricao.medicamento}}{% endif %}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Faz uso de algum tipo de medicamento diário, ou em casos diversos?
 						</small>
 					</div>
 				</div>
-
-
-				<!-- Nadar Antigo -->
-				{# <div class="col-12 my-2">
-					<div class="form-group">
-						<h6>Sabe nadar e autoriza a participação em atividades aquáticas? (*)</h6>
-						<div class="input-group">
-							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="0"> Não
-							</div>
-							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="1"> Sim
-							</div>
-						</div>
-						<small class="form-text text-muted">
-							Tem alergia ou algum tipo de cuidado com locais, comida, etc.
-						</small>
-					</div>
-				</div> #}
-
 
 				<!-- Atividades aquáticas -->
 				<div class="col-12 my-2">
@@ -611,7 +569,6 @@
 						</small>
 					</div>
 				</div>
-
 
 				<!-- Açude -->
 				<div class="col-12 my-2">
@@ -671,7 +628,7 @@
 					<div class="form-group">
 						<h6>Quer compatilhar alguma informação sobre o acampamento?</h6>
 						<div class="input-group">
-							<textarea id="f-ideia" name="f-ideia" class="form-control" rows="5" aria-label="With textarea"></textarea>
+							<textarea id="f-ideia" name="f-ideia" class="form-control" rows="5" aria-label="With textarea">{{inscricao.ideia}}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Quantas vezes já participou? Quer alguma programação extra? Tem uma ideia? Quer participar da Equipe.
@@ -680,12 +637,12 @@
 				</div>
 
 
-				<!-- Conselho -->
+				<!-- conselheiro -->
 				<div class="col-12 my-2">
 					<div class="form-group">
 						<h6>Quer compatilhar alguma informação para o seu conselheiro?</h6>
 						<div class="input-group">
-							<textarea id="f-conselho" name="f-conselho" class="form-control" rows="5" aria-label="With textarea"></textarea>
+							<textarea id="f-conselheiro" name="f-conselheiro" class="form-control" rows="5" aria-label="With textarea">{{inscricao.conselheiro}}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Está passando por algum momento diferente na sua vida? Gostaria de conversar com um conselheiro? Informe aqui ou no próprio acampamento. Nossos conselheiros estão a disposição para compartilhar um pouco de esperança e dividir as cargas.
@@ -714,8 +671,8 @@
 					<div class="form-group">
 						<h6>Termos e Compromisso (*)</h6>
 						<div class="form-check form-switch">
-							<input class="form-check-input" type="checkbox" role="switch" name="f-termos" id="f-termos" required>
-							<label class="form-check-label" for="f-termos">Aceito os <a href="{{global.URL_RAIZ}}termos/" target="_blank">termos e compromissos</a>.</label>
+							<input class="form-check-input" type="checkbox" role="switch" name="f-termos" id="f-termos" {% if inscricao.termos %}checked{% endif %} required>
+							<label class="form-check-label" for="f-termos">Aceito os <a href="{{base.url}}termos/" target="_blank">termos e compromissos</a>.</label>
 						</div>
 						<small class="form-text text-muted">
 							Aceite dos termos, políticas, regras, deveres, direitos, etc. requisitos legais para inscrição. Os termos com seus dados será gerado e assinado digitalmente na confirmação da inscrição, com a possibilidade de baixar o arquivo para seu dispositivo.
@@ -732,19 +689,13 @@
 					<div class="form-group text-end">
 						<div class="form-check form-switch">
 							<a id="btnUffa" class="btn btn-success" onclick="realizarInscricao();">Uffa! Fazer Inscrição</a>
-							<h6 id="menorLimite2" style="display: none;"><span class="badge bg-danger">Inscrição inválida. Somente maior de {{page.info.INFO_IDADE_MINIMA}} anos.</span></h6>
+							<small id="menorLimite2" style="display: none;"><br><span class="badge bg-danger">Idade Mínima {{evento.idade_minima}}</span> A idade mínima para o evento é de {{evento.idade_minima}} anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
 						</div>
 						<small class="form-text text-muted">
-							Verifique atentamente todos os dados! Após fazer a incrição, siga as orientações de datas, pagamento e acompanhamento. 
+							Verifique atentamente todos os dados! Após fazer a incrição, siga as orientações de datas, pagamento e acompanhamento.
 						</small>
 					</div>
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>
@@ -753,36 +704,29 @@
 
 
 <script>
+
+	// Informações de controle.
+	data = new Date();
+	idadeMinima = parseInt('{{evento.idade_minima}}');
+	anoAtual = parseInt('{{info.anoAtual}}');
+	dateLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), 18);
+	dateMenorLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), idadeMinima);
+
+	// Função verifica se a idade do inscrito é superior a 18 anos, se é menor de idade e se está abaixo da idade mínima do evento.
 	function verificaMaior() {
 
-		idadeMinima = parseInt('{{page.info.INFO_IDADE_MINIMA}}');
-		anoAtual = parseInt('{{page.info.ANO_ATUAL}}');
+		// dateLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), 18); // 18 anos até a data do evento
+		// dateMenorLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), idadeMinima); // idade minima em anos até a data do evento
 
 		data = new Date($('#f-dtNascimento').val());
-		// dateLimite = new Date(2004, 3, 13); // 18 anos até a data do evento
-		// dateMenorLimite = new Date(2009, 3, 13); // 13 anos até a data do evento
-
-		dateLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), 18); // 18 anos até a data do evento
-		dateMenorLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), idadeMinima); // idade minima em anos até a data do evento
-
-
-		// alert(new Date('{{page.info.INFO_DATA_INI}}'))
-		//alert(tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), 18));
-
-
-		// console.log(data);
-		// console.log(dateLimite);
-		// console.log(dateMenorLimite);
 
 		// Se for menor de idade
 		if (data >= dateLimite) {
 			// representante
-			console.log('menor de idade');
 			$('.menor').show();
 		}
 		else {
 			// Maior
-			console.log('maior de idade');
 			$('.menor').hide();
 			$('#menorLimite').hide();
 		}
@@ -799,6 +743,7 @@
 
 	}
 
+	// Calcula o tempo entre duas datas.
 	function tiraYearsToDate(date, years) {
 		var days = years * 365;
 		var res = new Date(date);
@@ -806,8 +751,16 @@
 		return res;
 	}
 
+	// Formata a data.
+	function dataFormatada(d) {
+		var data = new Date(d),
+			dia = data.getDate(),
+			mes = data.getMonth() + 1,
+			ano = data.getFullYear();
+		return [dia, mes, ano].join('/');
+	}
 
-
+	// Busca informações do inscrito para não precisar preencher.
 	function buscaCPF() {
 
 		// Obtém formulário.
@@ -816,7 +769,7 @@
 		dados = new FormData();
 		dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
 		dados.append('f-cpf', $('#b-cpf').val()); // Exemplo de inclusão de valores.
-		ajaxDados('{{global.URL_RAIZ}}inscricao/api/get/cpf', dados, function (ret) {
+		ajaxDados('{{base.url}}eventos/api/cpf/', dados, function (ret) {
 			// Para testes
 			// console.log(ret);
 
@@ -909,8 +862,6 @@
 		})
 	}
 
-
-
 	function realizarInscricao() {
 
 		// Campos obrigatórios preenchidos.
@@ -918,22 +869,22 @@
 		msgOb = '';
 
 		// Caso não tenha preenchido algum, trava.
-		if ($('#f-nome').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: nome. '; }
-		if ($('#f-email').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: email. '; }
-		if ($('#f-telefone').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: telefone. '; }
-		if ($('#f-telefoneContato').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: telefoneContato. '; }
-		if ($('#f-cpf').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: cpf. '; }
-		if ($('#f-rg').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: rg. '; }
-		if ($('#f-cnh').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: cnh. '; }
-		if ($('#f-sexo').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: sexo. '; }
-		if ($('#f-dtNascimento').val() == '') { camposObrigatorios = false; msgOb += 'Preencha o campo: dtNascimento. '; }
+		if ($('#f-nome').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Nome. '; }
+		if ($('#f-email').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Email. '; }
+		if ($('#f-telefone').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Telefone. '; }
+		if ($('#f-telefoneContato').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Telefone Contato. '; }
+		if ($('#f-cpf').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: CPF. '; }
+		if ($('#f-sexo').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Sexo. '; }
+		if ($('#f-dtNascimento').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Data Nascimento. '; }
+		if ($('#f-termos').val() == '') { camposObrigatorios = false; msgOb += '<br>É necessário aceitar os termos e políticas. '; }
 
-
-		if (data > dateMenorLimite) { camposObrigatorios = false; msgOb += 'Não atende a idade mínima. '; }
+		// Agora mesmo não tendo a idade mínima é possível realizar a inscrição. e a inscrição é automaticamente cancelada.
+		// Isso foi feito para poder excepcionalmente inscrever alguém menor de idade e ativar a inscrição depois.
+		// if (data > dateMenorLimite) { camposObrigatorios = false; msgOb += '<br>Não atende a idade mínima. '; }
 
 		// Verifica se é menor de idade e preencheu os campos de dados de representante.
 		data = new Date($('#f-dtNascimento').val());
-		dateLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), 18); // 18 anos até a data do evento
+		// dateLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), 18); // 18 anos até a data do evento
 		// Se for menor de idade
 		if (data >= dateLimite) {
 			if (
@@ -943,38 +894,41 @@
 				|| $('#f-RepCpf').val() == ''
 				|| $('#f-RepSexo').val() == ''
 				|| $('#f-RepDtNascimento').val() == ''
-			) { camposObrigatorios = false; msgOb += 'Necessário preenchimento de todos os campos dos dados de representante. '; }
+			) { camposObrigatorios = false; msgOb += '<br>Necessário preenchimento de todos os campos dos dados de representante. '; }
 		}
 
-
+		// Verifica se faltou o preenchimento de algum campo e informa o usuário.
 		if (camposObrigatorios == false) {
 
 			// Notificação.
 			Swal.fire({
 				icon: 'error',
 				title: 'Erro.',
-				text: 'Preencha os campos obrigatórios. ' + msgOb,
-				toast: true,
-				position: 'top-end',
+				html: '<div class="text-start">Preencha os campos obrigatórios.<br>' + msgOb + '</div>',
+				// toast: true,
+				// position: 'top-end',
 				showConfirmButton: false,
+				showDenyButton: true,
+				denyButtonText: "Entendi",
 				// timer: 3000,
 				// timerProgressBar: true,
 			});
 
 			return true;
-
 		}
 
 		// Pega o formulário e envia.
 		dados = new FormData($('#finscricao')[0]);
 		dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
 		dados.append('adicionar', 'adicionar'); // Token para uso de API
-		ajaxDados('{{global.URL_RAIZ}}inscricao/api/post/inscricao', dados, function (ret) {
+		// ajaxDados('{{global.URL_RAIZ}}inscricao/api/post/inscricao', dados, function (ret) {
+		ajaxDados('{{base.url}}eventos/api/inscrever/', dados, function (ret) {
 			// Para testes
 			console.log(ret);
+			console.log(ret.response);
 
 			// Verifica se teve retorno ok.
-			if (ret.ret) {
+			if (!ret.response.body.error) {
 				// Notificação.
 				Swal.fire({
 					icon: "success",
@@ -983,10 +937,11 @@
 					toast: true,
 					position: "top-end",
 					showConfirmButton: false,
-					timer: 3000,
-					timerProgressBar: true,
+					// timer: 3000,
+					// timerProgressBar: true,
 				});
 
+				// Retirar
 				// Verifica se já está inscrito no evento atual.
 				if (ret.html != '') {
 					// Monta o html do acompanhamento.

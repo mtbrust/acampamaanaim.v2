@@ -6,12 +6,233 @@ use desv\classes\DevHelper;
 use desv\classes\FeedBackMessagens;
 use template\classes\bds\BdEventos;
 use template\classes\bds\BdIngressos;
+use template\classes\bds\BdInscricoes;
 use template\classes\bds\BdMidias;
 use template\classes\Midias;
 
 class Maanaim
 {
-    static function AdicionarEvento($post)
+    static public $msg = [];
+    static public $error = false;
+    static public $inserir = true;
+
+    static public $inscricao = [];
+
+    static function AdicionarInscricao($inscricao, $options = [])
+    {
+        self::$inscricao = $inscricao;
+
+        // Valores default para envio de imagens.
+        $optionsDefault = [
+            'admin' => false,    // Passa por todas as validações.
+        ];
+        $options = array_merge($optionsDefault, $options);
+
+        // Verificar se o CPF dessa inscrição já está inscrito nesse evento.
+        self::verificaInscricaoCpf(self::$inscricao['cpf']);
+
+        // Verificar os campos obrigatórios.
+        self::verificaCamposObrigatorios(self::$inscricao);
+
+        // Limpar campos.
+        self::limparCampos();
+
+        // Validar os campos.
+        self::validarCampos(self::$inscricao);
+
+        // Verificar se ainda existe vagas. Caso não exista, a inscrição é cadastrada com status fila de espera.
+        self::verificarVagas();
+
+        // Acrescentar informações padrão.
+        $options = [];
+        self::informacoesPadrao($options);
+        
+        // Valor padrão.
+        $idInscricao = 0;
+
+        // Insere evento.
+        if (self::$inserir) {
+            // Inserir a inscrição no banco de dados.
+            $bdInscricao = new BdInscricoes();
+            $idInscricao = $bdInscricao->insert(self::$inscricao);
+            
+            self::$msg[] = 'Acompanhe sua inscrição no menu "MINHA INSCRIÇÃO", informando o cpf: "'. self::$inscricao['cpf'] .'" e id: "'. $idInscricao .'".';
+        }
+
+        // Retornar informações do cadastro e status da inscrição.
+        return [
+            'error'          => self::$error,
+            'idInscricao'    => $idInscricao,
+            'acompanhamento' => self::$inscricao['cpf'] . $idInscricao,
+            'inscricao'      => $inscricao,
+            'msg'            => self::$msg,
+        ];
+    }
+
+    static public function verificaInscricaoCpf($cpf)
+    {
+        $bdInscricoes = new BdInscricoes();
+        $fields = "id, cpf";
+        $where = 'idEvento = ' . self::$inscricao['idEvento'] . ' and cpf = "' . $cpf . '"';
+        $inscrito = $bdInscricoes->select($fields, $where, null, null, null, 1000);
+
+        if (isset($inscrito[0]['cpf'])) {
+            self::$error = true;
+            self::$msg[] = 'Já existe uma inscrição neste evento com este cpf [' . $inscrito[0]['cpf'] . '] - ID [' . $inscrito[0]['id'] . '].';
+            self::$msg[] = 'Acompanhe a sua inscrição ou entre em contato conosco.';
+            self::$inserir = false;
+        }
+    }
+
+    static public function verificaCamposObrigatorios($inscricao)
+    {
+        // Caso não seja para inserir esse registro, nem verifica.
+        if (!self::$inserir) {
+            return true;
+        }
+
+        // Verifica se foi enviado CPF.
+        if (empty($inscricao['cpf'])) {
+            self::$error = false;
+            self::$msg[] = 'Preencha o campo "CPF".';
+        }
+    }
+
+    static public function limparCampos()
+    {
+        // Caso não seja para inserir esse registro, nem verifica.
+        if (!self::$inserir) {
+            return true;
+        }
+
+        // Limpo o campo CPF.
+        self::$inscricao['cpf'] = preg_replace('/[^0-9]/is', '', self::$inscricao['cpf']);
+    }
+
+    static public function informacoesPadrao($options = [])
+    {
+        // Caso não seja para inserir esse registro, nem verifica.
+        if (!self::$inserir) {
+            return true;
+        }
+
+        // Valores default para envio de imagens.
+        $optionsDefault = [
+            'idStatus' => self::$error ? 0 : 1,    // Caso ocorreu algum erro, cancela a inscrição.
+            'obs' => implode(' ', self::$msg),
+        ];
+        $options = array_merge($optionsDefault, $options);
+
+
+        // Limpo o campo CPF.
+        self::$inscricao['idStatus'] = $options['idStatus'];
+        self::$inscricao['obs'] = $options['obs'];
+    }
+
+    static public function verificarVagas()
+    {
+        // Caso não seja para inserir esse registro, nem verifica.
+        if (!self::$inserir) {
+            return true;
+        }
+
+        // Informações do evento.
+        $bdEventos = new BdEventos();
+        $evento = $bdEventos->selectById(self::$inscricao['idEvento']);
+
+        $qtdM = $evento['qtd_vagas_masculino'];
+        $qtdF = $evento['qtd_vagas_feminino'];
+
+        // Quantidade de vagas.
+        $bdInscricoes = new BdInscricoes();
+        $fields = "sexo, count(*) as qtd";
+        $where = 'idEvento = ' . self::$inscricao['idEvento'];
+        $groupby = 'sexo';
+        $orderby = 'sexo desc';
+        $vagas = $bdInscricoes->select($fields, $where, $orderby, null, $groupby, 1000);
+
+        // DevHelper::printr($bdInscricoes::$sql);
+        // DevHelper::printr($vagas);
+
+        // Calculo a quantidade de vagas restantes.
+        if (isset($vagas[0]['sexo']) && $vagas[0]['sexo'] == 'Masculino') {
+            $qtdM -= $vagas[0]['qtd'];
+        }
+        if (isset($vagas[1]['sexo']) && $vagas[1]['sexo'] == 'Feminino') {
+            $qtdF -= $vagas[1]['qtd'];
+        }
+        if (isset($vagas[0]['sexo']) && $vagas[0]['sexo'] == 'Feminino') {
+            $qtdF -= $vagas[0]['qtd'];
+        }
+        if (isset($vagas[1]['sexo']) && $vagas[1]['sexo'] == 'Masculino') {
+            $qtdM -= $vagas[1]['qtd'];
+        }
+
+        // Verifica se foi enviado CPF.
+        if ($qtdM <= 0) {
+            self::$error = true;
+            self::$msg[] = 'Não há mais vagas masculinas.';
+        }
+
+        if ($qtdF <= 0) {
+            self::$error = true;
+            self::$msg[] = 'Não há mais vagas femininas.';
+        }
+
+        $vagas = [
+            'f' => $qtdF,
+            'm' => $qtdM,
+        ];
+
+        // DevHelper::printr($vagas);
+
+        return $vagas;
+    }
+
+    static public function validarCampos($inscricao)
+    {
+        // Caso não seja para inserir esse registro, nem verifica.
+        if (!self::$inserir) {
+            return true;
+        }
+
+        // Verifica se foi enviado CPF.
+        if (!self::validaCPF($inscricao['cpf'])) {
+            self::$error = true;
+            self::$msg[] = 'CPF não atende ao padrão de conformidade.';
+        }
+    }
+
+    static function validaCPF($cpf)
+    {
+        // Extrai somente os números
+        $cpf = preg_replace('/[^0-9]/is', '', $cpf);
+
+        // Verifica se foi informado todos os digitos corretamente
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+
+        // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        // Faz o calculo para validar o CPF
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    static public function AdicionarEvento($post)
     {
 
         $evento = self::processaCamposEvento($post);
@@ -118,8 +339,8 @@ class Maanaim
         // Instancia da tabela de Ingressos.
         $bdIngressos = new BdIngressos();
 
-        $where = "id_evento = " . $idEvento . " and  dt_fim_inscricao > NOW()";
-        $orderby = 'valor_inscricao DESC';
+        $where = "id_evento = " . $idEvento . " and  dt_fim_ingresso > NOW()";
+        $orderby = 'valor_ingresso DESC';
 
         // Obtém ingressos.
         $ingressos = $bdIngressos->select('*', $where, $orderby);
@@ -129,7 +350,7 @@ class Maanaim
             return 0;
         }
 
-        return $ingressos[0]['valor_inscricao'];
+        return $ingressos[0]['valor_ingresso'];
     }
 
     static function listarIngressosEvento($idEvento, $options = [])

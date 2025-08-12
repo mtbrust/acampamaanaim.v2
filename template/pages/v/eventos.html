@@ -48,6 +48,7 @@ EVENTO ESPECÍFICO
 
 {% if infoUrl.attr[0] and evento.id %}
 
+{% if not formInscricao %}
 <div class="py-90 bg-cinza-claro"></div>
 
 <div class="pt-90">
@@ -108,12 +109,16 @@ EVENTO ESPECÍFICO
 </div>
 
 {% endif %}
+{% endif %}
 
 
 {% if ingressoInfo.id %}
-    {{ingressosHtml|raw}}
 
-    {{formInscricaoHtml|raw}}
+{% if not formInscricao %}
+{{ingressosHtml|raw}}
+{% endif %}
+
+{{formInscricaoHtml|raw}}
 {% endif %}
 
 

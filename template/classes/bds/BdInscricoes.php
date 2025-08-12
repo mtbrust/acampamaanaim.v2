@@ -42,7 +42,9 @@ class BdInscricoes extends DataBase
         // Monta os campos da tabela.
         $fields = [
             // Identificador Padrão (obrigatório).
-            "id" => "INT NOT NULL AUTO_INCREMENT primary key",
+            "id"         => "INT NOT NULL AUTO_INCREMENT primary key",
+            "idEvento"   => "INT NULL DEFAULT '1'",                      // id da tabela eventos.
+            "idIngresso" => "INT NULL DEFAULT '1'",                      // id da tabela ingressos.
 
             // Informações pessoais inscrito
             "nome"            => "VARCHAR(128) NULL",   // Nome completo
@@ -93,7 +95,6 @@ class BdInscricoes extends DataBase
 
             // Informações de controle da equipe.
             "termos"       => "BOOLEAN NULL DEFAULT '1'",   // Inscrito aceitou os termos (obrigatório).
-            "idEevento"    => "INT NULL DEFAULT '1'",       // id da tabela eventos.
             "status"       => "VARCHAR(256) NULL",          // Status para o inscrito visualizar e acompanhar. 
             "statusEquipe" => "VARCHAR(256) NULL",          // Status para equipe (apenas a equipe pode ver).
             "obsPreAcampa" => "VARCHAR(1024) NULL",         // Pré Acampa
@@ -106,6 +107,7 @@ class BdInscricoes extends DataBase
             "quarto"       => "VARCHAR(32) NULL",     // Nome do alojamento que o inscrito está alocado.
             "checkin"      => "BOOLEAN NULL",         // Inscrito foi recebido dentro do maanaim (checkin)?
             "obsCheckin"   => "VARCHAR(1024) NULL",   // Observações gerais sobre o inscrito.
+            "valorPago"    => "FLOAT(7,2) NULL",      // Valor pago pelo inscrito nessa inscrição.
         ];
         return parent::createTable($fields);
     }

@@ -6,6 +6,8 @@ use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\maanaim\Maanaim;
+use template\classes\maanaim\MaanaimCarga;
+use template\classes\maanaim\MaanaimParse;
 
 /**
  * INDEX LOGIN
@@ -114,8 +116,8 @@ class eventos extends EndPoint
 			self::$params['evento'] = $this->pagina_evento($params);
 			self::$params['evento']['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
 
-			if (!isset(self::$params['evento']['titulo_evento']))
-			{
+			// Caso não encontre o evento.
+			if (!isset(self::$params['evento']['titulo_evento'])) {
 				self::$params['evento']['titulo_evento'] = 'Evento não encontrado';
 				self::$params['evento']['obs_evento'] = 'Evento não encontrado';
 				self::$params['html'] = '<h1 class="mt-5 my-3">Evento não encontrado</h1>';
@@ -156,6 +158,8 @@ class eventos extends EndPoint
 
 	public function post($params)
 	{
+		self::$params['formInscricao'] = true;
+
 		$idEvento = $params['infoUrl']['attr'][0];
 		$evento = Maanaim::listarEvento($idEvento);
 		$options = [
@@ -167,11 +171,50 @@ class eventos extends EndPoint
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 
 		self::$params['ingressoInfo'] = Maanaim::listarIngresso($_POST['f-ingresso']);
+		self::$params['evento'] = $evento;
+
+		self::$params['evento']['ingressos'] = [];
 		self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
-		// DevHelper::printr(self::$params['ingresso']);
+		self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
 		self::$params['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
 
+		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+
 		// Formulário de inscrição.
-		self::$params['formInscricaoHtml'] = Render::obj('forms/form-inscricao.html', $params);
+		self::$params['formInscricaoHtml'] = Render::obj('forms/form-inscricao.html', self::$params);
+	}
+
+	public function api($params)
+	{
+		// Valores padrão
+		self::$params['response'] = "Padrão.";
+		self::$params['render']['content_type'] = 'application/json';
+		self::$params['status'] = 200;
+		self::$params['msg'] = "Sucesso. Sem processamento.";
+
+		switch ($params['infoUrl']['attr'][1]) {
+			case 'teste':
+				break;
+			case 'inscrever':
+
+				self::$params['msg'] = "Inscrição realizada com sucesso!";
+
+				// Pego os campos tratados do evento.
+				$inscricao = MaanaimParse::InscricaoPostToTable($_POST);
+				self::$params['response'] = Maanaim::AdicionarInscricao($inscricao);
+
+				if (isset(self::$params['response']['error']) && self::$params['response']['error']) {
+					self::$params['status'] = 400;
+					self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+				}
+
+				break;
+
+			default:
+				self::$params['response'] = "Função não encontrada.";
+				self::$params['status'] = 400;
+				self::$params['msg'] = "Não foi encontrada a função da api.";
+				break;
+		}
 	}
 }
