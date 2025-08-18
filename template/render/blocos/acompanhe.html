@@ -1,0 +1,62 @@
+<div class="container py-90">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="oswald text-bold text-center">
+                ACOMPANHE SUA INSCRIÇÃO
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 mt-4 ">
+            <div class="p-4 mb-3 rounded bg-creme text-start h-100">
+                <h6 class="t-vermelho mt-2 mb-0">Nome:</h6>
+                {{inscricao.nome}}
+                <h6 class="t-vermelho mt-2 mb-0">Status:</h6>
+                {{inscricao.status}}
+                <h6 class="t-vermelho mt-2 mb-0">Observações:</h6>
+                {{inscricao.obs|raw}}
+            </div>
+        </div>
+        <div class="col-md-3 mt-4 ">
+            <div class="p-4 mb-3 rounded bg-creme text-start h-100">
+                <img class="w-100 rounded" src="{{base.url}}{{inscricao.evento.url_midia_01}}" alt="">
+                <h6 class="t-vermelho mt-2 mb-0">Evento:</h6>
+                [{{inscricao.evento.id}}] {{inscricao.evento.titulo_evento}}
+                <h6 class="t-vermelho mt-2 mb-0">Data:</h6>
+                {{ inscricao.evento.dt_inicio_evento|date("d/m/Y") }} até {{ inscricao.evento.dt_fim_evento|date("d/m/Y") }}
+            </div>
+        </div>
+        <div class="col-md-3 mt-4 ">
+            <div class="p-4 mb-3 rounded bg-creme text-start h-100">
+                <h6 class="t-vermelho mt-2 mb-0">Ingresso:</h6>
+                {{inscricao.ingresso.titulo}}
+                <h6 class="t-vermelho mt-2 mb-0">Valor:</h6>
+                R$ {{inscricao.ingresso.valor_ingresso|number_format(2, ',', '.')}}
+
+                {% if inscricao.status == "Aguardando Pagamento" %}
+                <h6 class="t-vermelho mt-2 mb-0">Validade:</h6>
+                {{ inscricao.ingresso.dt_limit_pagamento|date("d/m/Y") }}
+
+                {% if inscricao.ingresso.link_pagamento %}
+                <h6 class="t-vermelho mt-2 mb-0">link de pagamento:</h6>
+                <a href="{{inscricao.ingresso.link_pagamento}}" target="_blank">Clique aqui para pagar!</a>
+                {% endif %}
+
+                {% if inscricao.ingresso.chave_pix %}
+                <h6 class="t-vermelho mt-2 mb-0">PIX:</h6>
+                <span class="badge text-bg-success" onclick="cpTransferenciaText(this)" style="cursor: pointer;">{{inscricao.ingresso.chave_pix}}</span>
+                <br><small>Clique no pix para copiar.</small>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-3 mt-4 ">
+            <div class="p-4 mb-3 rounded bg-creme text-start h-100">
+                <h6 class="t-vermelho mt-2 mb-0">Termos e Compromisso:</h6>
+                <a class="btn btn-success btn-sm" href="{{base.url}}termosecompromisso/{{inscricao.id}}" target="_blank">Termos e Compromisso</a>
+                <br><small>Clique para ter acesso aos termos e compromisso aceito no ato da inscrição. </small>
+                <br><small>A inscrição pode ser cancelada e a estadia interrompida, caso ocorra descumprimento dos termos. </small>
+            </div>
+        </div>
+    </div>
+</div>

@@ -925,49 +925,60 @@
 		ajaxDados('{{base.url}}eventos/api/inscrever/', dados, function (ret) {
 			// Para testes
 			console.log(ret);
-			console.log(ret.response);
 
-			// Verifica se teve retorno ok.
-			if (!ret.response.body.error) {
+			// Verifica se não teve erro.
+			if (!ret.body.error) {
 				// Notificação.
 				Swal.fire({
 					icon: "success",
-					title: "Sucesso.",
-					text: ret.msg,
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
+					title: "Sucesso",
+					text: ret.body.msg,
+					showConfirmButton: true,
+					confirmButtonText: "Acompanhar Inscrição",
 					// timer: 3000,
 					// timerProgressBar: true,
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
+					} else if (result.isDenied) {
+					}
 				});
-
-				// Retirar
-				// Verifica se já está inscrito no evento atual.
-				if (ret.html != '') {
-					// Monta o html do acompanhamento.
-					$('#modalAcompanhamento .modal-body').html(ret.html);
-
-					// Abre o modal.
-					$("#modalAcompanhamento").modal('show');
-
-					// Download dos termos.
-					$('#termos')[0].click();
-				}
 
 
 			} else {
-				// Notificação.
-				Swal.fire({
-					icon: 'error',
-					title: 'Erro.',
-					text: ret.msg,
-					toast: true,
-					position: 'top-end',
-					showConfirmButton: false,
-					// timer: 3000,
-					// timerProgressBar: true,
-				});
+
+				if (ret.body.idInscricao) {
+					// Notificação.
+					Swal.fire({
+						icon: 'warning',
+						title: 'Atenção',
+						html: ret.msg,
+						showConfirmButton: true,
+						confirmButtonText: "Acompanhar Inscrição",
+					}).then((result) => {
+						if (result.isConfirmed) {
+							$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
+						} else if (result.isDenied) {
+						}
+					});
+				} else {
+					// Notificação.
+					Swal.fire({
+						icon: 'error',
+						title: 'Erro',
+						html: ret.msg,
+						showConfirmButton: true,
+						confirmButtonText: "Revisar",
+					}).then((result) => {
+						if (result.isConfirmed) {
+						} else if (result.isDenied) {
+						}
+					});
+
+				}
+
 			}
-		})
+			
+		}, 'POST', false);
 	}
 </script>

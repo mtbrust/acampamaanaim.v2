@@ -11,7 +11,7 @@
  * @return void
  * 
  */
-function ajaxDados(url_api, dados, callback, type = 'POST') {
+function ajaxDados(url_api, dados, callback, type = 'POST', alert = true) {
 
     // Realiza chamada AJAX.
     $.ajax({
@@ -30,7 +30,9 @@ function ajaxDados(url_api, dados, callback, type = 'POST') {
             this.myCallback(response);
 
             // Mostra o alerta na tela.
-            alerts2("Sucesso", "success", response.msg);
+            if (alert) {
+                alerts2("Sucesso", "success", response.msg);
+            }
         },
         error: function (response) {
             // Caso não tenha mensagem da api.
@@ -44,7 +46,9 @@ function ajaxDados(url_api, dados, callback, type = 'POST') {
             this.myCallback(response);
 
             // Mostra o alerta na tela.
-            alerts2("Erro " + response.status, "error", response.msg);
+            if (alert) {
+                alerts2("Erro " + response.status, "error", response.msg);
+            }
         },
         complete: function (response) {
             // Ao finalizar toda a execução.
@@ -80,14 +84,14 @@ function alertMin(title = 'Sucesso', icon = 'success') {
         timer: 1000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
         }
-      });
-      Toast.fire({
+    });
+    Toast.fire({
         icon: icon,
         title: title
-      });
+    });
 }
 
 /**
@@ -133,7 +137,7 @@ Notification.requestPermission();
  */
 // 
 function cpTransferencia(value) {
-    
+
     // Se input não está criado, cria.
     if (!$("input#cpTransferencia").length) {
         $("body").append('<input type="text" id="cpTransferencia" value="" class="m-0 p-0" style="height: 0px;border: 0;position: absolute;"/>');
@@ -151,7 +155,7 @@ function cpTransferencia(value) {
 
     // Realiza o comando copiar.
     document.execCommand('copy');
-    
+
     alertMin("Copiado para Área de Transferência");
 }
 

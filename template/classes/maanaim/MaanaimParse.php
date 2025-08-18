@@ -35,7 +35,7 @@ class MaanaimParse
     {
         $ingresso = [
             "id_evento"           => $post['f-id_evento'],
-            "qtd"                 => $post['f-qtd'],
+            "qtd"                 => isset($post['f-qtd'])?$post['f-qtd']:'',
             "titulo"              => $post['f-titulo'],
             "dt_ini_ingresso"     => str_replace('T', ' ', $post['f-dt_ini_ingresso']),
             "dt_fim_ingresso"     => str_replace('T', ' ', $post['f-dt_fim_ingresso']),
@@ -47,7 +47,7 @@ class MaanaimParse
             "desc_ingresso"       => $post['f-desc_ingresso'],
             "desc_cuidados"       => $post['f-desc_cuidados'],
             "desc_orientacao"     => $post['f-desc_orientacao'],
-            "idStatus"            => $post['f-status'],
+            "idStatus"            => isset($post['f-status'])?$post['f-status']:1,
         ];
         return $ingresso;
     }
@@ -107,7 +107,7 @@ class MaanaimParse
 
             // Informações"
             "termos"          => 1,
-            "status"          => (isset($post['f-status']))?$post['f-status']:'',
+            "status"          => (isset($post['f-status']))?$post['f-status']:'Aguardando Pagamento',
             "statusEquipe"    => (isset($post['f-statusEquipe']))?$post['f-statusEquipe']:'',
             "obsPreAcampa"    => (isset($post['f-obsPreAcampa']))?$post['f-obsPreAcampa']:'',
             "obsAcampa"       => (isset($post['f-obsAcampa']))?$post['f-obsAcampa']:'',

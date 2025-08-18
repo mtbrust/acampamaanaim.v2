@@ -81,6 +81,15 @@ class eventos extends EndPoint
 			'footer'       => 'maanaim',   // footer da página.
 			'end'          => 'maanaim',   // Fim da página.
 		];
+		
+		// Carrega na página scripts (template/assets/js/) Somente pages.
+		self::$params['scripts'] = [
+			// pasta libs.
+			'libs' => [
+				'jquery/jquery.min.js',   		// Exemplo.
+				'jquery/jquery.redirect.js',   		// Exemplo.
+			],
+		];
 
 		// Carrega na página plugins (template/assets/css/) Somente pages.
 		self::$params['plugins']     = [
@@ -178,6 +187,7 @@ class eventos extends EndPoint
 		self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
 		self::$params['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
 
+		// todo - Apenas para facilitar os testes.
 		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 
 		// Formulário de inscrição.
@@ -197,17 +207,17 @@ class eventos extends EndPoint
 				break;
 			case 'inscrever':
 
-				self::$params['msg'] = "Inscrição realizada com sucesso!";
-
 				// Pego os campos tratados do evento.
 				$inscricao = MaanaimParse::InscricaoPostToTable($_POST);
+
+				// esse é o body.
 				self::$params['response'] = Maanaim::AdicionarInscricao($inscricao);
 
 				if (isset(self::$params['response']['error']) && self::$params['response']['error']) {
-					self::$params['status'] = 400;
-					self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+					self::$params['status'] = 200;
 				}
-
+				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+				
 				break;
 
 			default:

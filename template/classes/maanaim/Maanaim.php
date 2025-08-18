@@ -17,6 +17,41 @@ class Maanaim
     static public $inserir = true;
 
     static public $inscricao = [];
+    static public $evento = [];
+
+    static function acompanhar($cpf, $id)
+    {
+        $bdInscricoes = new BdInscricoes();
+        $where = 'cpf = ' . $cpf . ' and id = "' . $id . '"';
+        $inscrito = $bdInscricoes->select('*', $where);
+
+        if (isset($inscrito[0])){
+            $inscrito[0]['evento'] = self::getEventoPorId($inscrito[0]['idEvento']);
+            $inscrito[0]['ingresso'] = self::getIngressoPorId($inscrito[0]['idIngresso']);
+            return $inscrito[0];
+        }
+
+        return false;
+    }
+
+    static function getEventoPorId($id)
+    {
+        $bd = new Bdeventos();
+        $evento = $bd->selectById($id);
+        self::incluirMidiasEvento($evento);
+        return $evento;
+
+    }
+
+    static function getIngressoPorId($id) {
+        $bd = new BdIngressos();
+        return $bd->selectById($id);
+    }
+
+    static function getInscricaoPorId($id) {
+        $bd = new BdInscricoes();
+        return $bd->selectById($id);
+    }
 
     static function AdicionarInscricao($inscricao, $options = [])
     {
@@ -29,7 +64,7 @@ class Maanaim
         $options = array_merge($optionsDefault, $options);
 
         // Verificar se o CPF dessa inscrição já está inscrito nesse evento.
-        self::verificaInscricaoCpf(self::$inscricao['cpf']);
+        self::verificaInscricaoCpf();
 
         // Verificar os campos obrigatórios.
         self::verificaCamposObrigatorios(self::$inscricao);
@@ -46,39 +81,41 @@ class Maanaim
         // Acrescentar informações padrão.
         $options = [];
         self::informacoesPadrao($options);
-        
+
         // Valor padrão.
-        $idInscricao = 0;
+        // self::$inscricao['id'] = 0;
 
         // Insere evento.
         if (self::$inserir) {
             // Inserir a inscrição no banco de dados.
             $bdInscricao = new BdInscricoes();
             $idInscricao = $bdInscricao->insert(self::$inscricao);
-            
-            self::$msg[] = 'Acompanhe sua inscrição no menu "MINHA INSCRIÇÃO", informando o cpf: "'. self::$inscricao['cpf'] .'" e id: "'. $idInscricao .'".';
+            self::$inscricao['id'] = $idInscricao;
+            self::$msg[] = 'Acompanhe sua inscrição no menu "MINHA INSCRIÇÃO", informando o cpf: "' . self::$inscricao['cpf'] . '" e o identificador: "' . $idInscricao . '".';
         }
 
         // Retornar informações do cadastro e status da inscrição.
         return [
-            'error'          => self::$error,
-            'idInscricao'    => $idInscricao,
-            'acompanhamento' => self::$inscricao['cpf'] . $idInscricao,
-            'inscricao'      => $inscricao,
-            'msg'            => self::$msg,
+            'error'       => self::$error,
+            'idInscricao' => self::$inscricao['id'], // 0 - não foi inserido.
+            'cpf'         => self::$inscricao['cpf'],
+            'inscricao'   => self::$inscricao,
+            'msg'         => self::$msg,
         ];
     }
 
-    static public function verificaInscricaoCpf($cpf)
+    static public function verificaInscricaoCpf()
     {
         $bdInscricoes = new BdInscricoes();
         $fields = "id, cpf";
-        $where = 'idEvento = ' . self::$inscricao['idEvento'] . ' and cpf = "' . $cpf . '"';
+        $where = 'idEvento = ' . self::$inscricao['idEvento'] . ' and cpf = "' . self::$inscricao['cpf'] . '"';
         $inscrito = $bdInscricoes->select($fields, $where, null, null, null, 1000);
 
         if (isset($inscrito[0]['cpf'])) {
+
+            self::$inscricao = $inscrito[0];
             self::$error = true;
-            self::$msg[] = 'Já existe uma inscrição neste evento com este cpf [' . $inscrito[0]['cpf'] . '] - ID [' . $inscrito[0]['id'] . '].';
+            self::$msg[] = 'Já existe uma inscrição neste evento com este cpf [' . self::$inscricao['cpf'] . '] - Identificador [' . self::$inscricao['id'] . '].';
             self::$msg[] = 'Acompanhe a sua inscrição ou entre em contato conosco.';
             self::$inserir = false;
         }
@@ -93,8 +130,9 @@ class Maanaim
 
         // Verifica se foi enviado CPF.
         if (empty($inscricao['cpf'])) {
-            self::$error = false;
-            self::$msg[] = 'Preencha o campo "CPF".';
+            self::$error = true;
+            self::$msg[] = 'Preencha o campo "CPF" com CPF válido.';
+            self::$inserir = false;
         }
     }
 
@@ -139,6 +177,7 @@ class Maanaim
         // Informações do evento.
         $bdEventos = new BdEventos();
         $evento = $bdEventos->selectById(self::$inscricao['idEvento']);
+        self::$evento = $evento;
 
         $qtdM = $evento['qtd_vagas_masculino'];
         $qtdF = $evento['qtd_vagas_feminino'];
@@ -150,9 +189,6 @@ class Maanaim
         $groupby = 'sexo';
         $orderby = 'sexo desc';
         $vagas = $bdInscricoes->select($fields, $where, $orderby, null, $groupby, 1000);
-
-        // DevHelper::printr($bdInscricoes::$sql);
-        // DevHelper::printr($vagas);
 
         // Calculo a quantidade de vagas restantes.
         if (isset($vagas[0]['sexo']) && $vagas[0]['sexo'] == 'Masculino') {
@@ -183,8 +219,6 @@ class Maanaim
             'f' => $qtdF,
             'm' => $qtdM,
         ];
-
-        // DevHelper::printr($vagas);
 
         return $vagas;
     }
@@ -275,36 +309,70 @@ class Maanaim
         $bdMidias = new BdMidias();
         foreach ($eventos as $key => $evento) {
 
-            $eventos[$key]["url_midia_banner"] = '';
-            $eventos[$key]["url_midia_01"] = '';
-            $eventos[$key]["url_midia_02"] = '';
-            $eventos[$key]["url_midia_03"] = '';
+            self::incluirMidiasEvento($evento);
+            $eventos[$key] = $evento;
 
-            // Obtém o caminho das imagens de cada evento.
-            $r = $bdMidias->selectById($evento['id_midia_banner']);
-            if (isset($r['path'])) {
-                $eventos[$key]["url_midia_banner"] = $r['path'];
-            }
+            // $eventos[$key]["url_midia_banner"] = '';
+            // $eventos[$key]["url_midia_01"] = '';
+            // $eventos[$key]["url_midia_02"] = '';
+            // $eventos[$key]["url_midia_03"] = '';
 
-            $r = $bdMidias->selectById($evento['id_midia_01']);
-            if (isset($r['path'])) {
-                $eventos[$key]["url_midia_01"] = $r['path'];
-            }
+            // // Obtém o caminho das imagens de cada evento.
+            // $r = $bdMidias->selectById($evento['id_midia_banner']);
+            // if (isset($r['path'])) {
+            //     $eventos[$key]["url_midia_banner"] = $r['path'];
+            // }
 
-            $r = $bdMidias->selectById($evento['id_midia_02']);
-            if (isset($r['path'])) {
-                $eventos[$key]["url_midia_02"] = $r['path'];
-            }
+            // $r = $bdMidias->selectById($evento['id_midia_01']);
+            // if (isset($r['path'])) {
+            //     $eventos[$key]["url_midia_01"] = $r['path'];
+            // }
 
-            $r = $bdMidias->selectById($evento['id_midia_03']);
-            if (isset($r['path'])) {
-                $eventos[$key]["url_midia_03"] = $r['path'];
-            }
+            // $r = $bdMidias->selectById($evento['id_midia_02']);
+            // if (isset($r['path'])) {
+            //     $eventos[$key]["url_midia_02"] = $r['path'];
+            // }
+
+            // $r = $bdMidias->selectById($evento['id_midia_03']);
+            // if (isset($r['path'])) {
+            //     $eventos[$key]["url_midia_03"] = $r['path'];
+            // }
 
             $eventos[$key]['ingressos'] = Maanaim::listarIngressosEvento($evento['id']);
         }
 
         return $eventos;
+    }
+
+    static function incluirMidiasEvento(&$evento) 
+    {
+        $bdMidias = new BdMidias();
+
+        $evento["url_midia_banner"] = '';
+        $evento["url_midia_01"] = '';
+        $evento["url_midia_02"] = '';
+        $evento["url_midia_03"] = '';
+
+        // Obtém o caminho das imagens de cada evento.
+        $r = $bdMidias->selectById($evento['id_midia_banner']);
+        if (isset($r['path'])) {
+            $evento["url_midia_banner"] = $r['path'];
+        }
+
+        $r = $bdMidias->selectById($evento['id_midia_01']);
+        if (isset($r['path'])) {
+            $evento["url_midia_01"] = $r['path'];
+        }
+
+        $r = $bdMidias->selectById($evento['id_midia_02']);
+        if (isset($r['path'])) {
+            $evento["url_midia_02"] = $r['path'];
+        }
+
+        $r = $bdMidias->selectById($evento['id_midia_03']);
+        if (isset($r['path'])) {
+            $evento["url_midia_03"] = $r['path'];
+        }
     }
 
     static function listarEvento($id)

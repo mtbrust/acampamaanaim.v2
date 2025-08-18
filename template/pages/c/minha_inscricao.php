@@ -2,8 +2,10 @@
 
 namespace pages;
 
+use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
+use template\classes\maanaim\Maanaim;
 
 /**
  * INDEX LOGIN
@@ -107,6 +109,29 @@ class minha_inscricao extends EndPoint
 
 	public function post($params) 
 	{
-		$this->get($params);
+		self::$params['inscricao'] = false;
+
+		// Verifica se tem o id e CPF.
+		if (isset($_POST['f-idInscricao']) && isset($_POST['f-cpf']) && $_POST['f-idInscricao'] && $_POST['f-cpf'])
+		{
+			self::$params['inscricao'] = Maanaim::acompanhar($_POST['f-cpf'], $_POST['f-idInscricao']);
+		}
+
+		// DevHelper::printr(self::$params['inscricao']);
+
+		if (!self::$params['inscricao']) {
+			$this->get($params);
+		}
+
+		$options = [
+			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/SOBRE/BANNER-TOPO.jpg',
+			'title' => $params['config']['title'],
+			'texto' => 'Acompanhe a sua inscrição. Saiba como anda o status da sua inscrição e se necessita entrar em contato.',
+		];
+		self::$params['tituloPagina'] = Render::obj('blocos/titulo-pagina.html', $options);
+		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
+
+		self::$params['blocoAcompanheHtml'] = Render::obj('blocos/acompanhe.html', self::$params); // conteúdo html da página.
+
 	}
 }

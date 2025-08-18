@@ -8,7 +8,9 @@ MNINHAS INSCRIÇÃO
 {# BANNER TITULO #}
 {{tituloPagina|raw}}
 
-
+{% if inscricao %}
+    {{blocoAcompanheHtml|raw}}
+{% else %}
 <div class="banner-home" style="background-image: url({{base.dir_relative}}template/assets/midias/site/ACOMPANHAMENTO/bg-forms.jpg);">
     <div class="container">
         <div class="row justify-content-center">
@@ -44,7 +46,7 @@ MNINHAS INSCRIÇÃO
         </div>
     </div>
 </div>
-
+{% endif %}
 
 {# ASSINE #}
 {{htmlAssine|raw}}
