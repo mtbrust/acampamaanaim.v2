@@ -11,6 +11,8 @@
             <div class="p-4 mb-3 rounded bg-creme text-start h-100">
                 <h6 class="t-vermelho mt-2 mb-0">Nome:</h6>
                 {{inscricao.nome}}
+                <h6 class="t-vermelho mt-2 mb-0">Nascimento:</h6>
+                {{inscricao.dtNascimento|date("d/m/Y")}} <br> Idade no evento: {{inscricao.idadeEvento}} anos.
                 <h6 class="t-vermelho mt-2 mb-0">Status:</h6>
                 {{inscricao.status}}
                 <h6 class="t-vermelho mt-2 mb-0">Observações:</h6>
@@ -47,6 +49,8 @@
                 <span class="badge text-bg-success" onclick="cpTransferenciaText(this)" style="cursor: pointer;">{{inscricao.ingresso.chave_pix}}</span>
                 <br><small>Clique no pix para copiar.</small>
                 {% endif %}
+                <h6 class="t-vermelho mt-2 mb-0">Observações:</h6>
+                <small>{{inscricao.ingresso.desc_orientacao|raw}}</small>
                 {% endif %}
             </div>
         </div>

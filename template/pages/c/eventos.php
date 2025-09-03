@@ -191,6 +191,7 @@ class eventos extends EndPoint
 		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 
 		// Formulário de inscrição.
+		self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'eventos/api/adicionar';
 		self::$params['formInscricaoHtml'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
 
@@ -205,17 +206,20 @@ class eventos extends EndPoint
 		switch ($params['infoUrl']['attr'][1]) {
 			case 'teste':
 				break;
-			case 'inscrever':
+			case 'adicionar':
 
 				// Pego os campos tratados do evento.
-				$inscricao = MaanaimParse::InscricaoPostToTable($_POST);
+				$inscricao = MaanaimParse::inscricaoPostToTable($_POST);
 
-				// esse é o body.
-				self::$params['response'] = Maanaim::AdicionarInscricao($inscricao);
+				// Inscrição adicionada.
+				self::$params['response'] = Maanaim::adicionarInscricao($inscricao);
 
+				// Verifico se teve algum erro.
 				if (isset(self::$params['response']['error']) && self::$params['response']['error']) {
 					self::$params['status'] = 200;
 				}
+
+				// Monto a mensagem de retorno.
 				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
 				
 				break;

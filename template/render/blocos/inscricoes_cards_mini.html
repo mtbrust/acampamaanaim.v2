@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row" id="inscricoes">
+        {% for key, inscricao in inscricoes %}
+
+        <div class="col-md-3 col-sm-4">
+            <div class="card {% if inscricao.idStatus == 0 %}border border-5 border-danger{% endif %} mt-3">
+                <div class="card-body p-1">
+                    <a href="{{base.url}}adm/inscricoes/editar/{{inscricao.id}}" class="h5 tituloNomeInscricao">
+                        [{{inscricao.id}}] - {{inscricao.nome}}
+                    </a>
+                    <div class="row">
+                        <div class="col-12">
+                            {{inscricao.status}}
+                        </div>
+                        <div class="col-4">
+                            <small>{{ inscricao.dtNascimento|date("d/m/Y") }}</small>
+                            <small>{{ inscricao.cpf }}</small>
+
+                        </div>
+                        <div class="col-8">
+                            [{{inscricao.id}}] - {{inscricao.nome_evento}}
+                            <br>
+                            {{ inscricao.dt_inicio_evento|date("d/m/Y") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .tituloNomeInscricao {
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+    }
+</style>

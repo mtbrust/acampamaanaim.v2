@@ -47,14 +47,16 @@ class BdInscricoes extends DataBase
             "idIngresso" => "INT NULL DEFAULT '1'",                      // id da tabela ingressos.
 
             // Informações pessoais inscrito
-            "nome"            => "VARCHAR(128) NULL",   // Nome completo
-            "email"           => "VARCHAR(128) NULL",   // e-mail inscricao
-            "telefone"        => "VARCHAR(14) NULL",    // Telefone
-            "telefoneContato" => "VARCHAR(14) NULL",    // Telefone Contato / Emergência
-            "cpf"             => "VARCHAR(11) NULL",    // CPF apenas números.
-            "sexo"            => "VARCHAR(10) NULL",    // Masculino | Feminino | Indefinido
+            "nome"            => "VARCHAR(128) NULL",          // Nome completo
+            "email"           => "VARCHAR(128) NULL",          // e-mail inscricao
+            "telefone"        => "VARCHAR(14) NULL",           // Telefone
+            "telefoneContato" => "VARCHAR(14) NULL",           // Telefone Contato / Emergência
+            "cpf"             => "VARCHAR(11) NULL",           // CPF apenas números.
+            "sexo"            => "VARCHAR(10) NULL",           // Masculino | Feminino | Indefinido
             "dtNascimento"    => "DATE NULL",
-            "idMidiaFoto"     => "INT NULL",            // Id da foto na tabela midia.
+            "idMidiaFoto"     => "INT NULL",                   // Id da foto na tabela midia.
+            "menor"           => "BOOLEAN NULL DEFAULT '0'",   // Menor de idade (menor de 18 anos até o evento).
+            "menorLimite"     => "BOOLEAN NULL DEFAULT '0'",   // Menor que limite de idade do evento.
 
             // Informações parentesco <18 anos
             "paiNome"         => "VARCHAR(128) NULL",   // Nome completo Pai
@@ -88,6 +90,8 @@ class BdInscricoes extends DataBase
             "medicamentoR" => "VARCHAR(1) NULL",      // Inscrito toma medicamento? [1] Sim, [0] Não.
             "medicamento"  => "VARCHAR(1024) NULL",   // Qual medicamento?
             "nadarR"       => "VARCHAR(1) NULL",      // Inscrito sabe nadar? [1] Sim, [0] Não.
+            "nadarA"       => "VARCHAR(1) NULL",      // Inscrito sabe nadar? [1] Sim, [0] Não.
+            "nadarP"       => "VARCHAR(1) NULL",      // Inscrito sabe nadar? [1] Sim, [0] Não.
 
             // Informações extras do inscrito
             "ideia"       => "VARCHAR(1024) NULL",   // Inscrito tem alguma ideia para o acampamento.

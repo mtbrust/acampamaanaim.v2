@@ -3,6 +3,19 @@
 		<div class="container">
 			<div class="row">
 
+				{% if infoUrl.func == 'editar' %}
+				<div class="col-12">
+					<h1>Editar</h1>
+				</div>
+				{% endif %}
+
+				{% if infoUrl.func == 'adicionar' %}
+				<div class="col-12">
+					<h1>Adicionar</h1>
+				</div>
+				{% endif %}
+
+				{% if infoUrl.func != 'editar' %}
 				<div class="col-12 mt-4 pt-5">
 
 					<h2>Faça sua inscrição</h2>
@@ -56,6 +69,7 @@
 						</div>
 					</div>
 				</div>
+				{% endif %}
 
 
 
@@ -73,7 +87,7 @@
 					<div class="form-group">
 						<h6>Evento</h6>
 						<div class="input-group">
-							<select id="f-idEvento" name="f-idEvento" class="form-select" required>
+							<select id="f-idEvento" name="f-idEvento" class="form-select" required onchange="atualizaIngressos();">
 								{% if formInscricao %}
 								<option value="{{evento.id}}" selected>{{evento.titulo_evento}}</option>
 								{% endif %}
@@ -90,7 +104,9 @@
 						<div class="input-group">
 							<select id="f-idIngresso" name="f-idIngresso" class="form-select" required>
 								{% if formInscricao %}
-								<option value="{{evento.ingressos[0].id}}" selected>R$ {{evento.ingressos[0].valor_ingresso|number_format(2, ',', '.')}} - {{evento.ingressos[0].titulo}}</option>
+								<option value="{{evento.ingressos[0].id}}" selected>{{evento.ingressos[0].titulo}} - R$ {{evento.ingressos[0].valor_ingresso|number_format(2, ',', '.')}}</option>
+								{% else %}
+								<option value="" selected>Selecione um evento</option>
 								{% endif %}
 							</select>
 						</div>
@@ -208,7 +224,7 @@
 						<small class="form-text text-muted">
 							Data de nascimento.
 						</small>
-						<small id="menorLimite" style="display: none;"><br><span class="badge bg-danger">Idade Mínima {{evento.idade_minima}}</span> A idade mínima para o evento é de {{evento.idade_minima}} anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
+						<small id="menorLimite" style="display: none;"><br><span class="badge bg-danger">Idade Mínima <span class="idade_minima">{{evento.idade_minima}}</span></span> A idade mínima para o evento é de <span class="idade_minima">{{evento.idade_minima}}</span> anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
 						<small style="display: none;" class="menor"><br><span class="badge bg-danger">Representante</span> Sua inscrição necessita dos dados e aprovação do representante legal, pois você é menor de idade.</small>
 					</div>
 				</div>
@@ -558,10 +574,10 @@
 						<h6>Autoriza a participação em atividades com água? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="0"> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarR %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="1" checked> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarR or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -576,10 +592,10 @@
 						<h6>Autoriza a participação no açude? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="0"> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarA %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="1" checked> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarA or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -595,10 +611,10 @@
 						<h6>Autoriza a participação na piscina? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="0"> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarP %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="1" checked> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarP or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -688,8 +704,13 @@
 				<div class="col-12 mt-5">
 					<div class="form-group text-end">
 						<div class="form-check form-switch">
-							<a id="btnUffa" class="btn btn-success" onclick="realizarInscricao();">Uffa! Fazer Inscrição</a>
-							<small id="menorLimite2" style="display: none;"><br><span class="badge bg-danger">Idade Mínima {{evento.idade_minima}}</span> A idade mínima para o evento é de {{evento.idade_minima}} anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
+							{% if infoUrl.func == 'editar' %}
+							<input type="hidden" name="f-id" value="{{inscricao.id}}">
+							<a id="btnEditar" class="btn btn-warning" onclick="editarInscricao();">Editar Inscrição</a>
+							{% else %}
+							<a id="btnUffa" class="btn btn-success" onclick="adicionarInscricao();">Uffa! Fazer Inscrição</a>
+							{% endif %}
+							<small id="menorLimite2" style="display: none;"><br><span class="badge bg-danger">Idade Mínima <span class="idade_minima">{{evento.idade_minima}}</span></span> A idade mínima para o evento é de <span class="idade_minima">{{evento.idade_minima}}</span> anos. Ao realizar sua inscrição, será automaticamente cancelada* no sistema.</small>
 						</div>
 						<small class="form-text text-muted">
 							Verifique atentamente todos os dados! Após fazer a incrição, siga as orientações de datas, pagamento e acompanhamento.
@@ -709,14 +730,66 @@
 	data = new Date();
 	idadeMinima = parseInt('{{evento.idade_minima}}');
 	anoAtual = parseInt('{{info.anoAtual}}');
-	dateLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), 18);
-	dateMenorLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), idadeMinima);
+	// dateLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), 18);
+	// dateMenorLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), idadeMinima);
+
+	dateLimite = tiraYearsToDate(new Date('{{evento.dt_inicio_evento}}'), 18);
+	dateMenorLimite = tiraYearsToDate(new Date('{{evento.dt_inicio_evento}}'), idadeMinima);
+
+	eventos_origin = '';
+	idEvento = 0;
+	eventos = [];
+
+	if ('{{eventos|raw}}') {
+		eventos_origin = JSON.parse('{{eventos|raw}}');
+
+		document.addEventListener("DOMContentLoaded", function () {
+			options = '<option value="" selected>Selecionar</option>';
+			eventos_origin.forEach((evento, i) => {
+				selected = '';
+				if (evento.id == '{{inscricao.idEvento}}') {
+					selected = 'selected';
+				}
+				options += '<option value="' + evento.id + '" ' + selected + '>' + evento.titulo_evento + '</option>';
+				eventos[evento.id] = evento;
+			});
+			$('#f-idEvento').html(options);
+			atualizaDatasLimite();
+		});
+	}
+
+	function atualizaIngressos() {
+
+		idEvento = $('#f-idEvento').val();
+		ingressos = eventos[idEvento]['ingressos'];
+
+		options = '<option value="" selected>Selecionar</option>';
+		ingressos.forEach((ingresso, i) => {
+			selected = '';
+			if (ingresso.id == '{{inscricao.id}}') {
+				selected = 'selected';
+			}
+			options += '<option value="' + ingresso.id + '">' + ingresso.titulo + ' - R$ ' + ingresso.valor_ingresso.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</option>';
+		});
+
+		$('#f-idIngresso').html(options);
+		atualizaDatasLimite();
+	}
+
+
+	function atualizaDatasLimite() {
+		// Garante que vai pegar o id do evento selecionado.
+		idEvento = $('#f-idEvento').val();
+		if ('{{eventos|raw}}') {
+			idadeMinima = eventos[idEvento]['idade_minima']
+			dateLimite = tiraYearsToDate(new Date(eventos[idEvento]['dt_inicio_evento']), 18);
+			dateMenorLimite = tiraYearsToDate(new Date(eventos[idEvento]['dt_inicio_evento']), idadeMinima);
+			$('.idade_minima').text(idadeMinima);
+		}
+	}
 
 	// Função verifica se a idade do inscrito é superior a 18 anos, se é menor de idade e se está abaixo da idade mínima do evento.
 	function verificaMaior() {
-
-		// dateLimite = tiraYearsToDate(new Date('{{evento.ingressos[0].dt_ini_ingresso}}'), 18); // 18 anos até a data do evento
-		// dateMenorLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), idadeMinima); // idade minima em anos até a data do evento
 
 		data = new Date($('#f-dtNascimento').val());
 
@@ -767,8 +840,8 @@
 		// $('#finscricao')[0];
 
 		dados = new FormData();
-		dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
 		dados.append('f-cpf', $('#b-cpf').val()); // Exemplo de inclusão de valores.
+		dados.append('f-id', $('#b-id').val()); // Exemplo de inclusão de valores.
 		ajaxDados('{{base.url}}eventos/api/cpf/', dados, function (ret) {
 			// Para testes
 			// console.log(ret);
@@ -862,13 +935,47 @@
 		})
 	}
 
-	function realizarInscricao() {
 
-		// Campos obrigatórios preenchidos.
-		camposObrigatorios = true;
+
+	// Campos obrigatórios preenchidos.
+	camposObrigatorios = true;
+	msgOb = '';
+
+	function editarInscricao() {
+
+		// Verifica campos obrigatórios
+		verificaCamposObrigatorios();
+
+		// Se faltou algum campo, interrompe o processamento.
+		if (camposObrigatorios == false) {
+			return true;
+		}
+
+		// Envio as informações.
+		postInscricao('editar');
+	}
+
+	function adicionarInscricao() {
+
+		// Verifica campos obrigatórios
+		verificaCamposObrigatorios();
+
+		// Se faltou algum campo, interrompe o processamento.
+		if (camposObrigatorios == false) {
+			return true;
+		}
+
+		// Envio as informações.
+		postInscricao('adicionar');
+	}
+
+	function verificaCamposObrigatorios() {
+
 		msgOb = '';
-
+		
 		// Caso não tenha preenchido algum, trava.
+		if ($('#f-idEvento').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Evento. '; }
+		if ($('#f-idIngresso').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Ingresso. '; }
 		if ($('#f-nome').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Nome. '; }
 		if ($('#f-email').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Email. '; }
 		if ($('#f-telefone').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Telefone. '; }
@@ -876,7 +983,7 @@
 		if ($('#f-cpf').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: CPF. '; }
 		if ($('#f-sexo').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Sexo. '; }
 		if ($('#f-dtNascimento').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Data Nascimento. '; }
-		if ($('#f-termos').val() == '') { camposObrigatorios = false; msgOb += '<br>É necessário aceitar os termos e políticas. '; }
+		if (!$('#f-termos').is(':checked')) { camposObrigatorios = false; msgOb += '<br>É necessário aceitar os termos e políticas. '; }
 
 		// Agora mesmo não tendo a idade mínima é possível realizar a inscrição. e a inscrição é automaticamente cancelada.
 		// Isso foi feito para poder excepcionalmente inscrever alguém menor de idade e ativar a inscrição depois.
@@ -884,8 +991,8 @@
 
 		// Verifica se é menor de idade e preencheu os campos de dados de representante.
 		data = new Date($('#f-dtNascimento').val());
-		// dateLimite = tiraYearsToDate(new Date('{{page.info.INFO_DATA_INI}}'), 18); // 18 anos até a data do evento
-		// Se for menor de idade
+
+		// Se for menor de idade é obrigado a preencher o representante.
 		if (data >= dateLimite) {
 			if (
 				$('#f-RepNome').val() == ''
@@ -897,34 +1004,30 @@
 			) { camposObrigatorios = false; msgOb += '<br>Necessário preenchimento de todos os campos dos dados de representante. '; }
 		}
 
-		// Verifica se faltou o preenchimento de algum campo e informa o usuário.
-		if (camposObrigatorios == false) {
+		notificaCamposObrigatorios();
+	}
 
-			// Notificação.
-			Swal.fire({
-				icon: 'error',
-				title: 'Erro.',
-				html: '<div class="text-start">Preencha os campos obrigatórios.<br>' + msgOb + '</div>',
-				// toast: true,
-				// position: 'top-end',
-				showConfirmButton: false,
-				showDenyButton: true,
-				denyButtonText: "Entendi",
-				// timer: 3000,
-				// timerProgressBar: true,
-			});
+	function notificaCamposObrigatorios() {
+		// Notificação.
+		Swal.fire({
+			icon: 'error',
+			title: 'Erro.',
+			html: '<div class="text-start">Preencha os campos obrigatórios.<br>' + msgOb + '</div>',
+			showConfirmButton: false,
+			showDenyButton: true,
+			denyButtonText: "Entendi",
+		});
+	}
 
-			return true;
-		}
-
+	function postInscricao(endpoint) {
 		// Pega o formulário e envia.
 		dados = new FormData($('#finscricao')[0]);
-		dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
-		dados.append('adicionar', 'adicionar'); // Token para uso de API
+		// dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
+		// dados.append('adicionar', 'adicionar'); // Token para uso de API
 		// ajaxDados('{{global.URL_RAIZ}}inscricao/api/post/inscricao', dados, function (ret) {
-		ajaxDados('{{base.url}}eventos/api/inscrever/', dados, function (ret) {
+		ajaxDados('{{urlApiInscricao}}' + endpoint + '/', dados, function (ret) {
 			// Para testes
-			console.log(ret);
+			// console.log(ret);
 
 			// Verifica se não teve erro.
 			if (!ret.body.error) {
@@ -932,9 +1035,14 @@
 				Swal.fire({
 					icon: "success",
 					title: "Sucesso",
-					text: ret.body.msg,
+					html: ret.body.msg,
 					showConfirmButton: true,
 					confirmButtonText: "Acompanhar Inscrição",
+
+					{% if infoUrl.func %}
+					showCancelButton: true,
+					cancelButtonText: "OK",
+					{% endif %}
 					// timer: 3000,
 					// timerProgressBar: true,
 				}).then((result) => {
@@ -978,7 +1086,7 @@
 				}
 
 			}
-			
+
 		}, 'POST', false);
 	}
 </script>

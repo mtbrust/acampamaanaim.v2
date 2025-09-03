@@ -80,8 +80,8 @@ class MaanaimCarga
 	static function fakeInscricao()
 	{
 		return [
-			"idEvento" => "7",
-			"idIngresso" => "",
+			"idEvento" => "3",
+			"idIngresso" => "4",
 			"nome" => "Mateus Rocha Brust",
 			"email" => "mtbrust@gmail.com",
 			"telefone" => "31993265491",

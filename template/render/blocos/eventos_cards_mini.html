@@ -19,7 +19,11 @@
                             <br>
                             {{ evento.dt_inicio_evento|date("d/m/Y") }}
                             <br>
+                            {% if listarInscricoes %}
+                            <a href="{{base.url}}adm/inscricoes/listar/{{evento.id}}" class="btn btn-sm btn-primary">Listar Inscrições</a>
+                            {% else %}
                             <a href="{{base.url}}adm/eventos/editar/{{evento.id}}" class="btn btn-sm btn-primary">Editar Evento</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

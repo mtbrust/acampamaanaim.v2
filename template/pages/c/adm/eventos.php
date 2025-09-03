@@ -9,7 +9,6 @@ use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\bds\BdEventos;
 use template\classes\maanaim\Maanaim;
-use template\classes\maanaim\Maanaim as MaanaimMaanaim;
 
 /**
  * INDEX LOGIN
@@ -86,6 +85,7 @@ class eventos extends EndPoint
 			'footer'       => 'admin',   // footer da página.
 			'end'          => 'admin',   // Fim da página.
 		];
+
 		// Carrega na página scripts (template/assets/js/) Somente pages.
 		self::$params['scripts']     = [
 			// pasta libs.

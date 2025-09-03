@@ -7,8 +7,9 @@ use desv\classes\bds\BdLoginsGroupsMenu;
 use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
-use template\classes\Maanaim;
+use template\classes\maanaim\Maanaim;
 use template\classes\maanaim\MaanaimCarga;
+use template\classes\maanaim\MaanaimParse;
 
 /**
  * INDEX LOGIN
@@ -57,6 +58,15 @@ class inscricoes extends EndPoint
 			'modelo',   // Exemplo.
 		];
 
+		// Carrega na página scripts (template/assets/js/) Somente pages.
+		self::$params['scripts']     = [
+			// pasta libs.
+			'libs' => [
+				'jquery/jquery.min.js',   		// Exemplo.
+				'jquery/jquery.redirect.js',   		// Exemplo.
+			],
+		];
+
 		// Carrega estrutura html. Somente pages.
 		self::$params['structure']   = [
 			// // Origem
@@ -87,10 +97,10 @@ class inscricoes extends EndPoint
 	public function get($params)
 	{
 		// Sub menus da página.
-		self::$params['subMenus'] = ['adicionar', 'editar'];
-		
+		$this->subMenu();
+
 		self::$params['html'] = "Dashboard";
-		
+
 		// Formulário de inscrição.
 		self::$params['formInscricaoHtml'] = '';
 	}
@@ -98,26 +108,149 @@ class inscricoes extends EndPoint
 	public function adicionar($params)
 	{
 		// Sub menus da página.
-		self::$params['subMenus'] = ['adicionar', 'editar'];
+		$this->subMenu();
 
-		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+		$options = [
+			'ingressoValidade' => false,    // Ingresso dentro da validade.
+		];
+
+		self::$params['eventos'] = json_encode(Maanaim::listarEventos($options));
+		// DevHelper::printEncodedJson(self::$params['eventos']);
+
+		// todo - inscrição fake. para ajudar no preenchimento e teste.
+		if (false) {
+			self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+			self::$params['formInscricao'] = true;
+			self::$params['ingressoInfo'] = Maanaim::listarIngresso(self::$params['inscricao']['idIngresso'], ['validade' => false]);
+			self::$params['evento']['ingressos'] = [];
+			self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
+			self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
+			// DevHelper::printr(self::$params['inscricao']);
+		}
+
 		self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
 
 	public function editar($params)
 	{
 		// Sub menus da página.
-		self::$params['subMenus'] = ['adicionar', 'editar'];
+		$this->subMenu();
 
-		self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
+		// DevHelper::printr(self::$params);
+
+		// Verifica se foi passado um id de inscrito.
+		if (!isset($params['infoUrl']['attr'][1])) {
+			self::$params['html'] = 'Vá em listar, para encontrar a inscrição que queira editar, ou preencha o id da inscrição que queira editar.';
+			$this->listar($params);
+		} else {
+
+			// todo - Pegar a inscrição do id passado por url.
+			// self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+			// DevHelper::printr(self::$params['inscricao']);
+			$id = $params['infoUrl']['attr'][1];
+			self::$params['inscricao'] = Maanaim::getInscricaoPorId($id);
+			// DevHelper::printr(self::$params['inscricao']);
+			$options = [
+				'ingressoValidade' => false,    // Ingresso dentro da validade.
+			];
+			self::$params['eventos'] = json_encode(Maanaim::listarEventos($options));
+			self::$params['formInscricao'] = true;
+			self::$params['ingressoInfo'] = Maanaim::listarIngresso(self::$params['inscricao']['idIngresso'], ['validade' => false]);
+			self::$params['evento']['ingressos'] = [];
+			self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
+			self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
+
+
+			// DevHelper::printr(self::$params['inscricao']);
+			self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'adm/inscricoes/api/';
+			self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
+		}
 	}
 
-	public function api($params) 
+	public function listar($params)
 	{
-		// Finaliza a execução da função.
+		// Sub menus da página.
+		$this->subMenu();
+
+		if (!isset($params['infoUrl']['attr'][1])) {
+			self::$params['eventos'] = Maanaim::listarEventos();
+			self::$params['listarInscricoes'] = true; // Exibe o botão para listar inscrições.
+			self::$params['html'] = Render::obj('blocos/eventos_cards_mini.html', self::$params);
+			// self::$params['html'] = 'Não temos id.';
+		} else {
+			$id = $params['infoUrl']['attr'][1];
+
+			self::$params['inscricoes'] = Maanaim::listarInscricoes($id);
+			// DevHelper::printr(self::$params['inscricoes']);
+
+			// Verifica se tem inscrições para este evento.
+			if (empty(self::$params['inscricoes'])) {
+				self::$params['html'] = 'Nenhuma inscrição para este evento.';
+			} else {
+				self::$params['html'] = Render::obj('blocos/inscricoes_cards_mini.html', self::$params);
+			}
+		}
+
+		// self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
+	}
+
+	public function api($params)
+	{
+		// Valores padrão
+		self::$params['response'] = "Padrão.";
 		self::$params['render']['content_type'] = 'application/json';
-		self::$params['response'] 	= "Teste";
-		self::$params['msg']		= 'Teste de api realizado com sucesso.';
-		self::$params['status']   	= 200;
+		self::$params['status'] = 200;
+		self::$params['msg'] = "Sucesso. Sem processamento.";
+
+		switch ($params['infoUrl']['attr'][1]) {
+			case 'teste':
+				break;
+			case 'adicionar':
+
+				// Pego os campos tratados do evento.
+				$inscricao = MaanaimParse::inscricaoPostToTable($_POST);
+
+				// Inscrição adicionada.
+				self::$params['response'] = Maanaim::adicionarInscricao($inscricao);
+
+				// Verifico se teve algum erro.
+				if (isset(self::$params['response']['error']) && self::$params['response']['error']) {
+					self::$params['status'] = 200;
+				}
+
+				// Monto a mensagem de retorno.
+				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+
+				break;
+			case 'editar':
+
+				// Pego os campos tratados do evento.
+				$inscricao = MaanaimParse::InscricaoPostToTable($_POST);
+
+				// Inscrição adicionada.
+				self::$params['response'] = Maanaim::editarInscricao($inscricao);
+
+				// Verifico se teve algum erro.
+				if (isset(self::$params['response']['error']) && self::$params['response']['error']) {
+					self::$params['status'] = 200;
+				}
+
+				// Monto a mensagem de retorno.
+				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+
+				break;
+
+			default:
+				self::$params['response'] = "Função não encontrada.";
+				self::$params['status'] = 400;
+				self::$params['msg'] = "Não foi encontrada a função da api.";
+				break;
+		}
+	}
+
+	public function subMenu()
+	{
+		// Sub menus da página.
+		self::$params['subMenus'] = ['adicionar', 'editar', 'listar'];
 	}
 }

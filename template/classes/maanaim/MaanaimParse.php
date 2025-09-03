@@ -6,7 +6,7 @@ use desv\classes\DevHelper;
 
 class MaanaimParse
 {
-    static function EventoPostToTable($post)
+    static function eventoPostToTable($post)
     {
         $evento = [
             "nome_evento"         => $post['f-nome_evento'],
@@ -31,7 +31,7 @@ class MaanaimParse
         return $evento;
     }
 
-    static function IngressoPostToTable($post) 
+    static function ingressoPostToTable($post) 
     {
         $ingresso = [
             "id_evento"           => $post['f-id_evento'],
@@ -52,8 +52,8 @@ class MaanaimParse
         return $ingresso;
     }
 
-    static function InscricaoPostToTable($post)
-    {
+    static function inscricaoPostToTable($post)
+    {        
         $inscricao = [
             "idEvento"        => (isset($post['f-idEvento']))?$post['f-idEvento']:'',
             "idIngresso"      => (isset($post['f-idIngresso']))?$post['f-idIngresso']:'',
@@ -67,6 +67,8 @@ class MaanaimParse
             "sexo"            => (isset($post['f-sexo']))?$post['f-sexo']:'',
             "dtNascimento"    => (isset($post['f-dtNascimento']))?$post['f-dtNascimento']:'',
             // "idMidiaFoto"     => ($post['f-idMidiaFoto'])?$post['f-idMidiaFoto']:'',
+            "menor"           => (isset($post['f-menor']))?$post['f-menor']:0,   // Menor de idade (menor de 18 anos até o evento).
+            "menorLimite"     => (isset($post['f-menorLimite']))?$post['f-menorLimite']:0,   // Menor que limite de idade do evento.
 
             // Informações"
             "paiNome"         => (isset($post['f-paiNome']))?$post['f-paiNome']:'',
@@ -100,6 +102,8 @@ class MaanaimParse
             "medicamentoR"    => (isset($post['f-medicamentoR']))?$post['f-medicamentoR']:'',
             "medicamento"     => (isset($post['f-medicamento']))?$post['f-medicamento']:'',
             "nadarR"          => (isset($post['f-nadarR']))?$post['f-nadarR']:'',
+            "nadarA"          => (isset($post['f-nadarA']))?$post['f-nadarA']:'',
+            "nadarP"          => (isset($post['f-nadarP']))?$post['f-nadarP']:'',
 
             // Informações"
             "ideia"           => (isset($post['f-ideia']))?$post['f-ideia']:'',
@@ -109,6 +113,7 @@ class MaanaimParse
             "termos"          => 1,
             "status"          => (isset($post['f-status']))?$post['f-status']:'Aguardando Pagamento',
             "statusEquipe"    => (isset($post['f-statusEquipe']))?$post['f-statusEquipe']:'',
+            "obs"    => (isset($post['f-obs']))?$post['f-obs']:'',
             "obsPreAcampa"    => (isset($post['f-obsPreAcampa']))?$post['f-obsPreAcampa']:'',
             "obsAcampa"       => (isset($post['f-obsAcampa']))?$post['f-obsAcampa']:'',
             "obsPosAcampa"    => (isset($post['f-obsPosAcampa']))?$post['f-obsPosAcampa']:'',
@@ -120,6 +125,11 @@ class MaanaimParse
             "checkin"         => (isset($post['f-checkin']))?$post['f-checkin']:'',
             "obsCheckin"      => (isset($post['f-obsCheckin']))?$post['f-obsCheckin']:'',
         ];
+
+        if (isset($post['f-id']))
+        {
+            $inscricao['id'] = $post['f-id'];
+        }
 
         return $inscricao;
     }
