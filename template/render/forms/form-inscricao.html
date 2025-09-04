@@ -529,14 +529,14 @@
 							<div class="input-group-text">
 								<div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="0" {% if not inscricao.alergiaR %}checked{% endif %}> Não
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" id="f-alergiaRN" aria-label="Radio button for following text input" value="0" {% if not inscricao.alergiaR %}checked{% endif %}> Não
 									</div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" aria-label="Radio button for following text input" value="1" {% if inscricao.alergiaR %}checked{% endif %}> Sim
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-alergiaR" id="f-alergiaRS" aria-label="Radio button for following text input" value="1" {% if inscricao.alergiaR %}checked{% endif %}> Sim
 									</div>
 								</div>
 							</div>
-							<textarea id="f-alergia" name="f-alergia" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?">{% if inscricao.alergia %}{{inscricao.alergia}}{% endif %}</textarea>
+							<textarea id="f-alergia" name="f-alergia" class="form-control" rows="5" aria-label="With textarea" placeholder="Descreva quais as alergias e quais os cuidados aqui.">{% if inscricao.alergia %}{{inscricao.alergia}}{% endif %}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Tem alergia ou algum tipo de cuidado com locais, comida, etc.
@@ -553,14 +553,14 @@
 							<div class="input-group-text">
 								<div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="0" {% if not inscricao.medicamentoR %}checked{% endif %}> Não
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" id="f-medicamentoRN" aria-label="Radio button for following text input" value="0" {% if not inscricao.medicamentoR %}checked{% endif %}> Não
 									</div>
 									<div class="py-2">
-										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" aria-label="Radio button for following text input" value="1" {% if inscricao.medicamentoR %}checked{% endif %}> Sim
+										<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-medicamentoR" id="f-medicamentoRS" aria-label="Radio button for following text input" value="1" {% if inscricao.medicamentoR %}checked{% endif %}> Sim
 									</div>
 								</div>
 							</div>
-							<textarea id="f-medicamento" name="f-medicamento" class="form-control" rows="5" aria-label="With textarea" placeholder="Qual?">{% if inscricao.medicamento %}{{inscricao.medicamento}}{% endif %}</textarea>
+							<textarea id="f-medicamento" name="f-medicamento" class="form-control" rows="5" aria-label="With textarea" placeholder="Descreva qual medicamento e quais os cuidados aqui.">{% if inscricao.medicamento %}{{inscricao.medicamento}}{% endif %}</textarea>
 						</div>
 						<small class="form-text text-muted">
 							Faz uso de algum tipo de medicamento diário, ou em casos diversos?
@@ -574,10 +574,10 @@
 						<h6>Autoriza a participação em atividades com água? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarR %}checked{% endif %}> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" id="f-nadarRN" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarR %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarR or not inscricao %}checked{% endif %}> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarR" id="f-nadarRS" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarR or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -592,10 +592,10 @@
 						<h6>Autoriza a participação no açude? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarA %}checked{% endif %}> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" id="f-nadarAN" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarA %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarA or not inscricao %}checked{% endif %}> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarA" id="f-nadarAS" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarA or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -611,10 +611,10 @@
 						<h6>Autoriza a participação na piscina? (*)</h6>
 						<div class="input-group">
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarP %}checked{% endif %}> Não
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" id="f-nadarPN" aria-label="Radio button for following text input" value="0" {% if not inscricao.nadarP %}checked{% endif %}> Não
 							</div>
 							<div class="input-group-text">
-								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarP or not inscricao %}checked{% endif %}> Sim
+								<input class="form-check-input mt-0 me-2 align-middle" type="radio" name="f-nadarP" id="f-nadarPS" aria-label="Radio button for following text input" value="1" {% if inscricao.nadarP or not inscricao %}checked{% endif %}> Sim
 							</div>
 						</div>
 						<small class="form-text text-muted">
@@ -847,12 +847,12 @@
 			// console.log(ret);
 
 			// Verifica se teve retorno ok.
-			if (ret.ret) {
+			if (ret.body) {
 				// Notificação.
 				Swal.fire({
 					icon: "success",
 					title: "Sucesso.",
-					text: ret.msg,
+					html: ret.msg,
 					toast: true,
 					position: "top-end",
 					showConfirmButton: false,
@@ -862,52 +862,10 @@
 
 
 				// Preenche os campos
-
-				$('#f-nome').val(ret.ret.nome);
-				$('#f-email').val(ret.ret.email);
-				$('#f-telefone').val(ret.ret.telefone);
-				$('#f-telefoneContato').val(ret.ret.telefoneContato);
-				$('#f-cpf').val(ret.ret.cpf);
-				$('#f-rg').val(ret.ret.rg);
-				$('#f-cnh').val(ret.ret.cnh);
-				$('#f-sexo').val(ret.ret.sexo);
-				$('#f-dtNascimento').val(ret.ret.dtNascimento);
-				verificaMaior();
-
-				// Representante
-				$('#f-RepNome').val(ret.ret.RepNome);
-				$('#f-RepEmail').val(ret.ret.RepEmail);
-				$('#f-RepTelefone').val(ret.ret.RepTelefone);
-				$('#f-RepCpf').val(ret.ret.RepCpf);
-				$('#f-RepRg').val(ret.ret.RepRg);
-				$('#f-RepCnh').val(ret.ret.RepCnh);
-				$('#f-RepSexo').val(ret.ret.RepSexo);
-				$('#f-RepDtNascimento').val(ret.ret.RepDtNascimento);
-
-				// Endereço
-				$('#f-endCEP').val(ret.ret.endCEP);
-				$('#f-endPais').val(ret.ret.endPais);
-				$('#f-endEstado').val(ret.ret.endEstado);
-				$('#f-endCidade').val(ret.ret.endCidade);
-				$('#f-endBairro').val(ret.ret.endBairro);
-				$('#f-endRua').val(ret.ret.endRua);
-				$('#f-endNumero').val(ret.ret.endNumero);
-				$('#f-endComplemento').val(ret.ret.endComplemento);
-
-				// Informações de saude
-				// $('#f-alergiaR').val(ret.ret.alergiaR);
-				// $('#f-alergia').val(ret.ret.alergia);
-				// $('#f-medicamentoR').val(ret.ret.medicamentoR);
-				// $('#f-medicamento').val(ret.ret.medicamento);
-				// $('#f-nadarR').val(ret.ret.nadarR);
-
-				// Pessoal
-				// $('#f-ideia').val(ret.ret.cpf);
-				// $('#f-conselho').val(ret.ret.cpf);
-				// $('#f-termos').val(ret.ret.cpf);
-
+				preencheInscricao(ret.body);
 
 				// Verifica se já está inscrito no evento atual.
+				/*
 				if (ret.html != '') {
 					// Monta o html do acompanhamento.
 					$('#modalAcompanhamento .modal-body').html(ret.html);
@@ -918,6 +876,7 @@
 					// Abre o modal.
 					$("#modalAcompanhamento").modal('show');
 				}
+				*/
 
 			} else {
 				// Notificação.
@@ -938,7 +897,7 @@
 
 
 	// Campos obrigatórios preenchidos.
-	camposObrigatorios = true;
+	camposObrigatorios = true; // campos obrigatórios preenchidos.
 	msgOb = '';
 
 	function editarInscricao() {
@@ -960,7 +919,7 @@
 		// Verifica campos obrigatórios
 		verificaCamposObrigatorios();
 
-		// Se faltou algum campo, interrompe o processamento.
+		// Se faltou algum campo (false), interrompe o processamento.
 		if (camposObrigatorios == false) {
 			return true;
 		}
@@ -972,7 +931,8 @@
 	function verificaCamposObrigatorios() {
 
 		msgOb = '';
-		
+		camposObrigatorios = true; // campos obrigatórios preenchidos.
+
 		// Caso não tenha preenchido algum, trava.
 		if ($('#f-idEvento').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Evento. '; }
 		if ($('#f-idIngresso').val() == '') { camposObrigatorios = false; msgOb += '<br>Preencha o campo: Ingresso. '; }
@@ -1008,15 +968,17 @@
 	}
 
 	function notificaCamposObrigatorios() {
-		// Notificação.
-		Swal.fire({
-			icon: 'error',
-			title: 'Erro.',
-			html: '<div class="text-start">Preencha os campos obrigatórios.<br>' + msgOb + '</div>',
-			showConfirmButton: false,
-			showDenyButton: true,
-			denyButtonText: "Entendi",
-		});
+		if (msgOb) {
+			// Notificação.
+			Swal.fire({
+				icon: 'error',
+				title: 'Erro.',
+				html: '<div class="text-start">Preencha os campos obrigatórios.<br>' + msgOb + '</div>',
+				showConfirmButton: false,
+				showDenyButton: true,
+				denyButtonText: "Entendi",
+			});
+		}
 	}
 
 	function postInscricao(endpoint) {
@@ -1040,53 +1002,140 @@
 					confirmButtonText: "Acompanhar Inscrição",
 
 					{% if infoUrl.func %}
-					showCancelButton: true,
-					cancelButtonText: "OK",
+			showCancelButton: true,
+				cancelButtonText: "OK",
 					{% endif %}
 					// timer: 3000,
 					// timerProgressBar: true,
 				}).then((result) => {
-					if (result.isConfirmed) {
-						$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
-					} else if (result.isDenied) {
-					}
-				});
-
-
-			} else {
-
-				if (ret.body.idInscricao) {
-					// Notificação.
-					Swal.fire({
-						icon: 'warning',
-						title: 'Atenção',
-						html: ret.msg,
-						showConfirmButton: true,
-						confirmButtonText: "Acompanhar Inscrição",
-					}).then((result) => {
 						if (result.isConfirmed) {
 							$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
 						} else if (result.isDenied) {
 						}
 					});
-				} else {
-					// Notificação.
-					Swal.fire({
-						icon: 'error',
-						title: 'Erro',
-						html: ret.msg,
-						showConfirmButton: true,
-						confirmButtonText: "Revisar",
-					}).then((result) => {
-						if (result.isConfirmed) {
-						} else if (result.isDenied) {
-						}
-					});
 
+
+			} else {
+
+		if (ret.body.idInscricao) {
+			// Notificação.
+			Swal.fire({
+				icon: 'warning',
+				title: 'Atenção',
+				html: ret.msg,
+				showConfirmButton: true,
+				confirmButtonText: "Acompanhar Inscrição",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
+				} else if (result.isDenied) {
 				}
+			});
+		} else {
+			// Notificação.
+			Swal.fire({
+				icon: 'error',
+				title: 'Erro',
+				html: ret.msg,
+				showConfirmButton: true,
+				confirmButtonText: "Revisar",
+			}).then((result) => {
+				if (result.isConfirmed) {
+				} else if (result.isDenied) {
+				}
+			});
 
-			}
+		}
+
+	}
 
 		}, 'POST', false);
+	}
+
+	function preencheInscricao(inscricao) {
+		// DADOS INSCRITO
+		$('#f-nome').val(inscricao.nome);
+		$('#f-email').val(inscricao.email);
+		$('#f-telefone').val(inscricao.telefone);
+		$('#f-telefoneContato').val(inscricao.telefoneContato);
+		$('#f-cpf').val(inscricao.cpf);
+		// $('#f-rg').val(inscricao.rg);
+		// $('#f-cnh').val(inscricao.cnh);
+		$('#f-sexo').val(inscricao.sexo);
+		$('#f-dtNascimento').val(inscricao.dtNascimento);
+		$('#f-paiNome').val(inscricao.paiNome);
+		$('#f-maeNome').val(inscricao.maeNome);
+
+		verificaMaior();
+
+		// Representante
+		$('#f-RepNome').val(inscricao.RepNome);
+		$('#f-RepEmail').val(inscricao.RepEmail);
+		$('#f-RepTelefone').val(inscricao.RepTelefone);
+		$('#f-RepCpf').val(inscricao.RepCpf);
+		// $('#f-RepRg').val(inscricao.RepRg);
+		// $('#f-RepCnh').val(inscricao.RepCnh);
+		$('#f-RepSexo').val(inscricao.RepSexo);
+		$('#f-RepDtNascimento').val(inscricao.RepDtNascimento);
+
+		// Endereço
+		$('#f-endCEP').val(inscricao.endCEP);
+		$('#f-endPais').val(inscricao.endPais);
+		$('#f-endEstado').val(inscricao.endEstado);
+		$('#f-endCidade').val(inscricao.endCidade);
+		$('#f-endBairro').val(inscricao.endBairro);
+		$('#f-endRua').val(inscricao.endRua);
+		$('#f-endNumero').val(inscricao.endNumero);
+		$('#f-endComplemento').val(inscricao.endComplemento);
+
+		// Informações de saude
+		$('#f-alergia').val(inscricao.alergia);
+		$('#f-medicamento').val(inscricao.medicamento);
+
+		if (inscricao.alergiaR == 1) {
+			$('#f-alergiaRS').prop("checked", true);
+			$('#f-alergiaRN').prop("checked", false);
+		} else {
+			$('#f-alergiaRN').prop("checked", true);
+			$('#f-alergiaRS').prop("checked", false);
+		}
+
+		if (inscricao.medicamentoR == 1) {
+			$('#f-medicamentoRS').prop("checked", true);
+			$('#f-medicamentoRN').prop("checked", false);
+		} else {
+			$('#f-medicamentoRN').prop("checked", true);
+			$('#f-medicamentoRS').prop("checked", false);
+		}
+
+		if (inscricao.nadarR == 1) {
+			$('#f-nadarRS').prop("checked", true);
+			$('#f-nadarRN').prop("checked", false);
+		} else {
+			$('#f-nadarRN').prop("checked", true);
+			$('#f-nadarRS').prop("checked", false);
+		}
+
+		if (inscricao.nadarA == 1) {
+			$('#f-nadarAS').prop("checked", true);
+			$('#f-nadarAN').prop("checked", false);
+		} else {
+			$('#f-nadarAN').prop("checked", true);
+			$('#f-nadarAS').prop("checked", false);
+		}
+
+		if (inscricao.nadarP == 1) {
+			$('#f-nadarPS').prop("checked", true);
+			$('#f-nadarPN').prop("checked", false);
+		} else {
+			$('#f-nadarPN').prop("checked", true);
+			$('#f-nadarPS').prop("checked", false);
+		}
+		// $( "#x" ).prop( "checked", true );
+
+		// Pessoal
+		// $('#f-ideia').val(inscricao.cpf);
+		// $('#f-conselho').val(inscricao.cpf);
+		// $('#f-termos').val(inscricao.cpf);
 	}
 </script>

@@ -180,18 +180,22 @@ class eventos extends EndPoint
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
 
 		self::$params['ingressoInfo'] = Maanaim::listarIngresso($_POST['f-ingresso']);
+
+		if (self::$params['ingressoInfo'])
+		{
 		self::$params['evento'] = $evento;
 
 		self::$params['evento']['ingressos'] = [];
 		self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
 		self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
+		}
 		self::$params['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
 
 		// todo - Apenas para facilitar os testes.
-		self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+		// self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 
 		// Formulário de inscrição.
-		self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'eventos/api/adicionar';
+		self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'eventos/api/adicionar/';
 		self::$params['formInscricaoHtml'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
 
@@ -221,6 +225,30 @@ class eventos extends EndPoint
 
 				// Monto a mensagem de retorno.
 				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
+				
+				break;
+			case 'cpf':
+
+				$id = 0;
+				$cpf = '';
+				if (isset($_POST['f-cpf']) && isset($_POST['f-id'])) {
+					$id = $_POST['f-id'];
+					$cpf = $_POST['f-cpf'];
+				}
+				$inscricao = Maanaim::getInscricaoPorId($id);
+
+				// Verifico se teve algum erro.
+				if ($inscricao && isset($inscricao['cpf']) && $inscricao['cpf'] == $cpf) {
+					// Inscrição adicionada.
+					self::$params['response'] = $inscricao;
+	
+					// Monto a mensagem de retorno.
+					self::$params['msg'] = '<b>' . $inscricao['nome'] . '</b><br>Consulta realizada com sucesso.<br>Verifique e atualize as informações e termine seu cadastro.';
+				} else {
+					self::$params['response'] = [];
+					self::$params['status'] = 400;
+					self::$params['msg'] = 'Não foi encontrado inscrição neste CPF/ID.<br>Verifique se foi preenchido corretamente ou faça sua inscrição manualmente.';
+				}
 				
 				break;
 

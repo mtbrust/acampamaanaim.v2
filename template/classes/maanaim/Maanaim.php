@@ -595,7 +595,11 @@ class Maanaim
         // Obtém ingressos.
         $ingressos = $bdIngressos->select('*', $where, $orderby);
 
-        return $ingressos[0];
+        if (isset($ingressos[0]))
+            return $ingressos[0];
+
+        return false;
+
     }
 
     static function adicionarIngresso($postIngresso)

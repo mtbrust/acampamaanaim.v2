@@ -33,10 +33,13 @@ TEMPORADAS
                                 <span class="badge text-bg-light" style="position: absolute; top: 10px; left: 10px;">{{evento.titulo_evento}}</span>
                                 <span class="badge text-bg-light" style="position: absolute; top: 35px; left: 10px;">{{ evento.dt_inicio_evento|date("d/m/Y") }} até {{ evento.dt_fim_evento|date("d/m/Y") }}</span>
                                 <a href="{{base.url}}eventos/{{evento.id}}/">
+                                    {% set url_midia_banner = evento.url_midia_banner %}
                                     {% if not evento.url_midia_banner %}
-                                    {% set evento = {'url_midia_banner': config.image} %}
+                                    {# {% set evento = {'url_midia_banner': config.image} %} #}
+                                    {# {% set evento.url_midia_banner = config.image %} #}
+                                    {% set url_midia_banner = config.image %}
                                     {% endif %}
-                                    <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_banner}}" alt="">
+                                    <img class="w-100 rounded" src="{{base.url}}{{url_midia_banner}}" alt="">
                                 </a>
                                 <a href="{{base.dir_relative}}eventos/{{evento.id}}/" class="btn btn-success position-absolute" style="bottom: 20px; right: 20px;">Inscrição</a>
                             </div>
