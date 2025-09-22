@@ -112,6 +112,227 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+
+
+
+
+			{# Quando for tela da administração #}
+			{% if infoUrl.func == 'editar' or infoUrl.func == 'adicionar' %}
+			<!-- 
+                    Dados de controle da EQUIPE
+                    **************************************************************************************************************
+                -->
+
+			<div class="row">
+				<div class="col-12 mt-4 pt-5">
+					<h4>Informações de Controle</h4>
+					{% if infoUrl.func == 'editar' %}
+					<p>
+						Informações para controle interno do acampamento maanaim.
+						<br>
+						<b>CPF</b>: {{inscricao.cpf}}
+						<br>
+						<b>ID</b>: {{inscricao.id}}
+					</p>
+					{% endif %}
+				</div>
+
+				<!-- status -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Status Inscrição para Inscrito</h6>
+						<div class="input-group">
+
+							<select id="f-status" name="f-status" class="form-select" required>
+								{% for key, status in inscricaoStatus %}
+								<option value="{{status}}" {% if inscricao.status == status %}selected{% endif %}>{{status}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<small class="form-text text-muted">
+							Status da situação da inscrição. Inscrito verá ao acompanhar sua inscrição em "Minha Inscrição". 
+						</small>
+					</div>
+				</div>
+
+				<!-- statusEquipe -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Status Equipe</h6>
+						<div class="input-group">
+							<input id="f-statusEquipe" name="f-statusEquipe" type="text" class="form-control" value="{{inscricao.statusEquipe}}">
+						</div>
+						<small class="form-text text-muted">
+							Status da equipe. Não aparece para o inscrito.
+						</small>
+					</div>
+				</div>
+
+				<!-- obs -->
+				<div class="col-sm-4 my-2">
+					<div class="form-group">
+						<h6>Observação para Inscrito</h6>
+						<div class="input-group">
+							<textarea id="f-obs" name="f-obs" class="form-control" rows="5" aria-label="With textarea">{{inscricao.obs}}</textarea>
+						</div>
+						<small class="form-text text-muted">
+							Observações que o inscrito verá ao acompanhar sua inscrição em "Minha Inscrição". Essa informação aparece para o inscrito.
+						</small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+
+				<!-- obsPreAcampa -->
+				<div class="col-sm-4 my-2">
+					<div class="form-group">
+						<h6>Observação Pré Acampamento</h6>
+						<div class="input-group">
+							<textarea id="f-obsPreAcampa" name="f-obsPreAcampa" class="form-control" rows="5" aria-label="With textarea">{{inscricao.obsPreAcampa}}</textarea>
+						</div>
+						<small class="form-text text-muted">
+							Observações antes do acampamento. Inscrito vai pagar uma parte no acampamento, priorizar algum quarto, informações de parentes, etc. Não aparece para o inscrito.
+						</small>
+					</div>
+				</div>
+
+				<!-- obsAcampa -->
+				<div class="col-sm-4 my-2">
+					<div class="form-group">
+						<h6>Observação Acampamento</h6>
+						<div class="input-group">
+							<textarea id="f-obsAcampa" name="f-obsAcampa" class="form-control" rows="5" aria-label="With textarea">{{inscricao.obsAcampa}}</textarea>
+						</div>
+						<small class="form-text text-muted">
+							Observações no acampamento. Algum pertence guardado no acampamento, alguma ocorrência, reclamação, incidente, etc. Não aparece para o inscrito.
+						</small>
+					</div>
+				</div>
+
+				<!-- obsPosAcampa -->
+				<div class="col-sm-4 my-2">
+					<div class="form-group">
+						<h6>Observação Pós Acampamento</h6>
+						<div class="input-group">
+							<textarea id="f-obsPosAcampa" name="f-obsPosAcampa" class="form-control" rows="5" aria-label="With textarea">{{inscricao.obsPosAcampa}}</textarea>
+						</div>
+						<small class="form-text text-muted">
+							Observações pós acampamento. Alguma dívida, pendência, objeto esquecido, etc. Não aparece para o inscrito.
+						</small>
+					</div>
+				</div>
+				<!-- 
+                    Dados de controle da EQUIPE
+                    **************************************************************************************************************
+                -->
+				<div class="col-12 mt-4 pt-5">
+					<h4>Informações de CHECKIN</h4>
+				</div>
+
+				<!-- statusCheckin -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Status Checkin</h6>
+						<div class="input-group">
+							<input type="text" class="form-control" id="f-statusCheckin" name="f-statusCheckin" value="{{inscricao.statusCheckin}}">
+						</div>
+						<small class="form-text text-muted">
+							Status para controle do checkin.
+						</small>
+					</div>
+				</div>
+
+				<!-- pago -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<h6>Pagamento</h6>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="f-pago" name="f-pago" value="1" {% if inscricao.pago %}checked{% endif %}>
+						<label class="form-check-label" for="f-pago">
+							Pago
+						</label>
+					</div>
+					<small class="form-text text-muted">
+						Pendência financeira de inscrito dada como pago.
+					</small>
+				</div>
+
+				<!-- valor pago -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Valor Pago Inscrito</h6>
+						<div class="input-group">
+							<input id="f-valorPago" name="f-valorPago" type="decimal(10.2)" class="form-control" value="{{inscricao.valorPago}}">
+						</div>
+						<small class="form-text text-muted">
+							Valor que o inscrito realmente pagou. Ex: 240.50 ou 1000.00.
+							<span>Atenção</span> Use o ponto (.) para separar as casas decimais (centavos). Não separe os milhares.
+						</small>
+					</div>
+				</div>
+
+				<!-- quarto -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<div class="form-group">
+						<h6>Quarto</h6>
+						<div class="input-group">
+							<input id="f-quarto" name="f-quarto" type="text" class="form-control" value="{{inscricao.quarto}}">
+						</div>
+						<small class="form-text text-muted">
+							Quarto que inscrito está alocado. Ex: DM4, DF10.
+						</small>
+					</div>
+				</div>
+
+				<!-- documentacao -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<h6>Documentação</h6>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="f-documentacao" name="f-documentacao" value="1" {% if inscricao.documentacao %}checked{% endif %}>
+						<label class="form-check-label" for="f-documentacao">
+							Conferido
+						</label>
+					</div>
+					<small class="form-text text-muted">
+						Os documentos apresentados estão de acordo com os originais.
+					</small>
+				</div>
+
+				<!-- Checkin -->
+				<div class="col-12 col-sm-4 col-lg-4 my-2">
+					<h6>Check-In</h6>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="f-checkin" name="f-checkin" value="1" {% if inscricao.checkin %}checked{% endif %}>
+						<label class="form-check-label" for="f-checkin">
+							Aceito
+						</label>
+					</div>
+					<small class="form-text text-muted">
+						O inscrito passou pelo checkin e está tudo certo. Informações pessoais, informações de responsável, responsável ciente, Informações de saúde, restrições, quarto, financeiro, preparado para comer, dormir, aquecer, etc.
+					</small>
+				</div>
+
+				<!-- obsCheckin -->
+				<div class="col-sm-4 my-2">
+					<div class="form-group">
+						<h6>Observação Check-In</h6>
+						<div class="input-group">
+							<textarea id="f-obsCheckin" name="f-obsCheckin" class="form-control" rows="5" aria-label="With textarea">{{inscricao.obsCheckin}}</textarea>
+						</div>
+						<small class="form-text text-muted">
+							Observações do check-in. ficou alguma pendência, Inscrito é uma exceção, inscrito fez check-in fora do horário, etc.
+						</small>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			<div class="row">
+
+
+
+
+
 
 
 

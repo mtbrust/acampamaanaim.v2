@@ -26,6 +26,25 @@
             <h5 class="mt-4">TESTES</h5>
             <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}montar/api/arquivos/', {},function(){}, 'POST')">Arquivos</a>
 
+            <h5 class="mt-4">TUDO</h5>
+            <a href="#" class="btn btn-success btn-flat" onclick="reset_teste();">Reset Teste</a>
+
         </div>
     </div>
 </div>
+
+<script>
+    function reset_teste() {
+    
+        ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_delete', null, function (response) {},'GET');
+        ajaxDados('{{base.url}}montar/api/deletar_tabelas/', {},function(){}, 'POST');
+
+        ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_create', null, function (response) {},'GET');
+        ajaxDados('{{base.url}}montar/api/criar_tabelas/', {},function(){}, 'POST');
+
+        ajaxDados('{{base.url}}desv/api/v1/config/init/bd_tables_insert', null, function (response) {},'GET');
+        ajaxDados('{{base.url}}montar/api/cria_permissoes/', {},function(){}, 'POST');
+        ajaxDados('{{base.url}}montar/api/criar_eventos/', {},function(){}, 'POST');
+        ajaxDados('{{base.url}}montar/api/criar_Ingressos/', {},function(){}, 'POST')
+    }
+</script>

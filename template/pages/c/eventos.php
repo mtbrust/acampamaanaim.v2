@@ -81,7 +81,7 @@ class eventos extends EndPoint
 			'footer'       => 'maanaim',   // footer da página.
 			'end'          => 'maanaim',   // Fim da página.
 		];
-		
+
 		// Carrega na página scripts (template/assets/js/) Somente pages.
 		self::$params['scripts'] = [
 			// pasta libs.
@@ -181,18 +181,19 @@ class eventos extends EndPoint
 
 		self::$params['ingressoInfo'] = Maanaim::listarIngresso($_POST['f-ingresso']);
 
-		if (self::$params['ingressoInfo'])
-		{
-		self::$params['evento'] = $evento;
+		if (self::$params['ingressoInfo']) {
+			self::$params['evento'] = $evento;
 
-		self::$params['evento']['ingressos'] = [];
-		self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
-		self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
+			self::$params['evento']['ingressos'] = [];
+			self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
+			self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
 		}
 		self::$params['ingressosHtml'] = Render::obj('blocos/ingressos.html', self::$params);
 
 		// todo - Apenas para facilitar os testes.
-		// self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+		if (isset($_GET['fake']) && $_GET['fake']) {
+			self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
+		}
 
 		// Formulário de inscrição.
 		self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'eventos/api/adicionar/';
@@ -225,7 +226,7 @@ class eventos extends EndPoint
 
 				// Monto a mensagem de retorno.
 				self::$params['msg'] = implode('<br>', self::$params['response']['msg']);
-				
+
 				break;
 			case 'cpf':
 
@@ -241,7 +242,7 @@ class eventos extends EndPoint
 				if ($inscricao && isset($inscricao['cpf']) && $inscricao['cpf'] == $cpf) {
 					// Inscrição adicionada.
 					self::$params['response'] = $inscricao;
-	
+
 					// Monto a mensagem de retorno.
 					self::$params['msg'] = '<b>' . $inscricao['nome'] . '</b><br>Consulta realizada com sucesso.<br>Verifique e atualize as informações e termine seu cadastro.';
 				} else {
@@ -249,7 +250,7 @@ class eventos extends EndPoint
 					self::$params['status'] = 400;
 					self::$params['msg'] = 'Não foi encontrado inscrição neste CPF/ID.<br>Verifique se foi preenchido corretamente ou faça sua inscrição manualmente.';
 				}
-				
+
 				break;
 
 			default:

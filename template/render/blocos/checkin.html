@@ -1,0 +1,370 @@
+<!-- Modal -->
+<div class="modal fade" id="acampante" tabindex="-1" aria-labelledby="acampanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="acampanteNome">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="acampanteInfo">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title m-1">Registros de CheckIn
+        </h3>
+        <div class="card-tools m-0">
+            <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- /.card-header -->
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-12">
+
+                {# FILTROS #}
+                <h3>FILTROS</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Inscrição</td>
+                            <td>Sexo</td>
+                            <td>Nome</td>
+                            <td>quarto</td>
+                            <td>Documentação</td>
+                            <td>Pagamento</td>
+                            <td>Alojamento</td>
+                            <td>Checkin</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" name="q-inscricao" id="q-inscricao" onkeyup="filtrar()"></td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="q-sexo-sim" id="q-sexo-sim" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-sexo-sim">F</label>
+                                    <br>
+                                    <input class="form-check-input" type="checkbox" name="q-sexo-nao" id="q-sexo-nao" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-sexo-nao">M</label>
+                                </div>
+                            </td>
+                            <td><input type="text" name="q-nome" id="q-nome" onkeyup="filtrar()"></td>
+                            <td><input type="text" name="q-quarto" id="q-quarto" onkeyup="filtrar()"></td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="q-documentacao-sim" id="q-documentacao-sim" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-documentacao-sim">Sim</label>
+                                    <br>
+                                    <input class="form-check-input" type="checkbox" name="q-documentacao-nao" id="q-documentacao-nao" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-documentacao-nao">Não</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="q-pagamento-sim" id="q-pagamento-sim" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-pagamento-sim">Sim</label>
+                                    <br>
+                                    <input class="form-check-input" type="checkbox" name="q-pagamento-nao" id="q-pagamento-nao" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-pagamento-nao">Não</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="q-alojamento-sim" id="q-alojamento-sim" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-alojamento-sim">Sim</label>
+                                    <br>
+                                    <input class="form-check-input" type="checkbox" name="q-alojamento-nao" id="q-alojamento-nao" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-alojamento-nao">Não</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="q-checkin-sim" id="q-checkin-sim" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-checkin-sim">Sim</label>
+                                    <br>
+                                    <input class="form-check-input" type="checkbox" name="q-checkin-nao" id="q-checkin-nao" onclick="filtrar()">
+                                    <label class="form-check-label" for="q-checkin-nao">Não</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {# REGISTROS #}
+                <h3>LISTA</h3>
+                <table class="table table-bordered" id="table-checkin">
+                    <thead>
+                        <tr>
+                            <td>Inscrição</td>
+                            <td>Sexo</td>
+                            <td>Nome</td>
+                            <td>quarto</td>
+                            <td>Documentação</td>
+                            <td>Pagamento</td>
+                            <td>Alojamento</td>
+                            <td>Checkin</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for item in listaCheckin %}
+                        <tr data-id="{{item.idInscricao}}" data-sexo="{{item.sexo|first}}" data-nome="{{item.nome}}" data-quarto="{{item.quarto}}" data-doc="{{item.documentacao}}" data-pag="{{item.pagamento}}" data-alojamento="{{item.alojamento}}" data-checkin="{{item.checkin}}">
+                            <td>{{item.idInscricao}}</td>
+                            <td>{{item.sexo|first}}</td>
+                            <td>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#acampante" onclick="acampanteInfo('{{item.idInscricao}}')">
+                                    {{item.nome}}
+                                </a>
+                            </td>
+                            <td><input type="text" onchange="atualizarCheckin('quarto', '{{item.idInscricao}}', '{{item.nome}}', this)" name="f-quarto" id="f-quarto" value="{{item.quarto}}"></td>
+                            <td><input type="checkbox" onclick="atualizarCheckin('doc', '{{item.idInscricao}}', '{{item.nome}}', this)" name="f-documentacao" id="f-documentacao" {% if item.documentacao %}checked{% endif %}></td>
+                            <td><input type="checkbox" onclick="atualizarCheckin('pag', '{{item.idInscricao}}', '{{item.nome}}', this)" name="f-pagamento" id="f-pagamento" {% if item.pagamento %}checked{% endif %}></td>
+                            <td><input type="checkbox" onclick="atualizarCheckin('alojamento', '{{item.idInscricao}}', '{{item.nome}}', this)" name="f-alojamento" id="f-alojamento" {% if item.alojamento %}checked{% endif %}></td>
+                            <td><input type="checkbox" onclick="atualizarCheckin('checkin', '{{item.idInscricao}}', '{{item.nome}}', this)" name="f-checkin" id="f-checkin" {% if item.checkin %}checked{% endif %}></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    // Filtro
+    function filtrar() {
+        // Guarda os valores da pesquisa.
+        id = $('#q-inscricao').val();
+        sexos = $('#q-sexo-sim').is(':checked');
+        sexon = $('#q-sexo-nao').is(':checked');
+        nome = $('#q-nome').val();
+        quarto = $('#q-quarto').val();
+        docs = $('#q-documentacao-sim').is(':checked');
+        docn = $('#q-documentacao-nao').is(':checked');
+        pags = $('#q-pagamento-sim').is(':checked');
+        pagn = $('#q-pagamento-nao').is(':checked');
+        alojamentos = $('#q-alojamento-sim').is(':checked');
+        alojamenton = $('#q-alojamento-nao').is(':checked');
+        checkins = $('#q-checkin-sim').is(':checked');
+        checkinn = $('#q-checkin-nao').is(':checked');
+
+        // console.log('id: ' + id);
+        // console.log('sexos: ' + sexos);
+        // console.log('sexon: ' + sexon);
+        // console.log('nome: ' + nome);
+        // console.log('quarto: ' + quarto);
+        // console.log('docs: ' + docs);
+        // console.log('docn: ' + docn);
+        // console.log('pags: ' + pags);
+        // console.log('pagn: ' + pagn);
+        // console.log('alojamentos: ' + alojamentos);
+        // console.log('alojamenton: ' + alojamenton);
+        // console.log('checkins: ' + checkins);
+        // console.log('checkinn: ' + checkinn);
+
+        $('#table-checkin tbody tr').each(function (i) {
+            $(this).show();
+        });
+
+        $('#table-checkin tbody tr').each(function (i) {
+
+            // Filtra por ID - Inscrição
+            if (id && $(this).data("id") != id) {
+                $(this).hide();
+            }
+
+            // Filtra por sexo
+            if (sexos || sexon) {
+                if (sexos && $(this).data("sexo") != 'F') {
+                    $(this).hide();
+                }
+                if (sexon && $(this).data("sexo") != 'M') {
+                    $(this).hide();
+                }
+            }
+
+            // Filtra por nome
+            var registro = $(this).data("nome");
+            var pesquisa = nome;
+            var match = pesquisa.split(" ").every(function (palavra) {
+                var regex = new RegExp(palavra, "i");
+                return regex.test(registro);
+            });
+            if (!match) {
+                $(this).hide();
+            }
+
+            // Filtra por Quarto
+            if (quarto && $(this).data("quarto") != quarto) {
+                $(this).hide();
+            }
+
+            // Documentação
+            if (docs || docn) {
+                if (docs && $(this).data("doc") != true) {
+                    $(this).hide();
+                }
+                if (docn && $(this).data("doc") != false) {
+                    $(this).hide();
+                }
+            }
+
+            // Pagamento
+            if (pags || pagn) {
+                if (pags && $(this).data("pag") != true) {
+                    $(this).hide();
+                }
+                if (pagn && $(this).data("pag") != false) {
+                    $(this).hide();
+                }
+            }
+
+            // Alojamento
+            if (alojamentos || alojamenton) {
+                if (alojamentos && $(this).data("alojamento") != true) {
+                    $(this).hide();
+                }
+                if (alojamenton && $(this).data("alojamento") != false) {
+                    $(this).hide();
+                }
+            }
+
+            // Checkin
+            if (checkins || checkinn) {
+                if (checkins && $(this).data("checkin") != true) {
+                    $(this).hide();
+                }
+                if (checkinn && $(this).data("checkin") != false) {
+                    $(this).hide();
+                }
+            }
+
+
+
+        });
+    }
+
+
+    // Atualiza registro de checkin
+    function atualizarCheckin(tipo, id, nome, valor) {
+
+        // Obtém a linha (tr) do registro.
+        linha = $('tr[data-id=' + id + ']')[0];
+
+        switch (tipo) {
+            case 'doc':
+                valor = $(valor).is(':checked') ? 1 : 0;
+                $(linha).data("doc", valor)
+            case 'pag':
+                valor = $(valor).is(':checked') ? 1 : 0;
+                $(linha).data("pag", valor)
+            case 'alojamento':
+                valor = $(valor).is(':checked') ? 1 : 0;
+                $(linha).data("alojamento", valor)
+            case 'checkin':
+                valor = $(valor).is(':checked') ? 1 : 0;
+                $(linha).data("checkin", valor)
+                break;
+            case 'quarto':
+                valor = $(valor).val();
+                $(linha).data("quarto", valor)
+                break;
+            default:
+            // code block
+        }
+        // console.log(tipo, valor);
+
+        // Pega o formulário e envia.
+        dados = new FormData();
+        dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
+        dados.append('f-id', id); // ID Inscrito
+        dados.append('f-name', nome); // ID Inscrito
+        dados.append('f-value', valor); // ID Inscrito
+        ajaxDados('{{global.URL_RAIZ}}checkin/api/put/' + tipo, dados, function (ret) {
+            // Para testes
+            // console.log(ret);
+
+            // Verifica se teve retorno ok.
+            if (ret.ret) {
+                // Notificação.
+                Swal.fire({
+                    icon: "success",
+                    title: "Sucesso.",
+                    text: ret.msg,
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+
+
+            } else {
+                // Notificação.
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro.',
+                    text: ret.msg,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    // timer: 3000,
+                    // timerProgressBar: true,
+                });
+            }
+        })
+    }
+
+
+
+    function acampanteInfo(id) {
+
+        // Obtém a linha (tr) do registro.
+        linha = $('tr[data-id=' + id + ']')[0];
+
+        nome = $(linha).data("nome");
+        console.log(nome);
+
+        // Limpa modal.
+        $('#acampanteInfo').html('');
+        $('#acampanteNome').text('');
+
+
+        dados = new FormData();
+        dados.append('f-formToken', '{{page.formTokenApi}}'); // Token para uso de API
+        dados.append('f-id', id); // ID Inscrito
+        ajaxDados('{{global.URL_RAIZ}}checkin/api/put/acampante', dados, function (ret) {
+            // Para testes
+            console.log(ret);
+
+            // Verifica se teve retorno ok.
+            if (ret.ret) {
+
+                $('#acampanteInfo').html(ret.ret);
+                $('#acampanteNome').text('[' + id + '] ' + nome);
+            } else {
+            }
+        })
+    }
+
+</script>

@@ -118,7 +118,7 @@ class inscricoes extends EndPoint
 		// DevHelper::printEncodedJson(self::$params['eventos']);
 
 		// todo - inscrição fake. para ajudar no preenchimento e teste.
-		if (false) {
+		if (isset($_GET['fake']) && $_GET['fake']) {
 			self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 			self::$params['formInscricao'] = true;
 			self::$params['ingressoInfo'] = Maanaim::listarIngresso(self::$params['inscricao']['idIngresso'], ['validade' => false]);
@@ -127,6 +127,8 @@ class inscricoes extends EndPoint
 			self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
 			// DevHelper::printr(self::$params['inscricao']);
 		}
+
+		self::$params['inscricaoStatus'] = Maanaim::$statusInscricao;
 
 		self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
@@ -162,6 +164,8 @@ class inscricoes extends EndPoint
 
 
 			// DevHelper::printr(self::$params['inscricao']);
+
+			self::$params['inscricaoStatus'] = Maanaim::$statusInscricao;
 			self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'adm/inscricoes/api/';
 			self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
 		}

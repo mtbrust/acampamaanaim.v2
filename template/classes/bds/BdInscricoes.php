@@ -106,12 +106,13 @@ class BdInscricoes extends DataBase
             "obsPosAcampa" => "VARCHAR(1024) NULL",         // Pós Acampa
 
             // Checkin
-            "documentacao" => "BOOLEAN NULL",         // Documentação da inscrição é a mesma do documento oficial?
-            "alojamento"   => "BOOLEAN NULL",         // Alojamento do inscrito ok?
-            "quarto"       => "VARCHAR(32) NULL",     // Nome do alojamento que o inscrito está alocado.
-            "checkin"      => "BOOLEAN NULL",         // Inscrito foi recebido dentro do maanaim (checkin)?
-            "obsCheckin"   => "VARCHAR(1024) NULL",   // Observações gerais sobre o inscrito.
-            "valorPago"    => "FLOAT(7,2) NULL",      // Valor pago pelo inscrito nessa inscrição.
+            "statusCheckin" => "VARCHAR(256) NULL",    // Status checkin. 
+            "documentacao"  => "BOOLEAN NULL",         // Documentação da inscrição é a mesma do documento oficial?
+            "quarto"        => "VARCHAR(32) NULL",     // Nome do alojamento que o inscrito está alocado.
+            "pago"          => "BOOLEAN NULL",         // Inscrito foi recebido dentro do maanaim (checkin)?
+            "valorPago"     => "FLOAT(7,2) NULL",      // Valor pago pelo inscrito nessa inscrição.
+            "obsCheckin"    => "VARCHAR(1024) NULL",   // Observações gerais sobre o inscrito.
+            "checkin"       => "BOOLEAN NULL",         // Inscrito foi recebido dentro do maanaim (checkin)?
         ];
         return parent::createTable($fields);
     }

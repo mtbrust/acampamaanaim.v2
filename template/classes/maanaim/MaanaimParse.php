@@ -110,20 +110,22 @@ class MaanaimParse
             "conselheiro"     => (isset($post['f-conselheiro']))?$post['f-conselheiro']:'',
 
             // Informações"
-            "termos"          => 1,
-            "status"          => (isset($post['f-status']))?$post['f-status']:'Aguardando Pagamento',
-            "statusEquipe"    => (isset($post['f-statusEquipe']))?$post['f-statusEquipe']:'',
-            "obs"    => (isset($post['f-obs']))?$post['f-obs']:'',
-            "obsPreAcampa"    => (isset($post['f-obsPreAcampa']))?$post['f-obsPreAcampa']:'',
-            "obsAcampa"       => (isset($post['f-obsAcampa']))?$post['f-obsAcampa']:'',
-            "obsPosAcampa"    => (isset($post['f-obsPosAcampa']))?$post['f-obsPosAcampa']:'',
+            "termos"       => 1,
+            "status"       => (isset($post['f-status']))?$post['f-status']:'Aguardando Pagamento',
+            "statusEquipe" => (isset($post['f-statusEquipe']))?$post['f-statusEquipe']:'',
+            "obs"          => (isset($post['f-obs']))?$post['f-obs']:'',
+            "obsPreAcampa" => (isset($post['f-obsPreAcampa']))?$post['f-obsPreAcampa']:'',
+            "obsAcampa"    => (isset($post['f-obsAcampa']))?$post['f-obsAcampa']:'',
+            "obsPosAcampa" => (isset($post['f-obsPosAcampa']))?$post['f-obsPosAcampa']:'',
 
             // Checkin"
-            "documentacao"    => (isset($post['f-documentacao']))?$post['f-documentacao']:'',
-            "alojamento"      => (isset($post['f-alojamento']))?$post['f-alojamento']:'',
-            "quarto"          => (isset($post['f-quarto']))?$post['f-quarto']:'',
-            "checkin"         => (isset($post['f-checkin']))?$post['f-checkin']:'',
-            "obsCheckin"      => (isset($post['f-obsCheckin']))?$post['f-obsCheckin']:'',
+            "statusCheckin" => (isset($post['f-statusCheckin']))?$post['f-statusCheckin']:'',
+            "pago"          => (isset($post['f-pago']))?$post['f-pago']:'',
+            "valorPago"     => (isset($post['f-valorPago']))?$post['f-valorPago']:'',
+            "quarto"        => (isset($post['f-quarto']))?$post['f-quarto']:'',
+            "documentacao"  => (isset($post['f-documentacao']))?$post['f-documentacao']:'',
+            "checkin"       => (isset($post['f-checkin']))?$post['f-checkin']:'',
+            "obsCheckin"    => (isset($post['f-obsCheckin']))?$post['f-obsCheckin']:'',
         ];
 
         if (isset($post['f-id']))

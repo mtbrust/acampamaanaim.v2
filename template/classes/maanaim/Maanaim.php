@@ -12,6 +12,17 @@ use template\classes\Midias;
 
 class Maanaim
 {
+    static public $statusInscricao = [
+        'Aguardando Pagamento',
+        'Em Análise',
+        'Entre em Contato',
+        'Fila de Espera',
+        'Confirmada',
+        'Cancelada',
+    ];
+    static public $statusInscricaoInativa = [
+        'Cancelada', // Deixar sempre na primeira posição.
+    ];
     static public $msg = [];
     static public $error = false;
     static public $inserir = true;
@@ -65,6 +76,7 @@ class Maanaim
 
     static function editarInscricao($inscricao, $options = [])
     {
+        $options['editar'] = true;
         // Prepara e trata os campos.
         self::preparaInscricao($inscricao, $options);
 
@@ -118,6 +130,7 @@ class Maanaim
         // Valores default para envio de imagens.
         $optionsDefault = [
             'admin' => false,    // Passa por todas as validações.
+            'editar'      => false,
         ];
         $options = array_merge($optionsDefault, $options);
 
@@ -129,8 +142,8 @@ class Maanaim
         // Verificar se o CPF dessa inscrição já está inscrito nesse evento.
         self::verificaInscricaoCpf();
 
-        // Verificar se o CPF dessa inscrição já está inscrito nesse evento.
-        self::verificaIdade();
+        // Verificar regras de idade para este evento.
+        self::verificaIdade($options);
 
         // Verificar os campos obrigatórios.
         self::verificaCamposObrigatorios();
@@ -185,10 +198,10 @@ class Maanaim
         return $anos;
     }
 
-    static public function verificaIdade()
+    static public function verificaIdade($options)
     {
         // Caso não seja para inserir esse registro, nem verifica.
-        if (!self::$inserir || !isset(self::$evento['dt_inicio_evento'])) {
+        if (!self::$inserir || !isset(self::$evento['dt_inicio_evento']) || $options['editar']) {
             return true;
         }
 
@@ -212,8 +225,8 @@ class Maanaim
         if ($dias <= self::$evento['idade_minima'] * 365.25) {
             self::$inscricao['menorLimite'] = 1;
             // self::$msg[] = "<b>Inscrição cancelada</b>. Inscrito tem idade menor que idade mínima do evento, " . self::$evento['idade_minima'] . " anos. Até a data início do evento.";
-            self::$inscricao['status'] = 'Cancelado'; // Cancelado.
-            self::$inscricao['idStatus'] = 0; // Cancelado.
+            self::$inscricao['status'] = self::$statusInscricaoInativa[0]; // Cancelada.
+            self::$inscricao['idStatus'] = 0; // Cancelada.
             self::$inscricao['obs'] .= ' Inscrição cancelada por não satisfazer idade mínima do evento [' . self::$evento['idade_minima'] . ' anos]. Cabe recurso.';
         }
 
@@ -295,13 +308,19 @@ class Maanaim
             return true;
         }
 
-        // Valores default para envio de imagens.
+        // [0] inativo, [1] ativo.
+        if (in_array(self::$inscricao['status'], self::$statusInscricaoInativa)) {
+            $options['idStatus'] = 0;
+        } else {
+            $options['idStatus'] = 1;
+        }
+
+        // Valores default de opções.
         $optionsDefault = [
-            'idStatus' => self::$error ? 0 : 1,    // Caso ocorreu algum erro, cancela a inscrição.
+            'idStatus' => self::$error ? 0 : 1,    // Caso ocorreu algum erro, cancela a inscrição. [0] inativo, [1] ativo.
             'obs' => implode(' ', self::$msg),
         ];
         $options = array_merge($optionsDefault, $options);
-
 
         // Limpo o campo CPF.
         self::$inscricao['idStatus'] = $options['idStatus'];
@@ -444,16 +463,18 @@ class Maanaim
         $eventos = $bdEvento->select('*', implode(' and ', $where), 'idStatus DESC, id DESC', null, null, $options['qtd'], $options['page']);
 
         $bdMidias = new BdMidias();
-        foreach ($eventos as $key => $evento) {
+        if ($eventos) {
+            foreach ($eventos as $key => $evento) {
 
-            self::incluirMidiasEvento($evento);
-            $eventos[$key] = $evento;
+                self::incluirMidiasEvento($evento);
+                $eventos[$key] = $evento;
 
-            $optionsIngresso = [
-                'validade' => $options['ingressoValidade'],
-            ];
+                $optionsIngresso = [
+                    'validade' => $options['ingressoValidade'],
+                ];
 
-            $eventos[$key]['ingressos'] = Maanaim::listarIngressosEvento($evento['id'], $optionsIngresso);
+                $eventos[$key]['ingressos'] = Maanaim::listarIngressosEvento($evento['id'], $optionsIngresso);
+            }
         }
 
         return $eventos;
