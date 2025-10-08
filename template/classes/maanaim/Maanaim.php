@@ -84,7 +84,7 @@ class Maanaim
         if (self::$inserir) {
             // Inserir a inscrição no banco de dados.
             $bdInscricao = new BdInscricoes();
-            $idInscricao = $bdInscricao->update(self::$inscricao['id'],self::$inscricao);
+            $idInscricao = $bdInscricao->update(self::$inscricao['id'], self::$inscricao);
             self::$msg[] = 'Inscrição editada com sucesso.';
         }
 
@@ -620,7 +620,6 @@ class Maanaim
             return $ingressos[0];
 
         return false;
-
     }
 
     static function adicionarIngresso($postIngresso)
@@ -651,6 +650,13 @@ class Maanaim
 
         // Retorna o ID do evento cadastrado.
         return $id;
+    }
+
+
+    static function editarCheckIn($id, $dados)
+    {
+        $bdInscricao = new BdInscricoes();
+        return $bdInscricao->update($id, $dados);
     }
 
     static function ping()
@@ -720,5 +726,52 @@ class Maanaim
         }
 
         return $evento;
+    }
+
+    static public function relatorioCheckin($idEvento)
+    {
+        // Pego todas as inscrições do evento.
+        $inscricoes = self::listarInscricoes($idEvento);
+
+        $header = '';
+        $lineTmp = '';
+        $lines = '';
+        $data = '';
+
+        // Percorro todas as linhas.
+        foreach ($inscricoes as $keyLinha => $linha) {
+
+            // Percorro todas as colunas.
+            foreach ($linha as $coluna => $valor) {
+
+                // Trato o valor para ficar dentro de uma célula.
+                if (!empty($valor)) {
+                    $valor = str_replace('"', '""', $valor);
+                }
+
+                // Verifico se é o cabeçalho. E monto as linhas.
+                if ($keyLinha == '0') {
+                    $header .=  '"' . $coluna . '"' . "\t";
+                    $lineTmp .=  '"' . $valor . '"' . "\t";
+                } else {
+                    $lineTmp .=  '"' . $valor . '"' . "\t";
+                }
+            }
+
+            if ($keyLinha == '0') {
+                $lines .= $header . "\n";
+            }
+            $lines .= $lineTmp . "\n";
+        }
+
+        $data .= trim($lines) . "\n";
+
+        $data = str_replace("\r", "", $data);
+
+        if ($data == "") {
+            $data = "\n(0) Records Found!\n";
+        }
+
+        return $data;
     }
 }

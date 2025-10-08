@@ -130,6 +130,7 @@ class inscricoes extends EndPoint
 
 		self::$params['inscricaoStatus'] = Maanaim::$statusInscricao;
 
+		self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'adm/inscricoes/api/adicionar/';
 		self::$params['html'] = Render::obj('forms/form-inscricao.html', self::$params);
 	}
 
@@ -146,9 +147,10 @@ class inscricoes extends EndPoint
 			$this->listar($params);
 		} else {
 
-			// todo - Pegar a inscrição do id passado por url.
 			// self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
 			// DevHelper::printr(self::$params['inscricao']);
+
+			// Pega a inscrição pelo id passado por url.
 			$id = $params['infoUrl']['attr'][1];
 			self::$params['inscricao'] = Maanaim::getInscricaoPorId($id);
 			// DevHelper::printr(self::$params['inscricao']);

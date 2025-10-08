@@ -68,7 +68,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>				
 				{% endif %}
 
 
@@ -135,6 +135,10 @@
 						<b>CPF</b>: {{inscricao.cpf}}
 						<br>
 						<b>ID</b>: {{inscricao.id}}
+						<br>
+						<a class="btn btn-success" onclick="acompanhar('{{inscricao.id}}','{{inscricao.cpf}}');">Acompanhar inscrição</a>
+						<br>
+						<small><b>Atenção:</b> Ao clicar você será redirecionado!</small>
 					</p>
 					{% endif %}
 				</div>
@@ -147,12 +151,12 @@
 
 							<select id="f-status" name="f-status" class="form-select" required>
 								{% for key, status in inscricaoStatus %}
-								<option value="{{status}}" {% if inscricao.status == status %}selected{% endif %}>{{status}}</option>
+								<option value="{{status}}" {% if inscricao.status==status %}selected{% endif %}>{{status}}</option>
 								{% endfor %}
 							</select>
 						</div>
 						<small class="form-text text-muted">
-							Status da situação da inscrição. Inscrito verá ao acompanhar sua inscrição em "Minha Inscrição". 
+							Status da situação da inscrição. Inscrito verá ao acompanhar sua inscrição em "Minha Inscrição".
 						</small>
 					</div>
 				</div>
@@ -965,18 +969,24 @@
 		eventos_origin = JSON.parse('{{eventos|raw}}');
 
 		document.addEventListener("DOMContentLoaded", function () {
-			options = '<option value="" selected>Selecionar</option>';
-			eventos_origin.forEach((evento, i) => {
-				selected = '';
-				if (evento.id == '{{inscricao.idEvento}}') {
-					selected = 'selected';
-				}
-				options += '<option value="' + evento.id + '" ' + selected + '>' + evento.titulo_evento + '</option>';
-				eventos[evento.id] = evento;
-			});
-			$('#f-idEvento').html(options);
-			atualizaDatasLimite();
+			// Monta os eventos no input de eventos e ajusta a variavel de eventos.
+			ajustaEventos();
 		});
+	}
+
+	// Monta os eventos no input de eventos e ajusta a variavel de eventos.
+	function ajustaEventos() {
+		options = '<option value="" selected>Selecionar</option>';
+		eventos_origin.forEach((evento, i) => {
+			selected = '';
+			if (evento.id == '{{inscricao.idEvento}}') {
+				selected = 'selected';
+			}
+			options += '<option value="' + evento.id + '" ' + selected + '>' + evento.titulo_evento + '</option>';
+			eventos[evento.id] = evento;
+		});
+		$('#f-idEvento').html(options);
+		atualizaDatasLimite();
 	}
 
 	function atualizaIngressos() {
@@ -1230,7 +1240,8 @@
 					// timerProgressBar: true,
 				}).then((result) => {
 						if (result.isConfirmed) {
-							$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
+							acompanhar(ret.body.idInscricao, ret.body.cpf);
+							// $.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
 						} else if (result.isDenied) {
 						}
 					});
@@ -1248,7 +1259,8 @@
 				confirmButtonText: "Acompanhar Inscrição",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
+					acompanhar(ret.body.idInscricao, ret.body.cpf);
+					// $.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': ret.body.cpf, 'f-idInscricao': ret.body.idInscricao });
 				} else if (result.isDenied) {
 				}
 			});
@@ -1358,5 +1370,10 @@
 		// $('#f-ideia').val(inscricao.cpf);
 		// $('#f-conselho').val(inscricao.cpf);
 		// $('#f-termos').val(inscricao.cpf);
+	}
+
+	function acompanhar(id, cpf)
+	{
+		$.redirect('{{base.url}}minha_inscricao/', { 'f-cpf': cpf, 'f-idInscricao': id });
 	}
 </script>

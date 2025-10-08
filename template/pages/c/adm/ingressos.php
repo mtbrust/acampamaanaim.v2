@@ -88,7 +88,10 @@ class ingressos extends EndPoint
 		// Sub menus da página.
 		self::$params['subMenus'] = ['adicionar', 'editar'];
 
-		self::$params['eventos'] = Maanaim::listarEventos();
+		$options = [
+			'ingressoValidade' => false,
+		];
+		self::$params['eventos'] = Maanaim::listarEventos($options);
 		self::$params['html'] = Render::obj('blocos/eventos_ingressos_cards_mini.html', self::$params);
 	}
 
@@ -98,7 +101,10 @@ class ingressos extends EndPoint
 		self::$params['subMenus'] = ['adicionar', 'editar'];
 
 		if (!isset($params['infoUrl']['attr'][1])) {
-			self::$params['eventos'] = Maanaim::listarEventos();
+			$options = [
+				'ingressoValidade' => false,
+			];
+			self::$params['eventos'] = Maanaim::listarEventos($options);
 			self::$params['html'] = Render::obj('blocos/eventos_ingressos_cards_mini.html', self::$params);
 		} else {
 			self::$params['ingresso']['id_evento'] = $params['infoUrl']['attr'][1];
@@ -112,18 +118,25 @@ class ingressos extends EndPoint
 		// Sub menus da página.
 		self::$params['subMenus'] = ['adicionar', 'editar'];
 
+		// Verifico se não passou id do ingresso.
 		if (!isset($params['infoUrl']['attr'][1])) {
-			self::$params['eventos'] = Maanaim::listarEventos();
+			$options = [
+				'ingressoValidade' => false,
+			];
+			self::$params['eventos'] = Maanaim::listarEventos($options);
 			self::$params['html'] = Render::obj('blocos/eventos_ingressos_cards_mini.html', self::$params);
 		} else {
 			$id = $params['infoUrl']['attr'][1];
 
 			// Lista ingresso específico.
-			self::$params['ingresso'] = Maanaim::listarIngresso($id, ['ativos' => 0]);
+			self::$params['ingresso'] = Maanaim::listarIngresso($id, ['validade' => 0]);
 
 			// Caso não exista o ingresso.
 			if (empty(self::$params['ingresso'])) {
-				self::$params['eventos'] = Maanaim::listarEventos();
+				$options = [
+					'ingressoValidade' => false,
+				];
+				self::$params['eventos'] = Maanaim::listarEventos($options);
 				self::$params['html'] = Render::obj('blocos/eventos_ingressos_cards_mini.html', self::$params);
 			} else {
 				self::$params['html'] = Render::obj('forms/form-ingressos.html', self::$params);

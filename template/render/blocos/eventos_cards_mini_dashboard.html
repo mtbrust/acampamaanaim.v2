@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        {% for key, evento in eventos %}
+
+        <div class="col-md-3 col-sm-4">
+            <div class="card {% if evento.idStatus == 0 %}border border-5 border-danger{% endif %} mt-3">
+                <div class="card-body">
+                    <h4 class="mb-0">{{evento.titulo_evento}}</h4>
+                    <div class="row">
+                        <div class="col-4">
+                            {% if evento.url_midia_01 %}
+                            <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_01}}" alt="">
+                            {% else %}
+                            <img class="w-100 rounded" src="{{base.url}}{{evento.url_midia_banner}}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="col-8">
+                            [{{evento.id}}] - {{evento.nome_evento}}
+                            <br>
+                            {{ evento.dt_inicio_evento|date("d/m/Y") }}
+                        </div>
+                        <div class="col-12">
+                            <a href="{{base.url}}adm/checkin/{{evento.id}}" class="btn btn-sm btn-primary">CheckIn</a>
+                            <a href="{{base.url}}adm/checkin/api/relatorio/{{evento.id}}/" class="btn btn-sm btn-success" target="_blank" download="{{evento.id}}-{{evento.nome_evento}}.csv"><i class="fas fa-download"></i> Relatório</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
