@@ -7,7 +7,8 @@ use desv\classes\bds\BdLoginsGroupsMenu;
 use desv\classes\bds\BdPermissions;
 use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
-use template\classes\Maanaim;
+use desv\controllers\Render;
+use template\classes\maanaim\Maanaim;
 
 /**
  * INDEX LOGIN
@@ -86,6 +87,15 @@ class index extends EndPoint
 			'footer'       => 'admin',   // footer da página.
 			'end'          => 'admin',   // Fim da página.
 		];
+
+		// Carrega na página scripts (template/assets/js/) Somente pages.
+		self::$params['scripts'] = [
+			// pasta libs.
+			'libs' => [
+				'jquery/jquery.min.js',   		// Exemplo.
+				'jquery/jquery.redirect.js',   		// Exemplo.
+			],
+		];
 	}
 
 
@@ -99,20 +109,22 @@ class index extends EndPoint
 	 */
 	public function get($params)
 	{
-		// todo - para apoiar a criação de permissões enquanto ainda não existe painel.
-		// $bdPermissions = new BdPermissions();
-		// $r = $bdPermissions->addPermissionsLogin(2, 'adm/');
+		if (!isset($params['infoUrl']['attr'][0])) {
+			// Lista de eventos.
+			self::$params['eventos'] = Maanaim::listarEventos();
+			self::$params['html'] = Render::obj('blocos/eventos_cards_mini_dashboard.html', self::$params);
+		} else {
 
-		// $bdLogins = new BdLogins();
-		// $r = $bdLogins->selectAll();
+			$idEvento = $params['infoUrl']['attr'][0];
 
-		// DevHelper::printr($r);
-
-		// DevHelper::echo(json_encode($r));
-
-		// DevHelper::printr(Maanaim::ping());
-
-		self::$params['html'] = "Conteúdo da página.";
+			// Lista de eventos.
+			self::$params['evento'] = Maanaim::listarEvento($idEvento);
+			// self::$params['inscricoes'] = Maanaim::listarInscricoes($idEvento);
+			self::$params['estatisticasEvento'] = Maanaim::estatisticasEvento($idEvento);
+			self::$params['estatisticasEventoVagas'] = Maanaim::verificarVagas($idEvento);
+			$html = Render::obj('blocos/indicadores.html', self::$params);
+			self::$params['html'] = $html;
+		}
 	}
 
 	public function api($params)
@@ -164,7 +176,7 @@ class index extends EndPoint
 		self::$params['status']   	= 200;
 
 
-		
+
 		// Caso o logado for o mateus. Para testes.
 		if ($params['_session']['user']['id'] = 2) {
 			// $bdPermissions = new BdPermissions();

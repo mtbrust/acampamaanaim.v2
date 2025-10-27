@@ -20,7 +20,7 @@
                             {{ evento.dt_inicio_evento|date("d/m/Y") }}
                         </div>
                         <div class="col-12">
-                            <a href="{{base.url}}adm/checkin/{{evento.id}}" class="btn btn-sm btn-primary">CheckIn</a>
+                            <a href="{{base.url}}adm/{{evento.id}}" class="btn btn-sm btn-primary">Detalhes</a>
                             <a href="{{base.url}}adm/checkin/api/relatorio/{{evento.id}}/" class="btn btn-sm btn-success" target="_blank" download="{{evento.id}}-{{evento.nome_evento}}.csv"><i class="fas fa-download"></i> Relatório</a>
                         </div>
                     </div>

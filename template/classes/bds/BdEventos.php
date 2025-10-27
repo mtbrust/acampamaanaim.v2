@@ -59,11 +59,12 @@ class BdEventos extends DataBase
             "link_album"      => "VARCHAR(4096) NULL",   // Link do albúm para realização do download.
 
             // Parâmetros do Evento
-            "qtd_vagas_masculino" => "INT NULL",                  // Quantidade de vagas públicas masculinas.
-            "qtd_vagas_feminino"  => "INT NULL",                  // Quantidade de vagas públicas femininas.
-            "dt_inicio_evento"    => "DATETIME NULL",             // Data Hora início do evento.
-            "dt_fim_evento"       => "DATETIME NULL",             // Data Hora Fim do evento.
-            "idade_minima"        => "INT NULL",                  // Idade mínima que pode realizar a inscrição.
+            "qtd_vagas_masculino" => "INT NULL",        // Quantidade de vagas públicas masculinas [0] é ilimitado.
+            "qtd_vagas_feminino"  => "INT NULL",        // Quantidade de vagas públicas femininas [0] é ilimitado.
+            "qtd_vagas"           => "INT NULL",        // Quantidade de vagas públicas geral [0] é ilimitado. Quando tem um valor, ignora vagas por sexo.
+            "dt_inicio_evento"    => "DATETIME NULL",   // Data Hora início do evento.
+            "dt_fim_evento"       => "DATETIME NULL",   // Data Hora Fim do evento.
+            "idade_minima"        => "INT NULL",        // Idade mínima que pode realizar a inscrição.
         ];
         return parent::createTable($fields);
     }

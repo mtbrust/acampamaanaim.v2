@@ -186,7 +186,12 @@ class inscricoes extends EndPoint
 		} else {
 			$id = $params['infoUrl']['attr'][1];
 
-			self::$params['inscricoes'] = Maanaim::listarInscricoes($id);
+			$options = [];
+			if (isset($_GET['status'])) {
+				$options['status'] = $_GET['status'];
+			}
+
+			self::$params['inscricoes'] = Maanaim::listarInscricoes($id, $options);
 			// DevHelper::printr(self::$params['inscricoes']);
 
 			// Verifica se tem inscrições para este evento.

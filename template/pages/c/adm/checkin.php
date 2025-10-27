@@ -216,10 +216,14 @@ class checkin extends EndPoint
 				break;
 			case 'relatorio':
 
-				self::$params['render']['content_type'] = 'application/csv';
+				$options = [];
+				if (isset($_GET['status'])) {
+					$options['status'] = $_GET['status'];
+				}
 				$ret = "\xEF\xBB\xBF";
-				$ret = Maanaim::relatorioCheckin($params['infoUrl']['attr'][2]);
+				$ret = Maanaim::relatorioCheckin($params['infoUrl']['attr'][2], $options);
 				$msg = '';
+				self::$params['render']['content_type'] = 'application/csv';
 				break;
 			default:
 				$ret = 'error';

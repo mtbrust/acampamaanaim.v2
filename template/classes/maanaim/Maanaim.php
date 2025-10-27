@@ -30,11 +30,16 @@ class Maanaim
     static public $inscricao = [];
     static public $evento = [];
 
-    static function listarInscricoes($idEvento)
+    static function listarInscricoes($idEvento, $options = [])
     {
         $bdInscricoes = new BdInscricoes();
         $where = 'idEvento = ' . $idEvento;
-        $inscricoes = $bdInscricoes->select('*', $where);
+
+        if (isset($options['status'])) {
+            $where .= ' and status = "' . $options['status'] . '"';
+        }
+
+        $inscricoes = $bdInscricoes->select('*', $where, null, null, null, 1000);
         return $inscricoes;
     }
 
@@ -127,6 +132,8 @@ class Maanaim
 
     static public function preparaInscricao($inscricao, $options)
     {
+        self::$inserir = true;
+
         // Valores default para envio de imagens.
         $optionsDefault = [
             'admin' => false,    // Passa por todas as validações.
@@ -155,7 +162,7 @@ class Maanaim
         self::validarCampos(self::$inscricao);
 
         // Verificar se ainda existe vagas. Caso não exista, a inscrição é cadastrada com status fila de espera.
-        self::verificarVagas();
+        self::verificarVagas(self::$inscricao['idEvento']);
 
         // Acrescentar informações padrão.
         $options = [];
@@ -230,7 +237,7 @@ class Maanaim
             self::$inscricao['obs'] .= ' Inscrição cancelada por não satisfazer idade mínima do evento [' . self::$evento['idade_minima'] . ' anos]. Cabe recurso.';
         }
 
-        return true;
+        return self::$inscricao['menor'];
     }
 
     static public function verificaCamposObrigatorios()
@@ -327,11 +334,23 @@ class Maanaim
         self::$inscricao['obs'] .= $options['obs'];
     }
 
-    static public function verificarVagas()
+    static public function verificarVagas($idEvento)
     {
         // Caso não seja para inserir esse registro, nem verifica.
         if (!self::$inserir) {
             return true;
+        }
+
+        if (!self::$evento) {
+            self::getEventoPorId($idEvento);
+        }
+
+        if (!isset(self::$evento['qtd_vagas_masculino'])) {
+            self::$evento['qtd_vagas_masculino'] = 0;
+        }
+
+        if (!isset(self::$evento['qtd_vagas_feminino'])) {
+            self::$evento['qtd_vagas_feminino'] = 0;
         }
 
         $qtdM = self::$evento['qtd_vagas_masculino'];
@@ -340,12 +359,12 @@ class Maanaim
         // Quantidade de vagas.
         $bdInscricoes = new BdInscricoes();
         $fields = "sexo, count(*) as qtd";
-        $where = 'idEvento = ' . self::$inscricao['idEvento'];
+        $where = 'idEvento = ' . $idEvento;
         $groupby = 'sexo';
         $orderby = 'sexo desc';
         $vagas = $bdInscricoes->select($fields, $where, $orderby, null, $groupby, 1000);
 
-        // Calculo a quantidade de vagas restantes.
+        // Calculo da quantidade de vagas restantes.
         if (isset($vagas[0]['sexo']) && $vagas[0]['sexo'] == 'Masculino') {
             $qtdM -= $vagas[0]['qtd'];
         }
@@ -728,10 +747,10 @@ class Maanaim
         return $evento;
     }
 
-    static public function relatorioCheckin($idEvento)
+    static public function relatorioCheckin($idEvento, $options = [])
     {
         // Pego todas as inscrições do evento.
-        $inscricoes = self::listarInscricoes($idEvento);
+        $inscricoes = self::listarInscricoes($idEvento, $options);
 
         $header = '';
         $lineTmp = '';
@@ -740,6 +759,8 @@ class Maanaim
 
         // Percorro todas as linhas.
         foreach ($inscricoes as $keyLinha => $linha) {
+
+            $lineTmp = '';
 
             // Percorro todas as colunas.
             foreach ($linha as $coluna => $valor) {
@@ -761,10 +782,10 @@ class Maanaim
             if ($keyLinha == '0') {
                 $lines .= $header . "\n";
             }
-            $lines .= $lineTmp . "\n";
+            $lines .= trim($lineTmp) . "\n";
         }
 
-        $data .= trim($lines) . "\n";
+        $data .= $lines . "\n";
 
         $data = str_replace("\r", "", $data);
 
@@ -773,5 +794,16 @@ class Maanaim
         }
 
         return $data;
+    }
+
+    static public function estatisticasEvento($idEvento)
+    {
+        $bdInscricoes = new BdInscricoes();
+        $where = 'idEvento = ' . $idEvento;
+        $status = $bdInscricoes->select('status, count(*) as qtd', $where, null, null, 'status');
+
+        return [
+            'status' => $status,
+        ];
     }
 }

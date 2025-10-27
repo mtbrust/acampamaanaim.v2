@@ -31,11 +31,11 @@ class MaanaimParse
         return $evento;
     }
 
-    static function ingressoPostToTable($post) 
+    static function ingressoPostToTable($post)
     {
         $ingresso = [
             "id_evento"           => $post['f-id_evento'],
-            "qtd"                 => isset($post['f-qtd'])?$post['f-qtd']:'',
+            "qtd"                 => isset($post['f-qtd']) ? $post['f-qtd'] : '',
             "titulo"              => $post['f-titulo'],
             "dt_ini_ingresso"     => str_replace('T', ' ', $post['f-dt_ini_ingresso']),
             "dt_fim_ingresso"     => str_replace('T', ' ', $post['f-dt_fim_ingresso']),
@@ -47,93 +47,167 @@ class MaanaimParse
             "desc_ingresso"       => $post['f-desc_ingresso'],
             "desc_cuidados"       => $post['f-desc_cuidados'],
             "desc_orientacao"     => $post['f-desc_orientacao'],
-            "idStatus"            => isset($post['f-status'])?$post['f-status']:1,
+            "idStatus"            => isset($post['f-status']) ? $post['f-status'] : 1,
         ];
         return $ingresso;
     }
 
     static function inscricaoPostToTable($post)
-    {        
+    {
         $inscricao = [
-            "idEvento"        => (isset($post['f-idEvento']))?$post['f-idEvento']:'',
-            "idIngresso"      => (isset($post['f-idIngresso']))?$post['f-idIngresso']:'',
-            
-            // Informações"
-            "nome"            => (isset($post['f-nome']))?$post['f-nome']:'',
-            "email"           => (isset($post['f-email']))?$post['f-email']:'',
-            "telefone"        => (isset($post['f-telefone']))?$post['f-telefone']:'',
-            "telefoneContato" => (isset($post['f-telefoneContato']))?$post['f-telefoneContato']:'',
-            "cpf"             => (isset($post['f-cpf']))?$post['f-cpf']:'',
-            "sexo"            => (isset($post['f-sexo']))?$post['f-sexo']:'',
-            "dtNascimento"    => (isset($post['f-dtNascimento']))?$post['f-dtNascimento']:'',
-            // "idMidiaFoto"     => ($post['f-idMidiaFoto'])?$post['f-idMidiaFoto']:'',
-            "menor"           => (isset($post['f-menor']))?$post['f-menor']:0,   // Menor de idade (menor de 18 anos até o evento).
-            "menorLimite"     => (isset($post['f-menorLimite']))?$post['f-menorLimite']:0,   // Menor que limite de idade do evento.
+            "idEvento"        => (isset($post['f-idEvento'])) ? $post['f-idEvento'] : '',
+            "idIngresso"      => (isset($post['f-idIngresso'])) ? $post['f-idIngresso'] : '',
 
             // Informações"
-            "paiNome"         => (isset($post['f-paiNome']))?$post['f-paiNome']:'',
+            "nome"            => (isset($post['f-nome'])) ? $post['f-nome'] : '',
+            "email"           => (isset($post['f-email'])) ? $post['f-email'] : '',
+            "telefone"        => (isset($post['f-telefone'])) ? $post['f-telefone'] : '',
+            "telefoneContato" => (isset($post['f-telefoneContato'])) ? $post['f-telefoneContato'] : '',
+            "cpf"             => (isset($post['f-cpf'])) ? $post['f-cpf'] : '',
+            "sexo"            => (isset($post['f-sexo'])) ? $post['f-sexo'] : '',
+            "dtNascimento"    => (isset($post['f-dtNascimento'])) ? $post['f-dtNascimento'] : '',
+            // "idMidiaFoto"     => ($post['f-idMidiaFoto'])?$post['f-idMidiaFoto']:'',
+            "menor"           => (isset($post['f-menor'])) ? $post['f-menor'] : 0,   // Menor de idade (menor de 18 anos até o evento).
+            "menorLimite"     => (isset($post['f-menorLimite'])) ? $post['f-menorLimite'] : 0,   // Menor que limite de idade do evento.
+
+            // Informações"
+            "paiNome"         => (isset($post['f-paiNome'])) ? $post['f-paiNome'] : '',
             // "paiCpf"          => ($post['f-paiCpf'])?$post['f-paiCpf']:'',
             // "paiDtNascimento" => ($post['f-paiDtNascimento'])?$post['f-paiDtNascimento']:'',
-            "maeNome"         => (isset($post['f-maeNome']))?$post['f-maeNome']:'',
+            "maeNome"         => (isset($post['f-maeNome'])) ? $post['f-maeNome'] : '',
             // "maeCpf"          => ($post['f-maeCpf'])?$post['f-maeCpf']:'',
             // "maeDtNascimento" => ($post['f-maeDtNascimento'])?$post['f-maeDtNascimento']:'',
 
             // Endereço"
-            "endCEP"          => (isset($post['f-endCEP']))?$post['f-endCEP']:'',
-            "endPais"         => (isset($post['f-endPais']))?$post['f-endPais']:'',
-            "endEstado"       => (isset($post['f-endEstado']))?$post['f-endEstado']:'',
-            "endCidade"       => (isset($post['f-endCidade']))?$post['f-endCidade']:'',
-            "endBairro"       => (isset($post['f-endBairro']))?$post['f-endBairro']:'',
-            "endRua"          => (isset($post['f-endRua']))?$post['f-endRua']:'',
-            "endNumero"       => (isset($post['f-endNumero']))?$post['f-endNumero']:'',
-            "endComplemento"  => (isset($post['f-endComplemento']))?$post['f-endComplemento']:'',
+            "endCEP"          => (isset($post['f-endCEP'])) ? $post['f-endCEP'] : '',
+            "endPais"         => (isset($post['f-endPais'])) ? $post['f-endPais'] : '',
+            "endEstado"       => (isset($post['f-endEstado'])) ? $post['f-endEstado'] : '',
+            "endCidade"       => (isset($post['f-endCidade'])) ? $post['f-endCidade'] : '',
+            "endBairro"       => (isset($post['f-endBairro'])) ? $post['f-endBairro'] : '',
+            "endRua"          => (isset($post['f-endRua'])) ? $post['f-endRua'] : '',
+            "endNumero"       => (isset($post['f-endNumero'])) ? $post['f-endNumero'] : '',
+            "endComplemento"  => (isset($post['f-endComplemento'])) ? $post['f-endComplemento'] : '',
 
             // informações"
-            "RepNome"         => (isset($post['f-RepNome']))?$post['f-RepNome']:'',
-            "RepEmail"        => (isset($post['f-RepEmail']))?$post['f-RepEmail']:'',
-            "RepTelefone"     => (isset($post['f-RepTelefone']))?$post['f-RepTelefone']:'',
-            "RepCpf"          => (isset($post['f-RepCpf']))?$post['f-RepCpf']:'',
-            "RepSexo"         => (isset($post['f-RepSexo']))?$post['f-RepSexo']:'',
-            "RepDtNascimento" => (isset($post['f-RepDtNascimento']))?$post['f-RepDtNascimento']:'',
+            "RepNome"         => (isset($post['f-RepNome'])) ? $post['f-RepNome'] : '',
+            "RepEmail"        => (isset($post['f-RepEmail'])) ? $post['f-RepEmail'] : '',
+            "RepTelefone"     => (isset($post['f-RepTelefone'])) ? $post['f-RepTelefone'] : '',
+            "RepCpf"          => (isset($post['f-RepCpf'])) ? $post['f-RepCpf'] : '',
+            "RepSexo"         => (isset($post['f-RepSexo'])) ? $post['f-RepSexo'] : '',
+            "RepDtNascimento" => (isset($post['f-RepDtNascimento'])) ? $post['f-RepDtNascimento'] : '',
 
             // Informações"
-            "alergiaR"        => (isset($post['f-alergiaR']))?$post['f-alergiaR']:'',
-            "alergia"         => (isset($post['f-alergia']))?$post['f-alergia']:'',
-            "medicamentoR"    => (isset($post['f-medicamentoR']))?$post['f-medicamentoR']:'',
-            "medicamento"     => (isset($post['f-medicamento']))?$post['f-medicamento']:'',
-            "nadarR"          => (isset($post['f-nadarR']))?$post['f-nadarR']:'',
-            "nadarA"          => (isset($post['f-nadarA']))?$post['f-nadarA']:'',
-            "nadarP"          => (isset($post['f-nadarP']))?$post['f-nadarP']:'',
+            "alergiaR"        => (isset($post['f-alergiaR'])) ? $post['f-alergiaR'] : '',
+            "alergia"         => (isset($post['f-alergia'])) ? $post['f-alergia'] : '',
+            "medicamentoR"    => (isset($post['f-medicamentoR'])) ? $post['f-medicamentoR'] : '',
+            "medicamento"     => (isset($post['f-medicamento'])) ? $post['f-medicamento'] : '',
+            "nadarR"          => (isset($post['f-nadarR'])) ? $post['f-nadarR'] : '',
+            "nadarA"          => (isset($post['f-nadarA'])) ? $post['f-nadarA'] : '',
+            "nadarP"          => (isset($post['f-nadarP'])) ? $post['f-nadarP'] : '',
 
             // Informações"
-            "ideia"           => (isset($post['f-ideia']))?$post['f-ideia']:'',
-            "conselheiro"     => (isset($post['f-conselheiro']))?$post['f-conselheiro']:'',
+            "ideia"           => (isset($post['f-ideia'])) ? $post['f-ideia'] : '',
+            "conselheiro"     => (isset($post['f-conselheiro'])) ? $post['f-conselheiro'] : '',
 
             // Informações"
             "termos"       => 1,
-            "status"       => (isset($post['f-status']))?$post['f-status']:'Aguardando Pagamento',
-            "statusEquipe" => (isset($post['f-statusEquipe']))?$post['f-statusEquipe']:'',
-            "obs"          => (isset($post['f-obs']))?$post['f-obs']:'',
-            "obsPreAcampa" => (isset($post['f-obsPreAcampa']))?$post['f-obsPreAcampa']:'',
-            "obsAcampa"    => (isset($post['f-obsAcampa']))?$post['f-obsAcampa']:'',
-            "obsPosAcampa" => (isset($post['f-obsPosAcampa']))?$post['f-obsPosAcampa']:'',
+            "status"       => (isset($post['f-status'])) ? $post['f-status'] : 'Aguardando Pagamento',
+            "statusEquipe" => (isset($post['f-statusEquipe'])) ? $post['f-statusEquipe'] : '',
+            "obs"          => (isset($post['f-obs'])) ? $post['f-obs'] : '',
+            "obsPreAcampa" => (isset($post['f-obsPreAcampa'])) ? $post['f-obsPreAcampa'] : '',
+            "obsAcampa"    => (isset($post['f-obsAcampa'])) ? $post['f-obsAcampa'] : '',
+            "obsPosAcampa" => (isset($post['f-obsPosAcampa'])) ? $post['f-obsPosAcampa'] : '',
 
             // Checkin"
-            "statusCheckin" => (isset($post['f-statusCheckin']))?$post['f-statusCheckin']:'',
-            "pago"          => (isset($post['f-pago']))?$post['f-pago']:'',
-            "valorPago"     => (isset($post['f-valorPago']))?$post['f-valorPago']:'',
-            "quarto"        => (isset($post['f-quarto']))?$post['f-quarto']:'',
-            "documentacao"  => (isset($post['f-documentacao']))?$post['f-documentacao']:'',
-            "checkin"       => (isset($post['f-checkin']))?$post['f-checkin']:'',
-            "obsCheckin"    => (isset($post['f-obsCheckin']))?$post['f-obsCheckin']:'',
+            "statusCheckin" => (isset($post['f-statusCheckin'])) ? $post['f-statusCheckin'] : '',
+            "pago"          => (isset($post['f-pago'])) ? $post['f-pago'] : '',
+            "valorPago"     => (isset($post['f-valorPago'])) ? $post['f-valorPago'] : '',
+            "quarto"        => (isset($post['f-quarto'])) ? $post['f-quarto'] : '',
+            "documentacao"  => (isset($post['f-documentacao'])) ? $post['f-documentacao'] : '',
+            "checkin"       => (isset($post['f-checkin'])) ? $post['f-checkin'] : '',
+            "obsCheckin"    => (isset($post['f-obsCheckin'])) ? $post['f-obsCheckin'] : '',
         ];
 
-        if (isset($post['f-id']))
-        {
+        if (isset($post['f-id'])) {
             $inscricao['id'] = $post['f-id'];
         }
 
         return $inscricao;
+    }
+
+    static function inscricaoV1($inscricaoV1)
+    {
+        $inscricaoV2 = [
+            "idEvento"        => 1, // Evento teste 1
+            "idIngresso"      => 9, // Ingresso teste do evento 1
+
+            // Informações"
+            "nome"            => $inscricaoV1['nome'],
+            "email"           => $inscricaoV1['email'],
+            "telefone"        => $inscricaoV1['telefone'],
+            "telefoneContato" => $inscricaoV1['telefoneContato'],
+            "cpf"             => $inscricaoV1['cpf'],
+            "sexo"            => $inscricaoV1['sexo'],
+            "dtNascimento"    => $inscricaoV1['dtNascimento'],
+            // "menor"           => Maanaim::verificaIdade(),
+            // "menorLimite"     => $inscricaoV1['menorLimite'],
+
+            // Informações"
+            "paiNome"         => $inscricaoV1['paiNome'],
+            "maeNome"         => $inscricaoV1['maeNome'],
+
+            // Endereço"
+            "endCEP"          => $inscricaoV1['endCEP'],
+            "endPais"         => $inscricaoV1['endPais'],
+            "endEstado"       => $inscricaoV1['endEstado'],
+            "endCidade"       => $inscricaoV1['endCidade'],
+            "endBairro"       => $inscricaoV1['endBairro'],
+            "endRua"          => $inscricaoV1['endRua'],
+            "endNumero"       => $inscricaoV1['endNumero'],
+            "endComplemento"  => $inscricaoV1['endComplemento'],
+
+            // informações"
+            "RepNome"         => $inscricaoV1['RepNome'],
+            "RepEmail"        => $inscricaoV1['RepEmail'],
+            "RepTelefone"     => $inscricaoV1['RepTelefone'],
+            "RepCpf"          => $inscricaoV1['RepCpf'],
+            "RepSexo"         => $inscricaoV1['RepSexo'],
+            "RepDtNascimento" => $inscricaoV1['RepDtNascimento'],
+
+            // Informações"
+            "alergiaR"        => $inscricaoV1['alergiaR'],
+            "alergia"         => $inscricaoV1['alergia'],
+            "medicamentoR"    => $inscricaoV1['medicamentoR'],
+            "medicamento"     => $inscricaoV1['medicamento'],
+            "nadarR"          => $inscricaoV1['nadarR'],
+            "nadarA"          => $inscricaoV1['nadarA'],
+            "nadarP"          => $inscricaoV1['nadarP'],
+
+            // Informações"
+            "ideia"           => $inscricaoV1['ideia'],
+            "conselheiro"     => 'ND',
+
+            // Informações"
+            "termos"       => 1,
+            "status"       => $inscricaoV1['status'],
+            "idStatus"     => 1,
+            "statusEquipe" => $inscricaoV1['statusEquipe'],
+            "obs"          => '',
+            // "obsPreAcampa" => $inscricaoV1['obsPreAcampa'],
+            // "obsAcampa"    => $inscricaoV1['obsAcampa'],
+            // "obsPosAcampa" => $inscricaoV1['obsPosAcampa'],
+
+            // Checkin"
+            // "statusCheckin" => 0,
+            // "pago"          => 0,
+            "valorPago"     => 100,
+            "quarto"        => 'DM-' . random_int(1, 7),
+            "documentacao"  => 0,
+            "checkin"       => 0,
+            // "obsCheckin"    => '',
+        ];
+
+        return $inscricaoV2;
     }
 
     static function ping()

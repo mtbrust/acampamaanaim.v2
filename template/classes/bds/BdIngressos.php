@@ -45,17 +45,19 @@ class BdIngressos extends DataBase
             "id" => "INT NOT NULL AUTO_INCREMENT primary key",
 
             "id_evento"           => "INT NULL",             // Id do evento.
-            "qtd"                 => "INT DEFAULT 0",        // Quantidade desse ingresso. [0] Ilimitado.
+            "qtd_masculino"       => "INT NULL",             // Quantidade de ingressos públicos masculinas [0] é ilimitado.
+            "qtd_feminino"        => "INT NULL",             // Quantidade de ingressos públicos femininas [0] é ilimitado.
+            "qtd"                 => "INT DEFAULT 0",        // Quantidade desse ingresso. [0] Ilimitado. Quando tem um valor, ignora quantidade por sexo
             "titulo"              => "VARCHAR(255) NULL",    // Nome do tipo de ingresso.
-            "dt_ini_ingresso"    => "DATETIME NULL",        // Data Hora abertura das inscrições.
-            "dt_fim_ingresso"    => "DATETIME NULL",        // Data Hora fechamento das inscrições.
-            "valor_ingresso"     => "FLOAT(7,2) NULL",      // Valor da inscrição sem descontos.
+            "dt_ini_ingresso"     => "DATETIME NULL",        // Data Hora abertura das inscrições.
+            "dt_fim_ingresso"     => "DATETIME NULL",        // Data Hora fechamento das inscrições.
+            "valor_ingresso"      => "FLOAT(7,2) NULL",      // Valor da inscrição sem descontos.
             "link_pagamento"      => "VARCHAR(128) NULL",    // Link de pagamento gerado por adquirente. (pag seguro, mercado pago, etc.)
             "dt_limit_pagamento"  => "DATETIME NULL",        // Data limite para efetuar o pagamento da inscrição.
             "chave_pix"           => "VARCHAR(128) NULL",    // Chave para pagamento via PIX.
             "desc_tipo_pagamento" => "VARCHAR(1024) NULL",   // Descrição do tipo de pagamento.
             "desc_ingresso"       => "VARCHAR(1024) NULL",   // Descrição do ingresso.
-            "desc_cuidados"       => "VARCHAR(1024) NULL",   // Descrição dos cuidados.
+            "desc_cuidados"       => "VARCHAR(1024) NULL",   // Descrição dos cuidados com o ingresso.
             "desc_orientacao"     => "VARCHAR(1024) NULL",   // Descrição de como proceder para o pagamento.
         ];
         return parent::createTable($fields);

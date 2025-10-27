@@ -56,8 +56,8 @@
                             <label class="form-check-label" for="q-sexo-nao">M</label>
                         </div>
                     </td>
-                    <td><input type="text" name="q-nome" id="q-nome" onkeyup="filtrar()"></td>
-                    <td><input type="text" name="q-quarto" id="q-quarto" onkeyup="filtrar()"></td>
+                    <td><input type="text" name="q-nome" id="q-nome" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                    <td><input type="text" name="q-quarto" id="q-quarto" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
                     <td>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="q-documentacao-sim" id="q-documentacao-sim" onclick="filtrar()">
@@ -123,7 +123,7 @@
                         </a>
                     </td>
                     <td>
-                        <input type="text" onchange="atualizarCheckin('quarto', '{{item.id}}', '{{item.nome}}', this)" name="f-quarto" id="f-quarto" value="{{item.quarto}}">
+                        <input type="text" onchange="atualizarCheckin('quarto', '{{item.id}}', '{{item.nome}}', this)" name="f-quarto" id="f-quarto" value="{{item.quarto}}" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;">
                     </td>
                     <td>
                         <input type="checkbox" onclick="atualizarCheckin('doc', '{{item.id}}', '{{item.nome}}', this)" name="f-documentacao" id="f-documentacao" {% if item.documentacao %}checked{% endif %}>

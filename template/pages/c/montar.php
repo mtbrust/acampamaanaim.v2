@@ -20,9 +20,9 @@ use template\classes\bds\BdInscricoesLog;
 use template\classes\bds\BdMidias;
 use template\classes\bds\BdPessoas;
 use template\classes\bds\BdPessoasLog;
-use template\classes\Maanaim;
-use template\classes\maanaim\Maanaim as MaanaimMaanaim;
+use template\classes\maanaim\Maanaim;
 use template\classes\maanaim\MaanaimCarga;
+use template\classes\maanaim\MaanaimParse;
 
 /**
  * INDEX LOGIN
@@ -148,7 +148,7 @@ class montar extends EndPoint
 					"f-idade_minima": "13",
 					"f-status": "1"
 					}', true);
-					$id[] = MaanaimMaanaim::AdicionarEvento($post);
+					$id[] = Maanaim::AdicionarEvento($post);
 				}
 
 				// Aqui eu acrescento as 4 primeiras imagens em todos os eventos.
@@ -167,7 +167,7 @@ class montar extends EndPoint
 			case 'criar_ingressos':
 
 				// Obtenho todos os eventos.
-				$eventos = MaanaimMaanaim::listarEventos();
+				$eventos = Maanaim::listarEventos();
 
 				$id = [];
 
@@ -195,7 +195,7 @@ class montar extends EndPoint
 						"f-desc_orientacao": "Este ingresso tem uma validade. Após o vencimento deste ingresso, sua inscrição será cancelada. Este ingresso tem um valor, é necessário realizar o pagamento integral deste valor, para validar sua inscrição. Após realizar o pagamento, é necessário enviar o comprovante para o whatsapp (35 9 9963-5624)."
 						}', true);
 
-						$id[] = MaanaimMaanaim::adicionarIngresso($postIngresso);
+						$id[] = Maanaim::adicionarIngresso($postIngresso);
 					}
 				}
 
@@ -204,6 +204,57 @@ class montar extends EndPoint
 				break;
 			case 'modelo':
 
+				self::$params['msg'] = 'Modelo';
+				break;
+			case 'criar_inscricoes_1':
+
+				$row = 1;
+				$cabecalho = [];
+				$inscricao = [];
+				if (($handle = fopen("template/assets/midias/csv/maanaim_inscricoes.csv", "r")) !== FALSE) {
+
+					// Carrega linha por linha.
+					while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+						$num = count($data);
+						// echo "<p> $num campos na linha $row: <br /></p>\n";
+						$row++;
+						$inscricao = [];
+						for ($c = 0; $c < $num; $c++) {
+							// echo $data[$c] . "<br />\n";
+							if ($row == 2) {
+								$cabecalho[] = $data[$c];
+							} else {
+								$inscricao[$cabecalho[$c]] = $data[$c];
+							}
+						}
+
+						// Tento cadastrar os primeiros 200 registros
+						if ($row == 200){
+							break;
+						}
+
+						// Insere no banco de dados.
+						if ($row > 8){
+							$inscricaov2 = MaanaimParse::inscricaoV1($inscricao);
+							echo $inscricaov2['cpf'];
+							echo '
+							';
+							$r = Maanaim::adicionarInscricao($inscricaov2);
+							var_dump($r['msg'][0]);
+							echo '
+
+
+							';
+							if ($r['error']) {
+								// echo $r['msg'][0];
+							}
+						}
+					}
+					fclose($handle);
+				}
+
+				// DevHelper::printr($cabecalho);
+				self::$params['response'] = $row;
 				self::$params['msg'] = 'Modelo';
 				break;
 

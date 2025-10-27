@@ -1,0 +1,76 @@
+<div class="container">
+
+  {# STATUS #}
+  <div class="row">
+    {% for key, status in estatisticasEvento.status %}
+
+    <div class="col">
+      <div id='grafico_{{id}}' class="{{col}} mt-3" style="height: auto;">
+        <div class="info-box" style="height: 100%;">
+          <span class="info-box-icon bg-{{tipo}}">
+            {% if status.status == 'Aguardando Pagamento' %}
+            <i class="fas fa-battery-empty"></i>
+            {% elseif status.status == 0 %}
+            2
+            {% else %}
+            <i class="fas fa-question-circle"></i>
+            {% endif %}
+          </span>
+
+          <div class="info-box-content">
+            <h6 class="info-box-text m-0">{{status.status}}</h6>
+            <small class="text-secondary" style="line-height: 12px;">{{subTitulo}}</small>
+            <h4 class="info-box-number m-0">{{status.qtd}}</h4>
+          </div>
+
+          <!-- Ações -->
+          <a href="{{base.url}}adm/inscricoes/listar/{{evento.id}}/?status={{status.status}}" data-toggle="modal" data-target="#modalGraficoDetalhes_{{id}}" class="text-success" style="position: absolute; top: -5px; right: 25px;"> <i class="fas fa-search"></i> </a>
+          <a href="{{base.url}}adm/checkin/api/relatorio/{{evento.id}}/?status={{status.status}}" class="text-success" target="_blank" download="{{evento.id}}-{{evento.nome_evento}}-{{status.status}}.csv" style="position: absolute; top: -5px; right: 5px;"><i class="fas fa-download"></i></a>
+          {% if informacao %}
+          <a href="#" data-toggle="modal" data-target="#modalGraficoInfo_{{id}}" class="text-{{tipo}}" style="position: absolute; top: -5px; right: 5px;"> <i class="fas fa-info-circle"></i> </a>
+          {% endif %}
+        </div>
+      </div>
+
+
+
+      <!-- Modal Informação -->
+      <div class="modal fade" id="modalGraficoDetalhes_{{id}}" tabindex="-1" aria-labelledby="modalGraficoDetalhes_{{id}}Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalGraficoDetalhes_{{id}}Label">Detalhes</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{detalhes}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Modal Informação -->
+      <div class="modal fade" id="modalGraficoInfo_{{id}}" tabindex="-1" aria-labelledby="modalGraficoInfo_{{id}}Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalGraficoInfo_{{id}}Label">Informações</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{informacao}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
