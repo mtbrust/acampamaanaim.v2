@@ -3,12 +3,12 @@
         {% for key, evento in eventos %}
 
         <div class="col-sm-3">
-            <div class="card">
+            <div class="card" style="height: 100%;">
                 <img class="w-100 rounded" src="{{evento.banner}}" alt="">
                 <div class="card-body">
                     <h5 class="card-title">{{evento.title}}</h5>
                     <p class="card-text">{{evento.descricao}}</p>
-                    <a href="{{base.url}}galeria/evento01/" class="btn btn-primary">Abrir Albúm</a>
+                    <a href="{{base.url}}galeria/{{evento.id}}/" class="btn btn-primary">Abrir Albúm</a>
                 </div>
             </div>
         </div>

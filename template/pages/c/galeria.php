@@ -5,6 +5,7 @@ namespace pages;
 use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
+use template\classes\maanaim\Maanaim;
 
 /**
  * INDEX LOGIN
@@ -98,20 +99,44 @@ class galeria extends EndPoint
 	{
 		if ($this->mostrar_album()) return;
 
-		$eventos['eventos'] = [
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg',
-				'id' => 'evento01',
-				'title' => 'Transbordar',
-				'descricao' => 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe'
-			],
-			[
-				'banner' => $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-02.jpg',
-				'id' => 'evento02',
-				'title' => 'Alta Frequência',
-				'descricao' => 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe'
-			],
+		// Busca eventos do banco de dados (ativos e passados, pois são álbuns)
+		$options = [
+			'ativos' => true,   // Apenas eventos ativos
+			'qtd' => 20,        // Quantidade de eventos
+			'ingressoValidade' => false, // Não precisa validar ingressos para galeria
 		];
+		$eventosDb = Maanaim::listarEventos($options);
+
+		// Mapeia os eventos do banco para a estrutura esperada pelo template
+		$eventos['eventos'] = [];
+		if ($eventosDb) {
+			foreach ($eventosDb as $evento) {
+				// Monta a URL do banner (seguindo o padrão usado em outros templates)
+				$banner = '';
+				if (!empty($evento['url_midia_banner'])) {
+					$banner = $params['base']['url'] . $evento['url_midia_banner'];
+				} elseif (!empty($evento['url_midia_01'])) {
+					// Usa a primeira mídia como fallback
+					$banner = $params['base']['url'] . $evento['url_midia_01'];
+				} else {
+					// Fallback para imagem padrão se não tiver nenhuma mídia
+					$banner = $params['base']['dir_relative'] . 'template/assets/midias/site/HOME/evento-01.jpg';
+				}
+
+				// Usa obs_evento como descrição, ou uma descrição padrão
+				$descricao = !empty($evento['obs_evento']) 
+					? $evento['obs_evento'] 
+					: 'Cada imagem conta uma história de fé, comunhão e renovação. Reviva os instantes especiais do Acampamento Maanaim e sinta a presença de Deus em cada detalhe';
+
+				$eventos['eventos'][] = [
+					'banner' => $banner,
+					'id' => $evento['id'],
+					'title' => !empty($evento['titulo_evento']) ? $evento['titulo_evento'] : 'Evento',
+					'descricao' => $descricao
+				];
+			}
+		}
+
 		self::$params['htmlEventosAlbuns'] = Render::obj('blocos/eventos_albuns.html', $eventos);
 		$options = [
 			'imagemFundo' => $params['base']['dir_relative'] . 'template/assets/midias/site/GALERIA/galeria_.jpg',
