@@ -4,6 +4,7 @@ namespace template\classes\maanaim;
 
 use desv\classes\DevHelper;
 use desv\classes\FeedBackMessagens;
+use Respect\Validation\Rules\FalseVal;
 use template\classes\bds\BdEventos;
 use template\classes\bds\BdIngressos;
 use template\classes\bds\BdInscricoes;
@@ -247,6 +248,14 @@ class Maanaim
             return true;
         }
 
+        // Verifica se self::$inscricao está definido
+        if (!isset(self::$inscricao) || !is_array(self::$inscricao)) {
+            self::$error = true;
+            self::$msg[] = 'Dados da inscrição não foram informados.';
+            self::$inserir = false;
+            return false;
+        }
+
         // Verifica se foi enviado CPF.
         if (empty(self::$inscricao['cpf'])) {
             self::$error = true;
@@ -268,33 +277,41 @@ class Maanaim
             self::$inserir = false;
         }
 
-        // Caso seja menor de 18 anos é necessário preencher os campos de responsável.
-        if (self::$inscricao['menor']) {
-
-            if (empty(self::$inscricao['RepNome'])) {
+        // Campos básicos obrigatórios
+        $camposObrigatorios = ['nome', 'email', 'telefone', 'telefoneContato', 'sexo', 'dtNascimento'];
+        foreach ($camposObrigatorios as $campo) {
+            if (empty(self::$inscricao[$campo])) {
                 self::$error = true;
-                self::$msg[] = 'Preencha o campo "Responsável Nome" com valor válido.';
-                self::$inserir = false;
-            }
-
-            if (empty(self::$inscricao['RepTelefone'])) {
-                self::$error = true;
-                self::$msg[] = 'Preencha o campo "Responsável Telefone" com valor válido.';
-                self::$inserir = false;
-            }
-
-            if (empty(self::$inscricao['RepCpf'])) {
-                self::$error = true;
-                self::$msg[] = 'Preencha o campo "Responsável CPF" com valor válido.';
-                self::$inserir = false;
-            }
-
-            if (empty(self::$inscricao['RepSexo'])) {
-                self::$error = true;
-                self::$msg[] = 'Preencha o campo "Responsável SEXO" com valor válido.';
+                $nomeCampo = ucfirst($campo);
+                // Ajustes de nome para exibição
+                if ($campo === 'telefoneContato') {
+                    $nomeCampo = 'Telefone Contato';
+                } elseif ($campo === 'dtNascimento') {
+                    $nomeCampo = 'Data Nascimento';
+                }
+                self::$msg[] = 'Preencha o campo "' . $nomeCampo . '".';
                 self::$inserir = false;
             }
         }
+
+        // Caso seja menor de 18 anos é necessário preencher os campos de responsável.
+        if (isset(self::$inscricao['menor']) && self::$inscricao['menor']) {
+            $camposResponsavel = ['RepNome', 'RepEmail', 'RepTelefone', 'RepCpf', 'RepSexo', 'RepDtNascimento'];
+            foreach ($camposResponsavel as $campo) {
+                if (empty(self::$inscricao[$campo])) {
+                    self::$error = true;
+                    $nomeCampo = str_replace('Rep', '', $campo);
+                    // Ajustes de nome para exibição
+                    if ($nomeCampo === 'DtNascimento') {
+                        $nomeCampo = 'Data Nascimento';
+                    }
+                    self::$msg[] = 'Preencha o campo "Responsável ' . $nomeCampo . '" com valor válido.';
+                    self::$inserir = false;
+                }
+            }
+        }
+
+        return !self::$error;
     }
 
     static public function limparCampos()
@@ -463,6 +480,7 @@ class Maanaim
             'page'             => 1,       // Página.
             'id'               => 0,       // ID de evento específico.
             'ingressoValidade' => true,    // Ingresso dentro da validade.
+            'futuros'          => false,   // Apenas eventos com data de início maior que hoje.
         ];
         $options = array_merge($optionsDefault, $options);
 
@@ -474,6 +492,11 @@ class Maanaim
 
         if ($options['id']) {
             $where[] = "id = " . $options['id'];
+        }
+
+        // Filtra apenas eventos futuros (data de início maior que hoje)
+        if ($options['futuros']) {
+            $where[] = "dt_fim_evento > NOW()";
         }
 
         // Instancia da tabela de eventos.
@@ -585,6 +608,7 @@ class Maanaim
             'qtd'      => 10,      // Quantidade de resultados.
             'page'     => 1,       // Página.
             'id'       => 0,       // ID de evento específico.
+            'futuros'  => true,   // Apenas ingressos com data de fim maior que hoje.
         ];
         $options = array_merge($optionsDefault, $options);
 
@@ -602,6 +626,11 @@ class Maanaim
         // Dentro da validade do ingresso.
         if ($options['validade']) {
             $where[] = "dt_fim_ingresso > NOW()";
+        }
+
+        // Dentro da validade do ingresso.
+        if (!$options['futuros']) {
+            $where[] = "dt_ini_ingresso < NOW()";
         }
 
         $orderby = 'dt_ini_ingresso ASC';

@@ -115,7 +115,6 @@ class eventos extends EndPoint
 			'texto' => 'Momentos únicos para fortalecer sua fé, criar novas amizades e viver experiências transformadoras. Escolha sua temporada e faça parte dessa jornada!',
 		];
 
-
 		// Verifico se é um evento específico.
 		if (isset($params['infoUrl']['attr'][0])) {
 			$params['page_tipo'] = 'evento';
@@ -156,6 +155,7 @@ class eventos extends EndPoint
 		$evento['maior_valor'] = Maanaim::maiorValorIngresso($idEvento);
 		$options = [
 			'ativos' => true,
+			'futuros' => false,
 		];
 		$evento['ingressos'] = Maanaim::listarIngressosEvento($idEvento, $options);
 		return $evento;
@@ -163,7 +163,7 @@ class eventos extends EndPoint
 
 	public function pagina_eventos($params)
 	{
-		$params['eventos'] = Maanaim::listarEventos(['ativos' => 1]);
+		$params['eventos'] = Maanaim::listarEventos(['ativos' => 1, 'futuros' => true]);
 		self::$params['htmlEventos'] = Render::obj('blocos/eventos_simples.html', $params);
 		self::$params['html'] = ""; // conteúdo html da página.
 	}

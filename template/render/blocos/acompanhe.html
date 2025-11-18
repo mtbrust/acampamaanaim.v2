@@ -64,7 +64,9 @@
         <div class="col-md-3 mt-4 ">
             <div class="p-4 mb-3 rounded bg-creme text-start h-100">
                 <h6 class="t-vermelho mt-2 mb-0">Termos e Compromisso:</h6>
-                <a class="btn btn-success btn-sm" href="{{base.url}}termosecompromisso/{{inscricao.id}}" target="_blank">Termos e Compromisso</a>
+                
+                <a href="{{base.url}}minha_inscricao/api/termosecompromisso/{{inscricao.id}}/" class="btn btn-sm btn-success" target="_blank" download="Termo-{{inscricao.id}}-{{inscricao.nome}}.pdf"><i class="fas fa-download"></i> Termos e Compromisso</a>
+
                 <br><small>Clique para ter acesso aos termos e compromisso aceito no ato da inscrição. </small>
                 <br><small>A inscrição pode ser cancelada e a estadia interrompida, caso ocorra descumprimento dos termos. </small>
             </div>
