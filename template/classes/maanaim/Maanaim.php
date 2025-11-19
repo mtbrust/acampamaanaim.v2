@@ -163,7 +163,7 @@ class Maanaim
         self::validarCampos(self::$inscricao);
 
         // Verificar se ainda existe vagas. Caso não exista, a inscrição é cadastrada com status fila de espera.
-        self::verificarVagas(self::$inscricao['idEvento']);
+        self::verificarVagas(self::$inscricao['idEvento'], $options);
 
         // Acrescentar informações padrão.
         $options = [];
@@ -351,7 +351,7 @@ class Maanaim
         self::$inscricao['obs'] .= $options['obs'];
     }
 
-    static public function verificarVagas($idEvento)
+    static public function verificarVagas($idEvento, $options = [])
     {
         // Caso não seja para inserir esse registro, nem verifica.
         if (!self::$inserir) {
@@ -376,7 +376,7 @@ class Maanaim
         // Quantidade de vagas.
         $bdInscricoes = new BdInscricoes();
         $fields = "sexo, count(*) as qtd";
-        $where = 'idEvento = ' . $idEvento;
+        $where = 'idEvento = ' . $idEvento . ' and status != "Cancelada" and status != "Fila de Espera"';
         $groupby = 'sexo';
         $orderby = 'sexo desc';
         $vagas = $bdInscricoes->select($fields, $where, $orderby, null, $groupby, 1000);
@@ -395,15 +395,23 @@ class Maanaim
             $qtdM -= $vagas[1]['qtd'];
         }
 
-        // Verifica se foi enviado CPF.
-        if ($qtdM <= 0) {
-            self::$error = true;
-            self::$msg[] = 'Não há mais vagas masculinas.';
-        }
 
-        if ($qtdF <= 0) {
-            self::$error = true;
-            self::$msg[] = 'Não há mais vagas femininas.';
+        if (!isset($options['editar']) || !$options['editar']) {
+
+            // Verifica se foi enviado CPF.
+            // Corrigido: verifica se não há vagas E se o sexo é masculino (ou não foi informado)
+            if (($qtdM <= 0) && (!isset(self::$inscricao['sexo']) || self::$inscricao['sexo'] == 'Masculino')) {
+                self::$error = true;
+                self::$msg[] = 'Não há mais vagas masculinas.';
+                self::$inscricao['status'] = self::$statusInscricao[3]; // Fila de Espera.
+            }
+
+            // Corrigido: verifica se não há vagas E se o sexo é feminino (ou não foi informado)
+            if (($qtdF <= 0) && (!isset(self::$inscricao['sexo']) || self::$inscricao['sexo'] == 'Feminino')) {
+                self::$error = true;
+                self::$msg[] = 'Não há mais vagas femininas.';
+                self::$inscricao['status'] = self::$statusInscricao[3]; // Fila de Espera.
+            }
         }
 
         $vagas = [
