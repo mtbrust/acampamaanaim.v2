@@ -86,7 +86,17 @@ class montar extends EndPoint
 	public function get($params)
 	{
 
+		// Verifica se a extensão GD está habilitada.
+		if (extension_loaded('gd')) {
+			self::$params['GD'] = "GD está habilitada!";
+			// print_r(gd_info());
+		} else {
+			self::$params['GD'] = "GD NÃO está habilitada!";
+		}
+
 		self::$params['html'] = "";
+
+		
 	}
 
 	public function api($params)
