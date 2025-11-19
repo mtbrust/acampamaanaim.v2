@@ -21,7 +21,7 @@
                 <h6 class="t-vermelho mt-2 mb-0">Nascimento:</h6>
                 {{inscricao.dtNascimento|date("d/m/Y")}} <br> Idade no evento: {{inscricao.idadeEvento}} anos.
                 <h6 class="t-vermelho mt-2 mb-0">Status Inscrição:</h6>
-                {% if inscricao.status == "Cancelada" %}
+                {% if inscricao.status == "Cancelada" or inscricao.status == "Fila de Espera" %}
                 <span class="badge text-bg-danger">{{inscricao.status}}</span>
                 {% else %}
                 {{inscricao.status}}
@@ -76,7 +76,96 @@
                 <br><small>A inscrição pode ser cancelada e a estadia interrompida, caso ocorra descumprimento dos termos. </small>
                 {% endif %}
 
+                {% if inscricao.status == "Fila de Espera" %}
+                <hr>
+                <p class="text-center">
+                    <button type="button" class="btn btn-danger btn-sm btn-cancelar-inscricao" data-id="{{inscricao.id}}" data-cpf="{{inscricao.cpf}}">
+                        <i class="fas fa-times-circle"></i> Cancelar Inscrição
+                    </button>
+                </p>
+                <small class="text-muted text-center d-block">
+                    Você não deseja mais ficar na fila de espera? Clique no botão acima para cancelar sua inscrição.
+                </small>
+                {% endif %}
+
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnCancelar = document.querySelector('.btn-cancelar-inscricao');
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const cpf = this.getAttribute('data-cpf');
+            cancelarInscricao(id, cpf);
+        });
+    }
+});
+
+function cancelarInscricao(id, cpf) {
+    Swal.fire({
+        title: 'Cancelar Inscrição?',
+        text: 'Tem certeza que deseja cancelar sua inscrição? Esta ação não pode ser desfeita.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, cancelar',
+        cancelButtonText: 'Não, manter inscrição'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Processando...',
+                text: 'Aguarde enquanto cancelamos sua inscrição.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Faz a requisição
+            fetch('{{base.url}}minha_inscricao/api/cancelar/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'id=' + encodeURIComponent(id) + '&cpf=' + encodeURIComponent(cpf)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error === false) {
+                    Swal.fire({
+                        title: 'Cancelada!',
+                        text: data.msg || 'Sua inscrição foi cancelada com sucesso.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Recarrega a página para atualizar o status
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Erro!',
+                        text: data.msg || 'Ocorreu um erro ao cancelar a inscrição.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Ocorreu um erro ao processar a solicitação. Tente novamente.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                console.error('Erro:', error);
+            });
+        }
+    });
+}
+</script>

@@ -154,6 +154,55 @@ class minha_inscricao extends EndPoint
 				$ret = 'Teste ok.';
 				$msg = 'Teste realizado com sucesso.';
 				break;
+			case 'cancelar':
+				// Valida se foi enviado ID e CPF
+				if (!isset($_POST['id']) || !isset($_POST['cpf'])) {
+					$ret = ['error' => true, 'msg' => 'ID e CPF são obrigatórios.'];
+					$msg = 'Erro: ID e CPF são obrigatórios.';
+					self::$params['status'] = 400;
+					break;
+				}
+
+				$idInscricao = $_POST['id'];
+				$cpf = $_POST['cpf'];
+
+				// Verifica se a inscrição existe e pertence ao CPF informado
+				$inscricao = Maanaim::acompanhar($cpf, $idInscricao);
+
+				if (!$inscricao) {
+					$ret = ['error' => true, 'msg' => 'Inscrição não encontrada ou CPF não confere.'];
+					$msg = 'Erro: Inscrição não encontrada ou CPF não confere.';
+					self::$params['status'] = 404;
+					break;
+				}
+
+				// Verifica se o status permite cancelamento (apenas Fila de Espera)
+				if ($inscricao['status'] != 'Fila de Espera') {
+					$ret = ['error' => true, 'msg' => 'Apenas inscrições em "Fila de Espera" podem ser canceladas pelo próprio inscrito.'];
+					$msg = 'Erro: Apenas inscrições em "Fila de Espera" podem ser canceladas pelo próprio inscrito.';
+					self::$params['status'] = 400;
+					break;
+				}
+
+				// Atualiza o status para Cancelada
+				$bdInscricoes = new \template\classes\bds\BdInscricoes();
+				$updateData = [
+					'status' => 'Cancelada',
+					'idStatus' => 0,
+					'obs' => ($inscricao['obs'] ? $inscricao['obs'] . ' ' : '') . 'Cancelada pelo próprio inscrito em ' . date('d/m/Y H:i:s') . '.'
+				];
+
+				$resultado = $bdInscricoes->update($idInscricao, $updateData);
+
+				if ($resultado) {
+					$ret = ['error' => false, 'msg' => 'Inscrição cancelada com sucesso.', 'id' => $idInscricao];
+					$msg = 'Inscrição cancelada com sucesso.';
+				} else {
+					$ret = ['error' => true, 'msg' => 'Erro ao cancelar a inscrição. Tente novamente.'];
+					$msg = 'Erro ao cancelar a inscrição.';
+					self::$params['status'] = 500;
+				}
+				break;
 			case 'termosecompromisso':
 
 				$idInscricao = 0;
