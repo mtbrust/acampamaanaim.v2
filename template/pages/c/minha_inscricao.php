@@ -7,6 +7,7 @@ use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\maanaim\Maanaim;
 use template\classes\PDF;
+use template\classes\AssinaturaPNG;
 
 /**
  * INDEX LOGIN
@@ -173,7 +174,7 @@ class minha_inscricao extends EndPoint
 				$logoBase64 = base64_encode($data);
 				self::$params['logo'] = 'data:image/png;base64, ' . $logoBase64;
 
-				$data = file_get_contents('./template/assets/midias/font/Arizonia-Regular.ttf');
+				$data = file_get_contents('./template/assets/midias/fonts/Arizonia-Regular.ttf');
 				$fontBase64 = base64_encode($data);
 				self::$params['font_arizonia'] = 'data:font/ttf;base64, ' . $fontBase64;
 
@@ -182,6 +183,31 @@ class minha_inscricao extends EndPoint
 				// DevHelper::printr(self::$params);
 				// DevHelper::printr(self::$params['inscricao']);
 				// DevHelper::printr(self::$params['evento']);
+
+				// Se for menor de idade, usa o nome do representante
+				$nomeAssinatura = $inscricao['nome'];
+				if (!empty($inscricao['menor']) && $inscricao['menor'] == 1 && !empty($inscricao['RepNome'])) {
+					$nomeAssinatura = $inscricao['RepNome'];
+				}
+
+				$options = [
+					'text' => $nomeAssinatura,
+					'font' => 'template/assets/midias/fonts/Arizonia-Regular.ttf',
+					'fontSize' => 45,
+					'textColor' => [33, 150, 243],
+					'padding' => 0,
+				];
+				self::$params['assinaturaRepresentante'] = AssinaturaPNG::create($options);
+
+				$options = [
+					'text' => 'Felipe Conti',
+					'font' => 'template/assets/midias/fonts/Arizonia-Regular.ttf',
+					'fontSize' => 45,
+					'textColor' => [33, 150, 243],
+					'padding' => 0,
+				];
+				self::$params['assinaturaPresidente'] = AssinaturaPNG::create($options);
+
 
 				$htmlTermos = Render::obj('docs/termos-e-compromissos.html', self::$params);
 				// self::$params['render']['content_type'] = 'text/html';

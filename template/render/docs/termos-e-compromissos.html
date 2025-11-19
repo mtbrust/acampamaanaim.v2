@@ -225,7 +225,11 @@
       <p style="text-align: center;"><b> Machado / MG , {{info.dataAtual}} de {{info.anoAtual}}. </b></p>
 
       <p><br></p>
-      <p style="text-align: center;"><b> _____________________________________________________________</b></p>
+      <p style="text-align: center;">
+        <img src="{{assinaturaRepresentante.dataUri}}">
+        <br>
+        <b> _____________________________________________________________</b>
+      </p>
       {% if not inscricao.menor %}
       <p style="text-align: center;"><b> Assinatura Digital do Responsável<br>CPF: {{inscricao.cpf}}<br>{{inscricao.nome}}</b></p>
       {% else %}
@@ -235,7 +239,11 @@
 
 
       <p><br></p>
-      <p style="text-align: center;"><b> _____________________________________________________________</b></p>
+      <p style="text-align: center;">
+        <img src="{{assinaturaPresidente.dataUri}}">
+        <br>
+        <b> _____________________________________________________________</b>
+      </p>
       <p style="text-align: center;"><b> Representante da organização ACAMPAMENTO MAANAIM</b></p>
     </div>
 
