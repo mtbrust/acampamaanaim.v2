@@ -200,7 +200,7 @@ class minha_inscricao extends EndPoint
 				self::$params['assinaturaRepresentante'] = AssinaturaPNG::create($options);
 
 				$options = [
-					'text' => 'Felipe Conti',
+					'text' => 'Felipe Silva Conti',
 					'font' => 'template/assets/midias/fonts/Arizonia-Regular.ttf',
 					'fontSize' => 45,
 					'textColor' => [33, 150, 243],

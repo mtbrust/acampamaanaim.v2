@@ -56,195 +56,198 @@
   <main>
 
     <div style="text-align: justify;">
-      <div>
-        <center>
-          <h1>Termos, Responsabilidades e Compromissos</h1>
-          <h2>{{info.INFO_EVENTO}}</h2>
-          <h3>Ficha de Inscrição e de Autorizações</h3>
-        </center>
+      <div style="text-align: center;">
+        <h1>TERMO DE INSCRIÇÃO, RESPONSABILIDADE, AUTORIZAÇÕES E CONSENTIMENTOS</h1>
+        <h2>Acampamento Maanaim de Machado/MG</h2>
+        <p><b>CNPJ: 08.397.191/0001-89</b></p>
+        <p><b>ID da Inscrição: {{inscricao.id}}</b></p>
+        
       </div>
 
-      <p><b>ID Inscrição:</b> {{id}}</p>
-
-
-      {# Tópico 1 #}
-      {% set numeroTopico = 1 %}
-      <p><b> {{ numeroTopico }}) Dados Pessoais</b></p>
-      <p>{{ numeroTopico }}.1) Inscrito</p>
-      <div class="espacamento">
-        <p><b>Nome Completo</b>: {{inscricao.nome}} </p>
-        <p><b>Data de Nascimento</b>: {{inscricao.dtNascimento|date("d/m/Y")}} </p>
-        <p><b>Sexo</b>: {{inscricao.sexo}} </p>
-        <p><b>CPF</b>: {{inscricao.cpf}} </p>
-        <!-- <p>RG: {{inscricao.rg}} </p> -->
-        <!-- <p>CNH: {{inscricao.cnh}} </p> -->
-        <p><b>Endereço Completo</b>: {{inscricao.endEstado}}, {{inscricao.endCidade}}, {{inscricao.endBairro}}, {{inscricao.endRua}}, {{inscricao.endNumero}}, {{inscricao.endComplemento}}, {{inscricao.endCEP}}. </p>
-        <p><b>Cidade/Estado</b>: {{inscricao.endCidade}}/ {{inscricao.estadoUf}} </p>
-        <p><b>E-Mail</b>: {{inscricao.email}} </p>
-        <p><b>Telefone</b>: {{inscricao.telefone}} </p>
-        <p><b>Telefone Emergência</b>: {{inscricao.telefoneContato}} </p>
-        <p><b>Nome Pai</b>: {{inscricao.paiNome}} </p>
-        <p><b>Nome Mãe</b>: {{inscricao.maeNome}} </p>
-      </div>
       <p><br></p>
-      {# Tópico 1.2 (Menor) #}
-      {% if not inscricao.menor %}
-      {% else %}
-      <p> 1.2) Representante Legal</p>
+
+      {# Tópico 1 - Dados Pessoais #}
+      <p><b>1. Dados Pessoais do Inscrito</b></p>
       <div class="espacamento">
-        <p><b>Nome Completo</b>: {{inscricao.RepNome}} </p>
-        <p><b>Sexo</b>: {{inscricao.RepSexo}} </p>
-        <p><b>Data de Nascimento</b>: {{inscricao.RepDtNascimento|date("d/m/Y")}} </p>
-        <p><b>CPF</b>: {{inscricao.RepCpf}} </p>
-        <!-- <p>RG: {{inscricao.RepRg}} </p> -->
-        <!-- <p>CNH: {{inscricao.RepCnh}} </p> -->
-        <p><b>E-Mail</b>: {{inscricao.RepEmail}} </p>
-        <p><b>Telefone</b>: {{inscricao.RepTelefone}} </p>
-        <p>Onde estarão os pais (responsável direto) durante o Acampamento: <br><br>
-        </p>
+        <p>• <b>Nome completo</b>: {{inscricao.nome}}</p>
+        <p>• <b>Data de nascimento</b>: {{inscricao.dtNascimento|date("d/m/Y")}}</p>
+        <p>• <b>Sexo</b>: {{inscricao.sexo}}</p>
+        <p>• <b>CPF</b>: {{inscricao.cpf}}</p>
+        <p>• <b>Endereço completo</b>: {{inscricao.endRua}}, {% if inscricao.endNumero %}nº {{inscricao.endNumero}}{% endif %}{% if inscricao.endComplemento %}, {{inscricao.endComplemento}}{% endif %}, {{inscricao.endBairro}}, {{inscricao.endCidade}}/{{inscricao.endEstado}} – CEP {{inscricao.endCEP}}</p>
+        <p>• <b>Cidade/Estado</b>: {{inscricao.endCidade}}/{{inscricao.endEstado}}</p>
+        <p>• <b>E-mail</b>: {{inscricao.email}}</p>
+        <p>• <b>Telefone</b>: {{inscricao.telefone}}</p>
+        <p>• <b>Telefone para emergência</b>: {{inscricao.telefoneContato}}</p>
+        <p>• <b>Nome do pai</b>: {{inscricao.paiNome}}</p>
+        <p>• <b>Nome da mãe</b>: {{inscricao.maeNome}}</p>
       </div>
-      _______________________________________________________________________________________________________________________
+      
+
+      <p><br></p>
+
+      {# Tópico 2 - Informações Médicas #}
+      <p><b>2. Informações Médicas e Autorizações</b></p>
+      <div class="espacamento">
+        <p><b>2.1 Alergias</b>: {% if inscricao.alergiaR %}Sim. Qual? {{inscricao.alergia}}{% else %}Não possui.{% endif %}</p>
+        <p><b>2.2 Uso de medicamentos contínuos</b>: {% if inscricao.medicamentoR %}Sim. Qual? {{inscricao.medicamento}}{% else %}Não utiliza.{% endif %}</p>
+        
+        <p><b>2.3 Responsabilidade sobre condições de saúde e acomodações</b></p>
+        <p>É de inteira responsabilidade do inscrito, ou do representante legal (no caso de menor de idade), verificar se as instalações, acomodações, estruturas físicas, atividades e ambientes do Acampamento Maanaim são adequados às necessidades médicas, físicas e psicológicas do participante.</p>
+        <p>O inscrito ou representante legal declara que:</p>
+        <p>• Analisará as acomodações no momento do check-in;</p>
+        <p>• Terá o prazo de 1 (uma) hora após o check-in para informar à equipe organizadora qualquer incompatibilidade que possa causar risco à saúde do inscrito;</p>
+        <p>• Caso não haja comunicação dentro desse período, considera-se que as acomodações e atividades foram avaliadas e consideradas adequadas.</p>
+        
+        <p><b>2.4 Autorizações Específicas</b></p>
+        <p>• <b>Participação em atividades com água</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
+        <p>• <b>Participação no açude</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
+        <p>• <b>Participação na piscina</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 3 - Regulamento Interno #}
+      <p><b>3. Regulamento Interno do Acampamento Maanaim</b></p>
+      <div class="espacamento">
+        <p><b>3.1 Idade mínima</b>: Caso seja constatada falsidade ou divergência na idade declarada, o acampamento poderá cancelar a inscrição.</p>
+        <p><b>3.2 Quarteis masculinos e femininos</b>: Proibida a entrada de participantes do sexo oposto nos dormitórios.</p>
+        <p><b>3.3 Permanência no local</b>: Qualquer saída deve ser previamente autorizada pela equipe organizadora.</p>
+        <p><b>3.4 Vestimenta e comportamento</b>: Conduta e roupas devem respeitar os padrões cristãos do evento.</p>
+        <p><b>3.5 Penalidades</b>: O inscrito poderá ser retirado após três advertências ou imediatamente em caso de conduta grave.</p>
+        <p><b>3.6 Autoridade</b>: O inscrito deve acatar orientações da diretoria, líderes e funcionários.</p>
+        <p><b>3.7 Pertences</b>: O acampamento não se responsabiliza por objetos pessoais.</p>
+        <p><b>3.8 Medicamentos</b>: Medicamentos de uso rotineiro são responsabilidade exclusiva dos pais/responsáveis.</p>
+        <p><b>3.9 Substâncias proibidas</b>: É proibido portar ou consumir álcool, cigarros ou entorpecentes.</p>
+        <p><b>3.10 Itens obrigatórios</b>: Roupa de cama, cobertor, toalha, itens de higiene, prato, talheres e copo.</p>
+        <p><b>3.11 Atividades aquáticas</b>: Permitidas apenas com autorização e traje adequado.</p>
+        <p><b>3.12 Realização do evento</b>: O evento ocorrerá apenas com no mínimo 150 inscritos; caso contrário, o valor será devolvido.</p>
+        <p><b>3.13 Aceitação</b>: A inscrição implica concordância total com este termo.</p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 4 - Responsabilidade Civil #}
+      <p><b>4. Responsabilidade Civil</b></p>
+      <div class="espacamento">
+        <p>O inscrito ou o representante legal declara estar ciente de que:</p>
+        <p>• O Acampamento Maanaim não se responsabiliza por acidentes decorrentes de comportamento inadequado, descumprimento das regras ou uso indevido das instalações.</p>
+        <p>• As atividades podem envolver esforço físico moderado e contato com ambientes naturais (como mata, açude, piscina e trilhas).</p>
+        <p>• O inscrito participa por livre e espontânea vontade, assumindo integral responsabilidade por eventuais danos causados a si mesmo, a terceiros ou ao patrimônio.</p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 5 - Autorização Médica #}
+      <p><b>5. Autorização para Atendimento Médico</b></p>
+      <div class="espacamento">
+        <p>Autorizo a equipe do acampamento a prestar primeiros socorros e, se necessário, encaminhar o inscrito para atendimento hospitalar, sendo as despesas de responsabilidade do inscrito ou do representante legal.</p>
+        <p>Hospitais de referência: Machado/MG e Alfenas/MG.</p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 6 - Direito de Imagem #}
+      <p><b>6. Autorização de Uso de Imagem (Direito de Imagem)</b></p>
+      <div class="espacamento">
+        <p>Autorizo o Acampamento Maanaim a utilizar imagens, vídeos e gravações do inscrito para fins institucionais, promocionais e publicitários, de forma gratuita, sem restrição de prazo ou mídia.</p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 7 - LGPD #}
+      <p><b>7. Cláusula de Proteção de Dados (LGPD – Lei 13.709/2018)</b></p>
+      <div class="espacamento">
+        <p>O inscrito, ou seu representante legal, declara ciência de que:</p>
+        <p><b>1. Os dados fornecidos serão utilizados exclusivamente para:</b></p>
+        <p>• identificação do inscrito,</p>
+        <p>• registro da participação no evento,</p>
+        <p>• questões de segurança, saúde e contato,</p>
+        <p>• cumprimento de obrigações legais.</p>
+        <p><b>2. O Acampamento Maanaim compromete-se a:</b></p>
+        <p>• armazenar e tratar os dados de forma segura;</p>
+        <p>• não compartilhar informações com terceiros, salvo por exigência legal ou necessidade médica emergencial;</p>
+        <p>• permitir, mediante solicitação, acesso, correção ou exclusão dos dados conforme a LGPD.</p>
+        <p><b>3. O titular dos dados concede autorização expressa para o tratamento das informações aqui fornecidas.</b></p>
+      </div>
+      
+
+      <p><br></p>
+
+      {# Tópico 8 - Representante Legal #}
+      {% if inscricao.menor %}
+      <p><b>8. Representante Legal (para menores de 18 anos)</b></p>
+      <div class="espacamento">
+        <p>Se o inscrito for menor de idade, o representante legal declara que:</p>
+        <p>• Leu integralmente e concorda com todas as regras e autorizações deste documento;</p>
+        <p>• É responsável pelo menor durante todo o evento, inclusive pelo fornecimento de informações reais e completas sobre sua saúde;</p>
+        <p>• Autoriza a participação em todas as atividades descritas;</p>
+        <p>• Assume responsabilidade civil pelos atos praticados pelo menor durante o acampamento.</p>
+        <p><b>Nome do responsável legal</b>: {{inscricao.RepNome}}</p>
+        <p><b>CPF</b>: {{inscricao.RepCpf}}</p>
+        <p><b>Telefone</b>: {{inscricao.RepTelefone}}</p>
+      </div>
+      
+      <p><br></p>
       {% endif %}
 
-
-
-      {# Tópico 2 #}
-      <p class="quebraPagina"><br></p>
-      {% set numeroTopico = numeroTopico + 1 %}
-      <p><b> {{ numeroTopico }}) Informações médicas e autorizações sobre o inscrito</b></p>
+      {# Tópico 9 - Assinatura Digital #}
+      <p><b>9. Assinatura Digital com Validade Jurídica</b></p>
       <div class="espacamento">
-        <p>{{ numeroTopico }}.1) Tem algum tipo de alergia? {% if inscricao.alergiaR %} Sim{% else %} Não{% endif %} </p>
-        <p>{% if inscricao.alergiaR %} Qual? {{inscricao.alergia}}{% endif %} </p>
-        <p>{{ numeroTopico }}.2) Faz uso de medicamento diário? {% if inscricao.medicamentoR %} Sim{% else %} Não{% endif %} </p>
-        <p>{% if inscricao.medicamentoR %} Qual? {{inscricao.medicamento}}{% endif %} </p>
-        {% if not inscricao.menor %}
-        <p>{{ inscricao.numeroTopico }}.3) Autorizações: </p>
-        {% else %}
-        <p>{{ numeroTopico }}.3) Autorizações ao menor acima citado: </p>
-        {% endif %}
-        <p>
-          {{ numeroTopico }}.3.1) Autoriza a participação em atividades com água?{% if inscricao.nadarR %} Sim{% else %} Não{% endif %}
-        </p>
-        <p>
-          {{ numeroTopico }}.3.2) Autoriza a participação no açude?{% if inscricao.nadarR %} Sim{% else %} Não{% endif %}
-        </p>
-        <p>
-          {{ numeroTopico }}.3.3) Autoriza a participação na piscina?{% if inscricao.nadarR %} Sim{% else %} Não{% endif %}
-        </p>
+        <p>Este documento será assinado digitalmente, pelo inscrito ou responsável legal, mediante aceite eletrônico e registro no sistema.</p>
+        <p>A assinatura digital:</p>
+        <p>• Dispensa apresentação de via física,</p>
+        <p>• Possui validade jurídica, conforme a legislação brasileira (MP 2.200-2/2001 e Código Civil),</p>
+        <p>• Equivale, para todos os fins de direito, a uma assinatura manuscrita.</p>
       </div>
-
-
-      {#
-      {% set numeroTopico = numeroTopico + 1 %}
-      <p>
-        <b> {{ numeroTopico }}) Termo de livre consentimento e responsabilidade para participação do Acampamento Maanaim</b>
-      </p>
-      <div class="espacamento">
-        <p>{{ numeroTopico }}.1) Eu {{RepNome}} representante legal do menor {{nome}} DECLARO, para todos os fins de direito que tenho ciência de todos os problemas causados pela pandemia COVID-19, e dos riscos em relação ao contágio do coronavírus SARS-CoV2, que tenho ciência do que está acontecendo em nível mundial, nacional, e especialmente no município de Machado- MG, bem como estou ciente de todas as medidas adotadas pelo Acampamento Maanaim em relação ao atividade religiosa que acontecerá nos dias {{info.INFO_DE}}. </p>
-        <p></p>
-        <p>{{ numeroTopico }}.2) De livre e espontânea vontade, autorizo a participação de forma presencial do menor {{nome}} e declaro ser integralmente responsável por este ato, isentando o Acampamento Maanaim de qualquer responsabilidade por fatos decorrentes da minha escolha.
-        </p>
-      </div> #}
-
-      {# <p>Declaro ainda que fui devidamente informado que a qualquer momento posso optar por me afastar das atividades presenciais. Também firmo estar ciente que: </p> #}
-      {# <ol><span>
-          <p></p>
-
-          <p>4.2.1) O menor deve apresentar o kit contendo máscaras, garrafinha de água; </p>
-
-          <p>4.2.2) O menor deve usar máscaras obrigatoriamente em ambiente do culto, obedecendo as orientações dos órgãos responsáveis; </p>
-
-          <p>4.2.3) O menor deve saber fazer a higienização de suas mãos; </p>
-
-          <p>4.2.4) Os pais devem monitorar pequenos sinais de gripes como coriza, fadiga, espirros, tosses e febre e comunicar ao acampamento qualquer um desses sinais; </p>
-
-          <p>4.2.5) Os pais devem buscar o menor no horário estipulado ou orientar o(a) filho(a) a voltar em segurança para casa, no término do evento; </p>
-
-          <p>4.2.6) Em caso de suspeita ou confirmação de COVID, o menor não deverá comparecer presencialmente a atividade religiosa; </p>
-
-          <p>4.2.7) Informar à instituição casos confirmados de COVID na família ou com pessoas de grande contato com o menor nos últimos 10 dias. </p>
-
-          <p>4.2.8) Concordo em orientar o menor a seguir todos os protocolos sanitários adotados pela Vigilância Sanitária Municipal e OMS. </p>
-        </span></ol> #}
+      
 
       <p><br></p>
-      {# Tópico 3 #}
-      {% set numeroTopico = numeroTopico + 1 %}
-      <p><b> {{ numeroTopico }}) Regulamento Interno do ACAMPAMENTO MAANAIM</b></p>
+
+      {# Tópico 10 - Declaração Final #}
+      <p><b>10. Declaração Final</b></p>
       <div class="espacamento">
-        <p>{{ numeroTopico }}.1) Idade Mínima de {{info.INFO_IDADE_MINIMA}} anos. Caso seja detectado alguma divergência ou inverdade nessa informação, o acampamento se reconhece no direito de cancelar a inscrição mesmo estando dentro do estabelecimento. </p>
-        <p>{{ numeroTopico }}.2) Divisão dos quartos: o <b> ACAMPAMENTO MAANAIM</b>, está dividido em duas alas, a ala feminina e ala masculina. Não será permitido a presença de meninas nos quartos dos meninos, e nem dos meninos nos quartos das meninas. </p>
-        <p>{{ numeroTopico }}.3) As atividades do evento, limitam-se ao espaço físico do <b> ACAMPAMENTO MAANAIM</b>. Todos os inscritos são obrigados a notificarem o <b> setor da Equipe</b><b> responsável, </b>sobre qualquer eventual necessidade de saída do <b> ACAMPAMENTO MAANAIM</b>, para obter a autorização para tal. </p>
-        <p>{{ numeroTopico }}.4) Comportamento e vestimenta: as vestimentas e o comportamento devem ser adequados ao padrão cristão do evento, não sendo tolerado roupas muito curtas, nem muito decotadas.</p>
-        <p>{{ numeroTopico }}.5) Em caso de rebeldia ou descumprimento deste regulamento, ou ainda se o inscrito for advertido por três vezes, o mesmo será orientado pela <b> DIRETORIA DO ACAMPAMENTO MAANAIM</b>, que se retire do acampamento. Em casos mais graves, poderá ser retirado sem aviso prévio, como no caso de depredação do patrimônio e violência física e verbal.</p>
-        <p>{{ numeroTopico }}.6) O inscrito deve se submeter à autoridade do acampamento, equipantes e funcionários do <b> ACAMPAMENTO MAANAIM</b>. </p>
-        <p>{{ numeroTopico }}.7) O <b> ACAMPAMENTO MAANAIM</b>não se responsabiliza pelos objetos, dinheiro, celular e outros pertences do inscrito. </p>
-        <p>{{ numeroTopico }}.8) O <b> ACAMPAMENTO MAANAIM</b>não disponibilizará medicamentos ao inscrito que faz uso deste, rotineiramente, cabendo aos pais ou responsáveis tomarem as devidas providências. </p>
-        <p>{{ numeroTopico }}.9) Não é permitido o uso de bebidas alcoólicas, cigarros ou qualquer tipo de entorpecentes. </p>
-        <p>{{ numeroTopico }}.10) É necessário que todos os inscritos tragam: roupa de cama, cobertor, toalha de banho, material de higiene pessoal, prato, talheres e copo. </p>
-        <p>{{ numeroTopico }}.11) Somente será permitido nadar ou participar das atividades aquáticas (açude e/ou piscina) se o inscrito tiver a prévia permissão do responsável, e se possuir os trajes adequados para o mesmo (maiô e shorts para meninas e shorts para meninos, serão tolerados shorts e camisetas de lycra e/ou material sintético). </p>
-        <p>{{ numeroTopico }}.12) O evento só acontecerá como no mínimo 150 inscritos inscritos, caso não haja o mínimo de inscrições, o evento não acontecerá e o dinheiro da inscrição será devolvido. O evento que acontecerá nos dias {{info.INFO_DE}}. </p>
-        <p>{{ numeroTopico }}.13) A inscrição para o evento implica na concordância plena deste regulamento, e no seu devido preenchimento. </p>
+        <p>Declaro que li, compreendi e concordo com todos os termos acima.</p>
+        <p><b>Data</b>: {{info.dataAtual}} de {{info.anoAtual}}</p>
+        <p><b>Local</b>: Machado/MG</p>
       </div>
 
       <p><br></p>
-      {# Tópico 4 #}
-      {% set numeroTopico = numeroTopico + 1 %}
-      <p><b> {{ numeroTopico }}) Socorro Médico</b></p>
-      <div class="espacamento">
-        <p>{{ numeroTopico }}.1) Autorizo a diretoria do mesmo a socorrê-lo (a) em casos de emergência, sendo que todas as despesas correrão sob minha responsabilidade. Comunicamos que em caso de emergência nos dirigimos, a princípio, ao Hospital de Alfenas e/ou Machado que atende tanto pelo SUS como por convênios particulares.</p>
-      </div>
 
-
+      {# Assinaturas #}
+      <p><b>ASSINATURAS:</b></p>
       <p><br></p>
-      {# Tópico 5 #}
-      {% set numeroTopico = numeroTopico + 1 %}
-      <p><b> {{ numeroTopico }}) Do direito de imagem</b></p>
-      <div class="espacamento">
-        <p>{{ numeroTopico }}.1) Autorizo a Organização Acampamento Maanaim de Machado, para todos os fins do presente termo, os direitos de gravação de áudio, vídeo, filmagem; o direito de imagem para a ampla divulgação deste e outros Eventos, produção de material promocional em qualquer tipo de mídia; peças promocionais para qualquer outro fim institucional desta organização. A presente autorização é feita a título gratuito, sem qualquer ônus para a Organização Acampamento Maanaim de Machado. E assim por estarem justos e acordados firmo a presente Autorização de Cessão de Direitos.</p>
-      </div>
 
-      <p><br></p>
-      <p>
-        {% if not inscricao.menor %}
-        Eu, {{inscricao.nome}}, aceito
-        {% else %}
-        Eu, {{inscricao.RepNome}}, <b> autorizo</b> o menor {{inscricao.nome}} a
-        {% endif %}
-        participar das atividades promovidas pelo <b> ACAMPAMENTO MAANAIM </b> que se localiza na Rodovia BR 267 – KM 21, Machado/MG, que acontecerá no período de {{info.INFO_DE}}; e declaro estar <b> ciente</b> e de <b> acordo</b> com as normas e regras estabelecidas pela organização do <b> ACAMPAMENTO MAANAIM.</b>
-      </p>
-
-
-      <p>
-        Obs: Se houver alguma restrição quanto a participação em quaisquer atividades do programa, descreva abaixo:
-        <br><br>
-      </p>
-      _______________________________________________________________________________________________________________________
-
-      <p><br></p>
-      <p style="text-align: center;"><b> Machado / MG , {{info.dataAtual}} de {{info.anoAtual}}. </b></p>
-
-      <p><br></p>
       <p style="text-align: center;">
-        <img src="{{assinaturaRepresentante.dataUri}}">
+        <img src="{{assinaturaRepresentante.dataUri}}" style="max-width: 300px;">
         <br>
-        <b> _____________________________________________________________</b>
+        <b>_____________________________________________________________</b>
       </p>
-      {% if not inscricao.menor %}
-      <p style="text-align: center;"><b> Assinatura Digital do Responsável<br>CPF: {{inscricao.cpf}}<br>{{inscricao.nome}}</b></p>
-      {% else %}
-
-      <p style="text-align: center;"><b> Assinatura Digital do Responsável<br>CPF: {{inscricao.RepCpf}}<br>{{inscricao.RepNome}}</b></p>
-      {% endif %}
-
+      <p style="text-align: center;">
+        <b>Inscrito / Representante Legal:</b><br>
+        <b>Nome</b>: {% if inscricao.menor %}{{inscricao.RepNome}}{% else %}{{inscricao.nome}}{% endif %}<br>
+        <b>CPF</b>: {% if inscricao.menor %}{{inscricao.RepCpf}}{% else %}{{inscricao.cpf}}{% endif %}<br>
+        <b>Assinatura Digital</b>
+      </p>
 
       <p><br></p>
+
       <p style="text-align: center;">
-        <img src="{{assinaturaPresidente.dataUri}}">
+        <img src="{{assinaturaPresidente.dataUri}}" style="max-width: 300px;">
         <br>
-        <b> _____________________________________________________________</b>
+        <b>_____________________________________________________________</b>
       </p>
-      <p style="text-align: center;"><b> Representante da organização ACAMPAMENTO MAANAIM</b></p>
+      <p style="text-align: center;">
+        <b>Diretoria - Acampamento Maanaim:</b><br>
+        <b>Nome</b>: Felipe Silva Conti<br>
+        <b>Cargo</b>: Diretor<br>
+        <b>CNPJ</b>: 08.397.191/0001-89<br>
+        <b>Assinatura Digital</b>
+      </p>
     </div>
 
   </main>
