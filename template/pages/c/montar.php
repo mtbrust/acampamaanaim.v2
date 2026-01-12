@@ -247,7 +247,7 @@ class montar extends EndPoint
 				$row = 1;
 				$cabecalho = [];
 				$inscricao = [];
-				if (($handle = fopen("template/assets/midias/csv/maanaim_inscricoes.csv", "r")) !== FALSE) {
+				if (($handle = fopen(BASE_DIR . "template/assets/midias/csv/maanaim_inscricoes.csv", "r")) !== FALSE) {
 
 					// Carrega linha por linha.
 					while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
