@@ -66,9 +66,9 @@ class montar extends EndPoint
 			'session'           => true,
 
 			// Grupos que tem permissão TOTAL a esta controller. Usar apenas para teste.
-			// 'groups'            => [
-			//     1, // Grupo ID: 1.
-			// ],
+			'groups'            => [
+			    1, // Grupo ID: 1.
+			],
 
 			// IDs que tem permissão TOTAL a esta controller. Usar apenas para teste.
 			'ids'            => [
