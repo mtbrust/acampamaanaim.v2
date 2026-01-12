@@ -8,6 +8,7 @@ use desv\controllers\Render;
 use template\classes\maanaim\Maanaim;
 use template\classes\PDF;
 use template\classes\AssinaturaPNG;
+use template\classes\bds\BdInscricoes;
 
 /**
  * INDEX LOGIN
@@ -202,6 +203,117 @@ class minha_inscricao extends EndPoint
 					$msg = 'Erro ao cancelar a inscrição.';
 					self::$params['status'] = 500;
 				}
+				break;
+			case 'pagbank':
+				// Webhook do PagBank para notificações de pagamento
+				
+				// Lê o body da requisição (JSON)
+				$json = file_get_contents('php://input');
+				$webhookData = json_decode($json, true);
+
+				// Log para debug (opcional - remover em produção ou usar sistema de logs)
+				// file_put_contents('webhook_log.txt', date('Y-m-d H:i:s') . ' - ' . $json . PHP_EOL, FILE_APPEND);
+
+				if (!$webhookData) {
+					$ret = ['error' => true, 'msg' => 'Dados inválidos no webhook.'];
+					$msg = 'Erro: Dados inválidos.';
+					self::$params['status'] = 400;
+					break;
+				}
+
+				// Verifica se tem a referência (ID da inscrição)
+				$idInscricao = null;
+				if (isset($webhookData['reference_id'])) {
+					$idInscricao = $webhookData['reference_id'];
+				} elseif (isset($webhookData['reference'])) {
+					$idInscricao = $webhookData['reference'];
+				} elseif (isset($webhookData['order']) && isset($webhookData['order']['reference_id'])) {
+					$idInscricao = $webhookData['order']['reference_id'];
+				}
+
+				if (!$idInscricao) {
+					$ret = ['error' => true, 'msg' => 'Referência (ID da inscrição) não encontrada no webhook.'];
+					$msg = 'Erro: Referência não encontrada.';
+					self::$params['status'] = 400;
+					break;
+				}
+
+				// Busca a inscrição
+				$inscricao = Maanaim::getInscricaoPorId($idInscricao);
+
+				if (!$inscricao) {
+					$ret = ['error' => true, 'msg' => 'Inscrição não encontrada.'];
+					$msg = 'Erro: Inscrição não encontrada.';
+					self::$params['status'] = 404;
+					break;
+				}
+
+				// Verifica o status do pagamento
+				$statusPagamento = null;
+				if (isset($webhookData['status'])) {
+					$statusPagamento = $webhookData['status'];
+				} elseif (isset($webhookData['order']) && isset($webhookData['order']['status'])) {
+					$statusPagamento = $webhookData['order']['status'];
+				} elseif (isset($webhookData['charges']) && is_array($webhookData['charges']) && isset($webhookData['charges'][0]['status'])) {
+					$statusPagamento = $webhookData['charges'][0]['status'];
+				}
+
+				// Status possíveis do PagBank: PAID, IN_ANALYSIS, DECLINED, CANCELED, etc.
+				// Verifica se o pagamento foi aprovado
+				$pagamentoAprovado = false;
+				if ($statusPagamento) {
+					$statusPagamentoUpper = strtoupper($statusPagamento);
+					// Status que indicam pagamento aprovado
+					if (in_array($statusPagamentoUpper, ['PAID', 'APPROVED', 'CONFIRMED', 'COMPLETED'])) {
+						$pagamentoAprovado = true;
+					}
+				}
+
+				// Se o pagamento foi aprovado e a inscrição ainda não está confirmada
+				if ($pagamentoAprovado && $inscricao['status'] != 'Confirmada') {
+					$bdInscricoes = new BdInscricoes();
+					$updateData = [
+						'status' => 'Confirmada',
+						'idStatus' => 1,
+						'obs' => ($inscricao['obs'] ? $inscricao['obs'] . ' ' : '') . 'Pagamento confirmado via PagBank em ' . date('d/m/Y H:i:s') . '.'
+					];
+
+					$resultado = $bdInscricoes->update($idInscricao, $updateData);
+
+					if ($resultado) {
+						$ret = [
+							'error' => false,
+							'msg' => 'Status da inscrição atualizado para Confirmada.',
+							'inscricao_id' => $idInscricao,
+							'status_anterior' => $inscricao['status'],
+							'status_novo' => 'Confirmada',
+							'status_pagamento' => $statusPagamento
+						];
+						$msg = 'Webhook processado com sucesso. Inscrição confirmada.';
+					} else {
+						$ret = [
+							'error' => true,
+							'msg' => 'Erro ao atualizar status da inscrição.',
+							'inscricao_id' => $idInscricao
+						];
+						$msg = 'Erro ao atualizar status.';
+						self::$params['status'] = 500;
+					}
+				} else {
+					// Pagamento não aprovado ou já estava confirmada
+					$ret = [
+						'error' => false,
+						'msg' => 'Webhook recebido, mas status não foi alterado.',
+						'inscricao_id' => $idInscricao,
+						'status_atual' => $inscricao['status'],
+						'status_pagamento' => $statusPagamento,
+						'razao' => $inscricao['status'] == 'Confirmada' ? 'Inscrição já estava confirmada.' : 'Pagamento não foi aprovado.'
+					];
+					$msg = 'Webhook processado.';
+				}
+
+				// Retorna 200 OK para o PagBank (importante para não receber múltiplas tentativas)
+				self::$params['status'] = 200;
 				break;
 			case 'termosecompromisso':
 

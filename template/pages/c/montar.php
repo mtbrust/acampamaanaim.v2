@@ -56,6 +56,26 @@ class montar extends EndPoint
 			'title' => 'Montar',  // Título da página exibido na aba/janela navegador.
 		];
 
+		// Opções de segurança.
+		self::$params['security']    = [
+
+			// Controller usará controller de segurança.
+			'ativo'             => true,
+
+			// Usuário só acessa logado.
+			'session'           => true,
+
+			// Grupos que tem permissão TOTAL a esta controller. Usar apenas para teste.
+			// 'groups'            => [
+			//     1, // Grupo ID: 1.
+			// ],
+
+			// IDs que tem permissão TOTAL a esta controller. Usar apenas para teste.
+			'ids'            => [
+			    2, // Login ID: 2.
+			],
+		];
+
 		// Carrega estrutura html. Somente pages.
 		self::$params['structure']   = [
 			// // Origem
