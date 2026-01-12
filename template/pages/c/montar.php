@@ -64,6 +64,9 @@ class montar extends EndPoint
 
 			// Usuário só acessa logado.
 			'session'           => true,
+			
+			// Caminho para página de login.
+			'loginPage' => "login/", // Page login dentro do modelo.
 
 			// Grupos que tem permissão TOTAL a esta controller. Usar apenas para teste.
 			'groups'            => [
@@ -143,6 +146,9 @@ class montar extends EndPoint
 				break;
 			case 'cria_permissoes':
 				$this->cria_permissoes();
+				break;
+			case 'cria_permissoes_outros':
+				$this->cria_permissoes_outros();
 				break;
 			case 'teste_maanaim':
 				self::$params['msg'] = 'Teste Classe Maanaim';
@@ -299,6 +305,13 @@ class montar extends EndPoint
 		self::$params['msg'] = __FUNCTION__;
 		MaanaimCarga::criarPermissoes();
 		self::$params['msg'] = "Carga realizada com sucesso.";
+	}
+
+	private function cria_permissoes_outros()
+	{
+		self::$params['msg'] = __FUNCTION__;
+		MaanaimCarga::criarPermissoesOutros();
+		self::$params['msg'] = "Criação dos usuários e permissões realizada com sucesso.";
 	}
 
 	private function deletar_tabelas()

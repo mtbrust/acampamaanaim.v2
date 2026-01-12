@@ -190,9 +190,10 @@
     <div class="float-end">
         {% if _session.user.id == 2 %}
         <a href="#" class="btn btn-success btn-flat" onclick="ajaxDados('{{base.url}}adm/api/atualizar', {},function(){}, 'POST')">Apoio</a>
-        {% endif %}
         <a href="./" class="btn btn-info btn-flat" onclick="ajaxDados('{{base.url}}adm/api/atualizar', {},function(){}, 'POST')">Atualizar</a>
-        <a href="{{base.url}}" class="btn btn-danger btn-flat" onclick="ajaxDados('{{base.url}}api/v1/session/end', {},function(){}, 'GET')">Sair</a>
+        
+        {% endif %}
+        <a href="{{base.url}}" class="btn btn-danger btn-flat" onclick="ajaxDados('{{base.url}}api/v1/session/end', {},function(){}, 'GET')">Deslogar</a>
     </div>
 
 
