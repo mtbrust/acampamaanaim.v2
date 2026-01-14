@@ -8,6 +8,7 @@ use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\maanaim\Maanaim;
+use template\classes\PDF;
 
 /**
  * INDEX LOGIN
@@ -200,6 +201,20 @@ class quartos extends EndPoint
 					self::$params['msg'] = 'Parâmetros inválidos.';
 				}
 				break;
+			case 'pdf':
+				// Gera PDF da relação de inscritos por quarto
+				// Na URL adm/quartos/api/pdf/{idEvento}, attr[0] é 'pdf' e attr[1] é o idEvento
+				$idEvento = $params['infoUrl']['attr'][2] ?? $params['infoUrl']['attr'][2] ?? null;
+				if ($idEvento) {
+					self::$params['render']['content_type'] = 'application/pdf';
+					$ret = $this->gerarPdfQuartos($idEvento);
+					self::$params['response'] = $ret;
+					self::$params['msg'] = 'PDF gerado com sucesso.';
+				} else {
+					self::$params['response'] = ['error' => true];
+					self::$params['msg'] = 'ID do evento não informado.';
+				}
+				break;
 			default:
 				self::$params['response'] = ['error' => true];
 				self::$params['msg'] = 'Endpoint não encontrado.';
@@ -217,5 +232,100 @@ class quartos extends EndPoint
 		}
 
 		return [$ret, $msg];
+	}
+
+	private function gerarPdfQuartos($idEvento)
+	{
+		// Carrega o evento usando listarEvento que já funciona
+		$evento = Maanaim::listarEvento($idEvento);
+		// Garante que $evento é um array válido
+		if (!is_array($evento) || empty($evento)) {
+			$evento = ['titulo_evento' => 'Evento não encontrado', 'nome_evento' => 'Evento não encontrado'];
+		}
+		self::$params['evento'] = $evento;
+
+		// Carrega as inscrições com dados completos para PDF
+		$options = [];
+		$options['quartos'] = true;
+		$options['pdf'] = true;
+		$inscricoes = Maanaim::listarInscricoes($idEvento, $options);
+		
+		// Garante que $inscricoes é um array
+		if (!is_array($inscricoes)) {
+			$inscricoes = [];
+		}
+		
+		// Organiza as inscrições por sexo e quarto
+		$inscricoesMasculinasPorQuarto = [];
+		$inscricoesMasculinasSemQuarto = [];
+		$inscricoesFemininasPorQuarto = [];
+		$inscricoesFemininasSemQuarto = [];
+		
+		foreach ($inscricoes as $inscricao) {
+			$sexo = strtolower($inscricao['sexo'] ?? '');
+			
+			// Calcula a idade (idade no evento se disponível, senão idade atual)
+			if (!empty($inscricao['dtNascimento'])) {
+				if (!empty($evento['dt_inicio_evento'])) {
+					$inscricao['idade'] = Maanaim::idadeNoEvento($inscricao['dtNascimento'], $evento['dt_inicio_evento']);
+				} else {
+					// Calcula idade atual
+					$dtNascimento = new \DateTime($inscricao['dtNascimento']);
+					$hoje = new \DateTime();
+					$intervalo = $dtNascimento->diff($hoje);
+					$inscricao['idade'] = (int)$intervalo->format('%y');
+				}
+			} else {
+				$inscricao['idade'] = '-';
+			}
+			
+			if (!empty($inscricao['quarto'])) {
+				$quarto = $inscricao['quarto'];
+				if ($sexo == 'masculino') {
+					if (!isset($inscricoesMasculinasPorQuarto[$quarto])) {
+						$inscricoesMasculinasPorQuarto[$quarto] = [];
+					}
+					$inscricoesMasculinasPorQuarto[$quarto][] = $inscricao;
+				} elseif ($sexo == 'feminino') {
+					if (!isset($inscricoesFemininasPorQuarto[$quarto])) {
+						$inscricoesFemininasPorQuarto[$quarto] = [];
+					}
+					$inscricoesFemininasPorQuarto[$quarto][] = $inscricao;
+				}
+			} else {
+				if ($sexo == 'masculino') {
+					$inscricoesMasculinasSemQuarto[] = $inscricao;
+				} elseif ($sexo == 'feminino') {
+					$inscricoesFemininasSemQuarto[] = $inscricao;
+				}
+			}
+		}
+		
+		self::$params['inscricoesMasculinasPorQuarto'] = $inscricoesMasculinasPorQuarto;
+		self::$params['inscricoesMasculinasSemQuarto'] = $inscricoesMasculinasSemQuarto;
+		self::$params['inscricoesFemininasPorQuarto'] = $inscricoesFemininasPorQuarto;
+		self::$params['inscricoesFemininasSemQuarto'] = $inscricoesFemininasSemQuarto;
+
+		// Pego a imagem da logo e mando para o pdf
+		$logoPath = self::$params['config']['favicon'] ?? self::$params['config']['image'] ?? 'template/assets/midias/logo/maanaim-logo.png';
+		if (file_exists('./' . $logoPath)) {
+			$data = file_get_contents('./' . $logoPath);
+			$logoBase64 = base64_encode($data);
+			self::$params['logo'] = 'data:image/png;base64, ' . $logoBase64;
+		} else {
+			self::$params['logo'] = '';
+		}
+
+		// Data atual
+		self::$params['info']['dataAtual'] = date('d');
+		self::$params['info']['anoAtual'] = date('Y');
+
+		// Renderiza o template do PDF
+		$htmlPdf = Render::obj('docs/relacao-inscritos-quartos.html', self::$params);
+		
+		// Gera e retorna o PDF usando o método arquivo (corrigido para retornar binário)
+		$ret = PDF::arquivo($htmlPdf);
+		
+		return $ret;
 	}
 }

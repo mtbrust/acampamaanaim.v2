@@ -43,12 +43,18 @@ class Maanaim
         }
 
         if (isset($options['quartos'])) {
-            $select = 'id, nome, sexo, quarto, telefone, endCidade';
-            $groupBy .= ' id, sexo, quarto, endCidade, nome';
+            if (isset($options['pdf'])) {
+                $select = 'id, nome, sexo, quarto, telefone, endCidade, cpf, dtNascimento';
+                $groupBy .= ' id, sexo, quarto, endCidade, nome, cpf, dtNascimento';
+            } else {
+                $select = 'id, nome, sexo, quarto, telefone, endCidade';
+                $groupBy .= ' id, sexo, quarto, endCidade, nome';
+            }
         }
 
         $inscricoes = $bdInscricoes->select($select, $where, null, null, $groupBy, 1000);
-        return $inscricoes;
+        // Garante que sempre retorna um array, mesmo que vazio
+        return is_array($inscricoes) ? $inscricoes : [];
     }
 
     static function acompanhar($cpf, $id)
@@ -69,9 +75,14 @@ class Maanaim
 
     static function getEventoPorId($id)
     {
-        $bd = new Bdeventos();
-        self::$evento = $bd->selectById($id);
-        self::incluirMidiasEvento(self::$evento);
+        // Usa listarEvento que já funciona corretamente
+        self::$evento = self::listarEvento($id);
+        
+        // Garante que retorna um array válido
+        if (!is_array(self::$evento) || empty(self::$evento)) {
+            self::$evento = [];
+        }
+        
         return self::$evento;
     }
 
@@ -537,8 +548,13 @@ class Maanaim
         return $eventos;
     }
 
-    static function incluirMidiasEvento(&$evento)
+    static function incluirMidiasEvento(&$evento = [])
     {
+        // Verifica se $evento é um array válido
+        if (!is_array($evento) || empty($evento)) {
+            return;
+        }
+
         $bdMidias = new BdMidias();
 
         $evento["url_midia_banner"] = '';
@@ -547,24 +563,32 @@ class Maanaim
         $evento["url_midia_03"] = '';
 
         // Obtém o caminho das imagens de cada evento.
-        $r = $bdMidias->selectById($evento['id_midia_banner']);
-        if (isset($r['path'])) {
-            $evento["url_midia_banner"] = $r['path'];
+        if (isset($evento['id_midia_banner']) && !empty($evento['id_midia_banner'])) {
+            $r = $bdMidias->selectById($evento['id_midia_banner']);
+            if (isset($r['path'])) {
+                $evento["url_midia_banner"] = $r['path'];
+            }
         }
 
-        $r = $bdMidias->selectById($evento['id_midia_01']);
-        if (isset($r['path'])) {
-            $evento["url_midia_01"] = $r['path'];
+        if (isset($evento['id_midia_01']) && !empty($evento['id_midia_01'])) {
+            $r = $bdMidias->selectById($evento['id_midia_01']);
+            if (isset($r['path'])) {
+                $evento["url_midia_01"] = $r['path'];
+            }
         }
 
-        $r = $bdMidias->selectById($evento['id_midia_02']);
-        if (isset($r['path'])) {
-            $evento["url_midia_02"] = $r['path'];
+        if (isset($evento['id_midia_02']) && !empty($evento['id_midia_02'])) {
+            $r = $bdMidias->selectById($evento['id_midia_02']);
+            if (isset($r['path'])) {
+                $evento["url_midia_02"] = $r['path'];
+            }
         }
 
-        $r = $bdMidias->selectById($evento['id_midia_03']);
-        if (isset($r['path'])) {
-            $evento["url_midia_03"] = $r['path'];
+        if (isset($evento['id_midia_03']) && !empty($evento['id_midia_03'])) {
+            $r = $bdMidias->selectById($evento['id_midia_03']);
+            if (isset($r['path'])) {
+                $evento["url_midia_03"] = $r['path'];
+            }
         }
     }
 

@@ -1,0 +1,271 @@
+<html>
+
+<head>
+  <style>
+    @page {
+      margin: 150px 50px 100px 50px;
+      font-size: 9pt;
+    }
+
+    header {
+      position: fixed;
+      top: -100px;
+      left: 0px;
+      right: 0px;
+      height: 150px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: -60px;
+      left: 0px;
+      right: 0px;
+      height: 50px;
+    }
+
+    .quebraPagina {
+      page-break-after: always;
+    }
+
+    .espacamento {
+      margin-left: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .quarto-titulo {
+      font-size: 16pt;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p:last-child {
+      page-break-after: never;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div style="position: absolute; top: 0px; left: 0px;">
+      <h1>
+        Evento: {{evento.titulo_evento}}
+      </h1>
+      <div style="text-align: justify; width: 100%;">
+        <div style="text-align: center;">
+          <h1>RELAÇÃO DE INSCRITOS POR QUARTO</h1>
+        </div>
+      </div>
+    </div>
+    <center>
+      {% if logo %}
+      <img src="{{logo}}" style="width: 150px;">
+      {% endif %}
+    </center>
+  </header>
+  <footer>
+    <center>
+      Acampamento Maanaim de Machado / MG
+    </center>
+  </footer>
+  <main>
+
+    <div style="text-align: justify;">
+
+      <p><br></p>
+
+      {# Seção Masculino #}
+      {% if inscricoesMasculinasPorQuarto is defined and inscricoesMasculinasPorQuarto|length > 0 %}
+
+
+      {% for quarto, inscricoes in inscricoesMasculinasPorQuarto %}
+      <div style="text-align: center; margin-top: 30px;">
+        <h2>MASCULINO</h2>
+      </div>
+      <div class="quebraPagina">
+        <div class="quarto-titulo">QUARTO: {{quarto}}</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 25%;">Nome</th>
+              <th style="width: 12%;">Telefone</th>
+              <th style="width: 18%;">Cidade</th>
+              <th style="width: 12%;">CPF</th>
+              <th style="width: 10%;">Data Nascimento</th>
+              <th style="width: 10%;">Idade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inscricao in inscricoes %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{inscricao.id}}</td>
+              <td>{{inscricao.nome}}</td>
+              <td>{{inscricao.telefone}}</td>
+              <td>{{inscricao.endCidade}}</td>
+              <td>{{inscricao.cpf}}</td>
+              <td>{% if inscricao.dtNascimento %}{{inscricao.dtNascimento|date("d/m/Y")}}{% else %}-{% endif %}</td>
+              <td>{{inscricao.idade ?? '-'}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <p style="margin-top: 20px;"><b>Total de inscritos neste quarto: {{inscricoes|length}}</b></p>
+      </div>
+      {% endfor %}
+
+      {% if inscricoesMasculinasSemQuarto is defined and inscricoesMasculinasSemQuarto|length > 0 %}
+      <div class="quebraPagina">
+        <div class="quarto-titulo">LISTA SEM QUARTO - MASCULINO</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 25%;">Nome</th>
+              <th style="width: 12%;">Telefone</th>
+              <th style="width: 18%;">Cidade</th>
+              <th style="width: 12%;">CPF</th>
+              <th style="width: 10%;">Data Nascimento</th>
+              <th style="width: 10%;">Idade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inscricao in inscricoesMasculinasSemQuarto %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{inscricao.id}}</td>
+              <td>{{inscricao.nome}}</td>
+              <td>{{inscricao.telefone}}</td>
+              <td>{{inscricao.endCidade}}</td>
+              <td>{{inscricao.cpf}}</td>
+              <td>{% if inscricao.dtNascimento %}{{inscricao.dtNascimento|date("d/m/Y")}}{% else %}-{% endif %}</td>
+              <td>{{inscricao.idade ?? '-'}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <p style="margin-top: 20px;"><b>Total de inscritos sem quarto: {{inscricoesMasculinasSemQuarto|length}}</b></p>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      {# Seção Feminino #}
+      {% if inscricoesFemininasPorQuarto is defined and inscricoesFemininasPorQuarto|length > 0 %}
+
+
+      {% for quarto, inscricoes in inscricoesFemininasPorQuarto %}
+      <div style="text-align: center; margin-top: 30px;">
+        <h2>FEMININO</h2>
+      </div>
+      <div class="quebraPagina">
+        <div class="quarto-titulo">QUARTO: {{quarto}}</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 25%;">Nome</th>
+              <th style="width: 12%;">Telefone</th>
+              <th style="width: 18%;">Cidade</th>
+              <th style="width: 12%;">CPF</th>
+              <th style="width: 10%;">Data Nascimento</th>
+              <th style="width: 10%;">Idade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inscricao in inscricoes %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{inscricao.id}}</td>
+              <td>{{inscricao.nome}}</td>
+              <td>{{inscricao.telefone}}</td>
+              <td>{{inscricao.endCidade}}</td>
+              <td>{{inscricao.cpf}}</td>
+              <td>{% if inscricao.dtNascimento %}{{inscricao.dtNascimento|date("d/m/Y")}}{% else %}-{% endif %}</td>
+              <td>{{inscricao.idade ?? '-'}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <p style="margin-top: 20px;"><b>Total de inscritos neste quarto: {{inscricoes|length}}</b></p>
+      </div>
+      {% endfor %}
+
+      {% if inscricoesFemininasSemQuarto is defined and inscricoesFemininasSemQuarto|length > 0 %}
+      <div class="quebraPagina">
+        <div class="quarto-titulo">LISTA SEM QUARTO - FEMININO</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 25%;">Nome</th>
+              <th style="width: 12%;">Telefone</th>
+              <th style="width: 18%;">Cidade</th>
+              <th style="width: 12%;">CPF</th>
+              <th style="width: 10%;">Data Nascimento</th>
+              <th style="width: 10%;">Idade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inscricao in inscricoesFemininasSemQuarto %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{inscricao.id}}</td>
+              <td>{{inscricao.nome}}</td>
+              <td>{{inscricao.telefone}}</td>
+              <td>{{inscricao.endCidade}}</td>
+              <td>{{inscricao.cpf}}</td>
+              <td>{% if inscricao.dtNascimento %}{{inscricao.dtNascimento|date("d/m/Y")}}{% else %}-{% endif %}</td>
+              <td>{{inscricao.idade ?? '-'}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <p style="margin-top: 20px;"><b>Total de inscritos sem quarto: {{inscricoesFemininasSemQuarto|length}}</b></p>
+      </div>
+      {% endif %}
+      {% endif %}
+
+    </div>
+
+  </main>
+
+  {# Script para exibir o número de páginas. #}
+  <script type='text/php'>
+    if (isset($pdf)) 
+    {               
+        $pdf->page_text(60, $pdf->get_height() - 50, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 12, array(0,0,0));
+    }
+</script>
+</body>
+
+</html>

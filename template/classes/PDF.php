@@ -91,15 +91,10 @@ class PDF
     {
         self::htmlToPdf($html);
 
-        // Retorna o conteúdo do Arquivo.
+        // Retorna o conteúdo binário do PDF diretamente
         $pdf_gen = self::$domPDF->output();
 
-        // Transforma o Arquivo em base64.
-        $pdfBase64 = base64_encode($pdf_gen);
-
-        $arquivo = file_get_contents('data:application/pdf;charset=utf-8;base64, ' . $pdfBase64);
-
-        return $arquivo;
+        return $pdf_gen;
     }
 
 	/**
