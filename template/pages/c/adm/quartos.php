@@ -44,6 +44,11 @@ class quartos extends EndPoint
 			'session' => 1,
 			// Caminho para página de login.
 			'loginPage' => "login/", // Page login dentro do modelo.
+			
+			// IDs que tem permissão TOTAL a esta controller. Usar apenas para teste.
+			'ids'            => [
+			    2, // Login ID: 2.
+			],
 		];
 
 		// Configuração personalizada do endpoins.

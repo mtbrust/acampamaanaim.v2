@@ -150,6 +150,9 @@ class montar extends EndPoint
 			case 'cria_permissoes_outros':
 				$this->cria_permissoes_outros();
 				break;
+			case 'realiza_updates':
+				$this->realiza_updates();
+				break;
 			case 'teste_maanaim':
 				self::$params['msg'] = 'Teste Classe Maanaim';
 				break;
@@ -228,7 +231,7 @@ class montar extends EndPoint
 						"f-desc_tipo_pagamento": "Pagamento via PIX.",
 						"f-desc_ingresso": "Este é um ingresso promocional.",
 						"f-desc_cuidados": "Confira os links e os destinatários para não cair em golpes.",
-						"f-desc_orientacao": "Este ingresso tem uma validade. Após o vencimento deste ingresso, sua inscrição será cancelada. Este ingresso tem um valor, é necessário realizar o pagamento integral deste valor, para validar sua inscrição. Após realizar o pagamento, é necessário enviar o comprovante para o whatsapp (35 9 9963-5624)."
+						"f-desc_orientacao": "Este ingresso tem uma validade. Após o vencimento deste ingresso, sua inscrição será cancelada. Este ingresso tem um valor, é necessário realizar o pagamento integral deste valor, para validar sua inscrição. Após realizar o pagamento, é necessário enviar o comprovante para o whatsapp (35 9 8863-9702)."
 						}', true);
 
 						$id[] = Maanaim::adicionarIngresso($postIngresso);
@@ -312,6 +315,13 @@ class montar extends EndPoint
 		self::$params['msg'] = __FUNCTION__;
 		MaanaimCarga::criarPermissoesOutros();
 		self::$params['msg'] = "Criação dos usuários e permissões realizada com sucesso.";
+	}
+
+	private function realiza_updates()
+	{
+		self::$params['msg'] = __FUNCTION__;
+		MaanaimCarga::realizaUpdates();
+		self::$params['msg'] = "Updates realizadas com sucesso.";
 	}
 
 	private function deletar_tabelas()
