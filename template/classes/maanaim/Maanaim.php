@@ -34,13 +34,20 @@ class Maanaim
     static function listarInscricoes($idEvento, $options = [])
     {
         $bdInscricoes = new BdInscricoes();
+        $select = '*';
         $where = 'idEvento = ' . $idEvento;
+        $groupBy = '';
 
         if (isset($options['status'])) {
             $where .= ' and status = "' . $options['status'] . '"';
         }
 
-        $inscricoes = $bdInscricoes->select('*', $where, null, null, null, 1000);
+        if (isset($options['quartos'])) {
+            $select = 'id, nome, sexo, quarto, telefone, endCidade';
+            $groupBy .= ' id, sexo, quarto, endCidade, nome';
+        }
+
+        $inscricoes = $bdInscricoes->select($select, $where, null, null, $groupBy, 1000);
         return $inscricoes;
     }
 
@@ -712,6 +719,13 @@ class Maanaim
     static function editarCheckIn($id, $dados)
     {
         $bdInscricao = new BdInscricoes();
+        return $bdInscricao->update($id, $dados);
+    }
+
+    static function editarQuarto($id, $quarto)
+    {
+        $bdInscricao = new BdInscricoes();
+        $dados = ['quarto' => $quarto];
         return $bdInscricao->update($id, $dados);
     }
 

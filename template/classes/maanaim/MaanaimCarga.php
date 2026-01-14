@@ -231,16 +231,65 @@ class MaanaimCarga
 
 	static function realizaUpdates()
 	{
-		// Atualizo a senha do usuário 2 e 1
-		$bdLogins = new BdLogins();
-		$bdLogins->update(3, [
-			'senha' => hash('sha256', 'tito.rute'), 
-			'fullName'  => 'Fellipe Conti',
-			'firstName' => 'Fellipe',
-			'lastName'  => 'Conti',
-			'userName' => 'fellipe.conti',
-			'email'    => 'fellipe.conti@acampamaanaim.com.br',
-		]);
+		// Instancia da classe de menus
+		$bdLoginsGroupsMenu = new BdLoginsGroupsMenu();
+		
+		// Menu baseado no login 2, adicionando a página Quartos
+		$menuGroup = [
+			'icon' => '',
+			'title' => 'Administradores',
+			'type' => '',
+			'submenu' => [
+				[
+					'title' => 'DashBoard',
+					'url_relative' => 'adm/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Eventos',
+					'url_relative' => 'adm/eventos/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Ingressos',
+					'url_relative' => 'adm/ingressos/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Inscrições',
+					'url_relative' => 'adm/inscricoes/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Pessoas',
+					'url_relative' => 'adm/pessoas/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Check-In',
+					'url_relative' => 'adm/checkin/',
+					'icon' => '',
+					'type' => '',
+				],
+				[
+					'title' => 'Quartos',
+					'url_relative' => 'adm/quartos/',
+					'icon' => '',
+					'type' => '',
+				],
+			]
+		];
+		
+		// Insere o menu para o grupo 1
+		$bdLoginsGroupsMenu->insert(['idGroup' => 1, 'menu' => json_encode($menuGroup)]);
+		
+		// Adiciona permissões para o grupo 1 (se necessário)
+		// As permissões podem ser adicionadas através de BdPermissions se houver método para grupos
 	}
 
 	static function fakeInscricao()

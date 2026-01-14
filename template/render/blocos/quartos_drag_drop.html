@@ -1,0 +1,552 @@
+
+<style>
+    .kanban {
+        display: flex;
+        justify-content: center;
+        min-height: 400px;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .column-container {
+        position: relative;
+    }
+
+    .column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .column-header h3 {
+        margin: 0;
+    }
+
+    .btn-collapse {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .btn-collapse:hover {
+        background-color: #0056b3;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        min-width: 200px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+    .column.collapsed {
+        min-height: 0;
+        padding: 10px 0;
+    }
+
+    .column.collapsed .item {
+        display: none;
+    }
+
+    .item {
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .dragging {
+        opacity: 0.5;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .card-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .card-header h5 {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .form-label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="container">
+    <!-- Seção Masculino -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2>Masculino</h2>
+        </div>
+        <div class="col-9">
+            <div class="row">
+                {% if inscricoesMasculinasPorQuarto is defined %}
+                    {% for quarto, inscricoes in inscricoesMasculinasPorQuarto %}
+                        <div class="col-3 column-container">
+                            <div class="column-header">
+                                <h3>{{ quarto }} <span class="badge bg-secondary">({{ inscricoes|length }})</span></h3>
+                                <button class="btn-collapse" onclick="toggleColumn(this)" data-column="{{ quarto }}-masculino">−</button>
+                            </div>
+                            <div class="column" id="column-{{ quarto }}-masculino" data-quarto="{{ quarto }}">
+                                {% for inscricao in inscricoes %}
+                                    <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                        {{ inscricao.nome }}
+                                        <br>
+                                        <small>{{ inscricao.telefone }}</small>
+                                        <br>
+                                        <small>{{ inscricao.endCidade }}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-3">
+            
+            <!-- Formulário para adicionar novo quarto masculino -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Adicionar Quarto</h5>
+                </div>
+                <div class="card-body">
+                    <form id="form-add-quarto-masculino" onsubmit="adicionarQuarto(event, 'masculino')">
+                        <div class="mb-3">
+                            <label for="nome-quarto-masculino" class="form-label">Nome do Quarto</label>
+                            <input type="text" class="form-control" id="nome-quarto-masculino" name="nome-quarto" placeholder="Ex: DM-5" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Adicionar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="column-container mb-3">
+                <div class="column-header">
+                    <h3>Lista Sem Quarto <span class="badge bg-secondary">({{ inscricoesMasculinasSemQuarto|length }})</span></h3>
+                    <button class="btn-collapse" onclick="toggleColumn(this)" data-column="sem-quarto-masculino">−</button>
+                </div>
+                <div class="column" id="column-sem-quarto-masculino" data-quarto="">
+                    {% if inscricoesMasculinasSemQuarto is defined %}
+                        {% for inscricao in inscricoesMasculinasSemQuarto %}
+                            <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                {{ inscricao.nome }}
+                                <br>
+                                <small>{{ inscricao.telefone }}</small>
+                                <br>
+                                <small>{{ inscricao.endCidade }}</small>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção Feminino -->
+    <div class="row">
+        <div class="col-12">
+            <h2>Feminino</h2>
+        </div>
+        <div class="col-9">
+            <div class="row">
+                {% if inscricoesFemininasPorQuarto is defined %}
+                    {% for quarto, inscricoes in inscricoesFemininasPorQuarto %}
+                        <div class="col-3 column-container">
+                            <div class="column-header">
+                                <h3>{{ quarto }} <span class="badge bg-secondary">({{ inscricoes|length }})</span></h3>
+                                <button class="btn-collapse" onclick="toggleColumn(this)" data-column="{{ quarto }}-feminino">−</button>
+                            </div>
+                            <div class="column" id="column-{{ quarto }}-feminino" data-quarto="{{ quarto }}">
+                                {% for inscricao in inscricoes %}
+                                    <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                        {{ inscricao.nome }}
+                                        <br>
+                                        <small>{{ inscricao.telefone }}</small>
+                                        <br>
+                                        <small>{{ inscricao.endCidade }}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-3">
+
+            <!-- Formulário para adicionar novo quarto feminino -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Adicionar Quarto</h5>
+                </div>
+                <div class="card-body">
+                    <form id="form-add-quarto-feminino" onsubmit="adicionarQuarto(event, 'feminino')">
+                        <div class="mb-3">
+                            <label for="nome-quarto-feminino" class="form-label">Nome do Quarto</label>
+                            <input type="text" class="form-control" id="nome-quarto-feminino" name="nome-quarto" placeholder="Ex: DF-5" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Adicionar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="column-container mb-3">
+                <div class="column-header">
+                    <h3>Lista Sem Quarto <span class="badge bg-secondary">({{ inscricoesFemininasSemQuarto|length }})</span></h3>
+                    <button class="btn-collapse" onclick="toggleColumn(this)" data-column="sem-quarto-feminino">−</button>
+                </div>
+                <div class="column" id="column-sem-quarto-feminino" data-quarto="">
+                    {% if inscricoesFemininasSemQuarto is defined %}
+                        {% for inscricao in inscricoesFemininasSemQuarto %}
+                            <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                {{ inscricao.nome }}
+                                <br>
+                                <small>{{ inscricao.telefone }}</small>
+                                <br>
+                                <small>{{ inscricao.endCidade }}</small>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+
+    const columns = document.querySelectorAll(".column");
+    let draggedItem = null;
+    let draggedItemId = null;
+
+    document.addEventListener("dragstart", (e) => {
+        if (e.target.classList.contains("item")) {
+            e.target.classList.add("dragging");
+            draggedItem = e.target;
+            draggedItemId = e.target.getAttribute("data-id");
+            // Atualiza a contagem da coluna de origem
+            atualizarContagem();
+        }
+    });
+
+    document.addEventListener("dragend", (e) => {
+        if (e.target.classList.contains("item")) {
+            e.target.classList.remove("dragging");
+            draggedItem = null;
+            draggedItemId = null;
+            // Atualiza a contagem após finalizar o arrasto
+            setTimeout(() => {
+                atualizarContagem();
+            }, 100);
+        }
+    });
+
+    columns.forEach((column) => {
+        column.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            const dragging = document.querySelector(".dragging");
+            if (!dragging) return;
+
+            const applyAfter = getNewPosition(column, e.clientY);
+
+            if (applyAfter) {
+                applyAfter.insertAdjacentElement("afterend", dragging);
+            } else {
+                column.prepend(dragging);
+            }
+        });
+
+        column.addEventListener("drop", (e) => {
+            e.preventDefault();
+            if (draggedItem && draggedItemId) {
+                const quarto = column.getAttribute("data-quarto");
+                const quartoValue = quarto === '' || quarto === null ? null : quarto;
+                atualizarQuarto(draggedItemId, quartoValue);
+                // Atualiza a contagem após mover o item (com pequeno delay para garantir que o DOM foi atualizado)
+                setTimeout(() => {
+                    atualizarContagem();
+                }, 50);
+            }
+        });
+    });
+
+    function getNewPosition(column, posY) {
+        const cards = column.querySelectorAll(".item:not(.dragging)");
+        let result;
+
+        for (let refer_card of cards) {
+            const box = refer_card.getBoundingClientRect();
+            const boxCenterY = box.y + box.height / 2;
+
+            if (posY >= boxCenterY) result = refer_card;
+        }
+
+        return result;
+    }
+
+    function toggleColumn(button) {
+        const columnId = button.getAttribute('data-column');
+        const column = document.getElementById('column-' + columnId);
+        
+        if (column.classList.contains('collapsed')) {
+            column.classList.remove('collapsed');
+            button.textContent = '−';
+        } else {
+            column.classList.add('collapsed');
+            button.textContent = '+';
+        }
+    }
+
+    // Atualiza a contagem de inscritos em cada quarto
+    function atualizarContagem() {
+        const columns = document.querySelectorAll(".column");
+        
+        columns.forEach((column) => {
+            // Conta apenas os itens que não estão sendo arrastados
+            const items = column.querySelectorAll(".item:not(.dragging)");
+            const count = items.length;
+            
+            // Encontra o header correspondente
+            const container = column.closest(".column-container");
+            if (container) {
+                const header = container.querySelector(".column-header h3");
+                if (header) {
+                    // Procura pelo badge existente
+                    let existingBadge = header.querySelector(".badge");
+                    
+                    if (!existingBadge) {
+                        // Se não existe badge, cria um novo
+                        existingBadge = document.createElement("span");
+                        existingBadge.className = "badge bg-secondary";
+                        existingBadge.style.marginLeft = "5px";
+                        
+                        // Adiciona um espaço antes do badge se necessário
+                        const lastChild = header.lastChild;
+                        if (lastChild && lastChild.nodeType === Node.TEXT_NODE) {
+                            if (!lastChild.textContent.endsWith(' ')) {
+                                lastChild.textContent += ' ';
+                            }
+                        } else {
+                            header.appendChild(document.createTextNode(' '));
+                        }
+                        
+                        header.appendChild(existingBadge);
+                    }
+                    
+                    // Atualiza o texto do badge
+                    existingBadge.textContent = `(${count})`;
+                }
+            }
+        });
+    }
+
+    // Atualiza a contagem inicial ao carregar a página
+    document.addEventListener("DOMContentLoaded", function() {
+        atualizarContagem();
+    });
+
+    // Adiciona um novo quarto dinamicamente
+    function adicionarQuarto(event, sexo) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const input = form.querySelector('input[name="nome-quarto"]');
+        const nomeQuarto = input.value.trim();
+        
+        if (!nomeQuarto) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atenção',
+                text: 'Por favor, informe o nome do quarto.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+            return;
+        }
+        
+        // Verifica se o quarto já existe
+        const existingColumn = document.getElementById(`column-${nomeQuarto}-${sexo}`);
+        if (existingColumn) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atenção',
+                text: 'Este quarto já existe.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+            return;
+        }
+        
+        // Encontra a área de quartos da seção correspondente
+        const sectionRow = sexo === 'masculino' 
+            ? document.querySelector('.row.mb-5 .col-9 .row')
+            : document.querySelector('.row:not(.mb-5) .col-9 .row');
+        
+        if (!sectionRow) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Não foi possível encontrar a seção de quartos.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+            return;
+        }
+        
+        // Cria a nova coluna de quarto
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-3 column-container';
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'column-header';
+        
+        const h3 = document.createElement('h3');
+        h3.innerHTML = `${nomeQuarto} <span class="badge bg-secondary">(0)</span>`;
+        
+        const btnCollapse = document.createElement('button');
+        btnCollapse.className = 'btn-collapse';
+        btnCollapse.setAttribute('onclick', `toggleColumn(this)`);
+        btnCollapse.setAttribute('data-column', `${nomeQuarto}-${sexo}`);
+        btnCollapse.textContent = '−';
+        
+        headerDiv.appendChild(h3);
+        headerDiv.appendChild(btnCollapse);
+        
+        const columnDiv = document.createElement('div');
+        columnDiv.className = 'column';
+        columnDiv.id = `column-${nomeQuarto}-${sexo}`;
+        columnDiv.setAttribute('data-quarto', nomeQuarto);
+        
+        // Adiciona eventos de drag and drop à nova coluna
+        columnDiv.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            const dragging = document.querySelector(".dragging");
+            if (!dragging) return;
+
+            const applyAfter = getNewPosition(columnDiv, e.clientY);
+
+            if (applyAfter) {
+                applyAfter.insertAdjacentElement("afterend", dragging);
+            } else {
+                columnDiv.prepend(dragging);
+            }
+        });
+
+        columnDiv.addEventListener("drop", (e) => {
+            e.preventDefault();
+            if (draggedItem && draggedItemId) {
+                const quarto = columnDiv.getAttribute("data-quarto");
+                const quartoValue = quarto === '' || quarto === null ? null : quarto;
+                atualizarQuarto(draggedItemId, quartoValue);
+                setTimeout(() => {
+                    atualizarContagem();
+                }, 50);
+            }
+        });
+        
+        colDiv.appendChild(headerDiv);
+        colDiv.appendChild(columnDiv);
+        
+        // Adiciona a nova coluna antes da última coluna (ou no final)
+        sectionRow.appendChild(colDiv);
+        
+        // Atualiza a lista de colunas para drag and drop
+        // Não precisa fazer nada aqui, pois os event listeners já foram adicionados acima
+        
+        // Limpa o formulário
+        input.value = '';
+        
+        // Notificação de sucesso
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso',
+            text: `Quarto "${nomeQuarto}" adicionado com sucesso!`,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+        });
+        
+        // Atualiza a contagem
+        atualizarContagem();
+    }
+
+    // Atualiza o quarto do inscrito.
+    function atualizarQuarto(id, valor) {
+        // Pega o formulário e envia.
+        const dados = new FormData();
+        dados.append('f-id', id); // ID Inscrito
+        dados.append('f-value', valor === null ? '' : valor); // Valor do quarto (vazio se null)
+        
+        const url = '{{base.url}}adm/quartos/api/quarto/';
+        
+        ajaxDados(url, dados, function (ret) {
+            // Verifica se teve retorno ok.
+            if (!ret.error) {
+                // Notificação.
+                Swal.fire({
+                    icon: "success",
+                    title: "Sucesso.",
+                    text: ret.msg,
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+            } else {
+                // Notificação.
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro.',
+                    text: ret.msg,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            }
+        }, 'POST', false);
+    }
+
+</script>

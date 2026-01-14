@@ -68,11 +68,6 @@ class montar extends EndPoint
 			// Caminho para página de login.
 			'loginPage' => "login/", // Page login dentro do modelo.
 
-			// Grupos que tem permissão TOTAL a esta controller. Usar apenas para teste.
-			'groups'            => [
-			    1, // Grupo ID: 1.
-			],
-
 			// IDs que tem permissão TOTAL a esta controller. Usar apenas para teste.
 			'ids'            => [
 			    2, // Login ID: 2.
