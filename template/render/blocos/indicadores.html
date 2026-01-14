@@ -1,11 +1,13 @@
 <div class="container">
 
-  {# STATUS #}
-  <div class="row">
+  {# TÓPICO 1: STATUS DA INSCRIÇÃO #}
+  <div class="row mt-5 mb-4">
+    <div class="col-12">
+      <h4 class="mb-3"><i class="fas fa-chart-bar"></i> Status da Inscrição</h4>
+    </div>
     {% for key, status in estatisticasEvento.status %}
-
     <div class="col">
-      <div id='grafico_{{id}}' class="{{col}} mt-3" style="height: auto;">
+      <div id='grafico_status_{{key}}' class="{{col}} mt-3" style="height: auto;">
         <div class="info-box" style="height: 100%;">
           <span class="info-box-icon bg-{{tipo}}">
             {% if status.status == 'Aguardando Pagamento' %}
@@ -24,22 +26,20 @@
           </div>
 
           <!-- Ações -->
-          <a href="{{base.url}}adm/inscricoes/listar/{{evento.id}}/?status={{status.status}}" data-toggle="modal" data-target="#modalGraficoDetalhes_{{id}}" class="text-success" style="position: absolute; top: -5px; right: 25px;"> <i class="fas fa-search"></i> </a>
+          <a href="{{base.url}}adm/inscricoes/listar/{{evento.id}}/?status={{status.status}}" data-toggle="modal" data-target="#modalGraficoDetalhes_status_{{key}}" class="text-success" style="position: absolute; top: -5px; right: 25px;"> <i class="fas fa-search"></i> </a>
           <a href="{{base.url}}adm/checkin/api/relatorio/{{evento.id}}/?status={{status.status}}" class="text-success" target="_blank" download="{{evento.id}}-{{evento.nome_evento}}-{{status.status}}.csv" style="position: absolute; top: -5px; right: 5px;"><i class="fas fa-download"></i></a>
           {% if informacao %}
-          <a href="#" data-toggle="modal" data-target="#modalGraficoInfo_{{id}}" class="text-{{tipo}}" style="position: absolute; top: -5px; right: 5px;"> <i class="fas fa-info-circle"></i> </a>
+          <a href="#" data-toggle="modal" data-target="#modalGraficoInfo_status_{{key}}" class="text-{{tipo}}" style="position: absolute; top: -5px; right: 5px;"> <i class="fas fa-info-circle"></i> </a>
           {% endif %}
         </div>
       </div>
 
-
-
       <!-- Modal Informação -->
-      <div class="modal fade" id="modalGraficoDetalhes_{{id}}" tabindex="-1" aria-labelledby="modalGraficoDetalhes_{{id}}Label" aria-hidden="true">
+      <div class="modal fade" id="modalGraficoDetalhes_status_{{key}}" tabindex="-1" aria-labelledby="modalGraficoDetalhes_status_{{key}}Label" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="modalGraficoDetalhes_{{id}}Label">Detalhes</h5>
+              <h5 class="modal-title" id="modalGraficoDetalhes_status_{{key}}Label">Detalhes</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -51,13 +51,12 @@
         </div>
       </div>
 
-
       <!-- Modal Informação -->
-      <div class="modal fade" id="modalGraficoInfo_{{id}}" tabindex="-1" aria-labelledby="modalGraficoInfo_{{id}}Label" aria-hidden="true">
+      <div class="modal fade" id="modalGraficoInfo_status_{{key}}" tabindex="-1" aria-labelledby="modalGraficoInfo_status_{{key}}Label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="modalGraficoInfo_{{id}}Label">Informações</h5>
+              <h5 class="modal-title" id="modalGraficoInfo_status_{{key}}Label">Informações</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -68,9 +67,113 @@
           </div>
         </div>
       </div>
-
     </div>
-
     {% endfor %}
   </div>
+
+  {# TÓPICO 2: SEXO DOS INSCRITOS #}
+  <div class="row mt-5 mb-4">
+    <div class="col-12">
+      <h4 class="mb-3"><i class="fas fa-venus-mars"></i> Sexo dos Inscritos</h4>
+    </div>
+    {% for estatistica in estatisticasSexo %}
+    <div class="col">
+      <div class="info-box mt-3" style="height: 100%;">
+        <span class="info-box-icon bg-info">
+          {% if estatistica.sexo == 'Masculino' %}
+          <i class="fas fa-mars"></i>
+          {% elseif estatistica.sexo == 'Feminino' %}
+          <i class="fas fa-venus"></i>
+          {% else %}
+          <i class="fas fa-question"></i>
+          {% endif %}
+        </span>
+
+        <div class="info-box-content">
+          <h6 class="info-box-text m-0">{{estatistica.sexo}}</h6>
+          <small class="text-secondary" style="line-height: 12px;">Inscritos confirmados</small>
+          <h4 class="info-box-number m-0">{{estatistica.qtd}}</h4>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# TÓPICO 3: QUARTOS #}
+  <div class="row mt-5 mb-4">
+    <div class="col-12">
+      <h4 class="mb-3"><i class="fas fa-bed"></i> Quartos</h4>
+    </div>
+    
+    {# Subtópico: Masculino #}
+    <div class="col-12 mb-3">
+      <h5 class="mb-2"><i class="fas fa-mars"></i> Masculino</h5>
+      <div class="row">
+        {% for quarto, qtd in quartosMasculino %}
+        <div class="col-md-3 col-sm-6">
+          <div class="info-box mt-3">
+            <span class="info-box-icon bg-primary">
+              <i class="fas fa-door-open"></i>
+            </span>
+            <div class="info-box-content">
+              <h6 class="info-box-text m-0">Quarto: {{quarto}}</h6>
+              <small class="text-secondary" style="line-height: 12px;">Inscritos</small>
+              <h4 class="info-box-number m-0">{{qtd}}</h4>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% if semQuartoMasculino > 0 %}
+        <div class="col-md-3 col-sm-6">
+          <div class="info-box mt-3">
+            <span class="info-box-icon bg-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            <div class="info-box-content">
+              <h6 class="info-box-text m-0">Sem Quarto</h6>
+              <small class="text-secondary" style="line-height: 12px;">Aguardando alocação</small>
+              <h4 class="info-box-number m-0">{{semQuartoMasculino}}</h4>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# Subtópico: Feminino #}
+    <div class="col-12 mb-3">
+      <h5 class="mb-2"><i class="fas fa-venus"></i> Feminino</h5>
+      <div class="row">
+        {% for quarto, qtd in quartosFeminino %}
+        <div class="col-md-3 col-sm-6">
+          <div class="info-box mt-3">
+            <span class="info-box-icon bg-danger">
+              <i class="fas fa-door-open"></i>
+            </span>
+            <div class="info-box-content">
+              <h6 class="info-box-text m-0">Quarto: {{quarto}}</h6>
+              <small class="text-secondary" style="line-height: 12px;">Inscritos</small>
+              <h4 class="info-box-number m-0">{{qtd}}</h4>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% if semQuartoFeminino > 0 %}
+        <div class="col-md-3 col-sm-6">
+          <div class="info-box mt-3">
+            <span class="info-box-icon bg-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            <div class="info-box-content">
+              <h6 class="info-box-text m-0">Sem Quarto</h6>
+              <small class="text-secondary" style="line-height: 12px;">Aguardando alocação</small>
+              <h4 class="info-box-number m-0">{{semQuartoFeminino}}</h4>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
 </div>

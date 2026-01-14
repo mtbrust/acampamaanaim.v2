@@ -9,6 +9,7 @@ use desv\classes\DevHelper;
 use desv\controllers\EndPoint;
 use desv\controllers\Render;
 use template\classes\maanaim\Maanaim;
+use template\classes\bds\BdInscricoes;
 
 /**
  * INDEX LOGIN
@@ -122,6 +123,50 @@ class index extends EndPoint
 			// self::$params['inscricoes'] = Maanaim::listarInscricoes($idEvento);
 			self::$params['estatisticasEvento'] = Maanaim::estatisticasEvento($idEvento);
 			self::$params['estatisticasEventoVagas'] = Maanaim::verificarVagas($idEvento);
+			
+			// Estatísticas por sexo
+			$bdInscricoes = new BdInscricoes();
+			$where = 'idEvento = ' . $idEvento . ' and status != "Cancelada"';
+			$estatisticasSexo = $bdInscricoes->select('sexo, count(*) as qtd', $where, null, null, 'sexo');
+			self::$params['estatisticasSexo'] = $estatisticasSexo ? $estatisticasSexo : [];
+			
+			// Estatísticas por quartos
+			$options = ['quartos' => true];
+			$inscricoes = Maanaim::listarInscricoes($idEvento, $options);
+			$quartosMasculino = [];
+			$quartosFeminino = [];
+			$semQuartoMasculino = 0;
+			$semQuartoFeminino = 0;
+			
+			foreach ($inscricoes as $inscricao) {
+				$sexo = strtolower($inscricao['sexo'] ?? '');
+				if (!empty($inscricao['quarto'])) {
+					$quarto = $inscricao['quarto'];
+					if ($sexo == 'masculino') {
+						if (!isset($quartosMasculino[$quarto])) {
+							$quartosMasculino[$quarto] = 0;
+						}
+						$quartosMasculino[$quarto]++;
+					} elseif ($sexo == 'feminino') {
+						if (!isset($quartosFeminino[$quarto])) {
+							$quartosFeminino[$quarto] = 0;
+						}
+						$quartosFeminino[$quarto]++;
+					}
+				} else {
+					if ($sexo == 'masculino') {
+						$semQuartoMasculino++;
+					} elseif ($sexo == 'feminino') {
+						$semQuartoFeminino++;
+					}
+				}
+			}
+			
+			self::$params['quartosMasculino'] = $quartosMasculino;
+			self::$params['quartosFeminino'] = $quartosFeminino;
+			self::$params['semQuartoMasculino'] = $semQuartoMasculino;
+			self::$params['semQuartoFeminino'] = $semQuartoFeminino;
+			
 			$html = Render::obj('blocos/indicadores.html', self::$params);
 			self::$params['html'] = $html;
 		}
