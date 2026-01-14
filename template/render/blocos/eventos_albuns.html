@@ -8,7 +8,11 @@
                 <div class="card-body">
                     <h5 class="card-title">{{evento.title}}</h5>
                     <p class="card-text">{{evento.descricao}}</p>
-                    <a href="{{base.url}}galeria/{{evento.id}}/" class="btn btn-primary">Abrir Albúm</a>
+                    {% if evento.link_album %}
+                    <a href="{{evento.link_album}}" class="btn btn-primary" target="_blank">Abrir Albúm</a>
+                    {% else %}
+                    <span class="btn btn-secondary disabled">Link não disponível</span>
+                    {% endif %}
                 </div>
             </div>
         </div>

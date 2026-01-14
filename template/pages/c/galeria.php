@@ -132,7 +132,8 @@ class galeria extends EndPoint
 					'banner' => $banner,
 					'id' => $evento['id'],
 					'title' => !empty($evento['titulo_evento']) ? $evento['titulo_evento'] : 'Evento',
-					'descricao' => $descricao
+					'descricao' => $descricao,
+					'link_album' => !empty($evento['link_album']) ? $evento['link_album'] : ''
 				];
 			}
 		}
