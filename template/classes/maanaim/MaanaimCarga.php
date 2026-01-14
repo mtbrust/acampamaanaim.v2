@@ -236,7 +236,7 @@ class MaanaimCarga
 		
 		// Deleta os menus existentes do grupo 1 antes de criar novos
 		$table = $bdLoginsGroupsMenu->fullTableName();
-		$sql = "DELETE FROM $table WHERE idGroup = 1";
+		$sql = "DELETE FROM $table";
 		$bdLoginsGroupsMenu->executeQuery($sql);
 		
 		// Menu baseado no login 2, adicionando a página Quartos
