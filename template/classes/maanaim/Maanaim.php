@@ -48,7 +48,7 @@ class Maanaim
                 $groupBy .= ' id, sexo, quarto, endCidade, nome, cpf, dtNascimento';
             } else {
                 $select = 'id, nome, sexo, quarto, telefone, endCidade';
-                $groupBy .= ' id, sexo, quarto, endCidade, nome';
+                $groupBy .= 'sexo, quarto, endCidade, nome';
             }
         }
 
