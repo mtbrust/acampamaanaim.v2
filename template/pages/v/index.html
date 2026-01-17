@@ -52,25 +52,25 @@ PRÓXIMO EVENTO
 
                     {# DIAS #}
                     <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
-                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <h1 class="data-regressiva-numero oswald text-light m-0" id="countdown-days">00</h1>
                         <span class="data-regressiva-info text-light">DIAS</span>
                     </div>
 
                     {# HORAS #}
                     <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
-                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <h1 class="data-regressiva-numero oswald text-light m-0" id="countdown-hours">00</h1>
                         <span class="data-regressiva-info text-light">HORAS</span>
                     </div>
 
                     {# MINUTOS #}
                     <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
-                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <h1 class="data-regressiva-numero oswald text-light m-0" id="countdown-minutes">00</h1>
                         <span class="data-regressiva-info text-light">MINUTOS</span>
                     </div>
 
                     {# SEGUNDOS #}
                     <div class="data-regressiva d-inline-block m-3 align-middle bg-vermelho p-1 rounded">
-                        <h1 class="data-regressiva-numero oswald text-light m-0">09</h1>
+                        <h1 class="data-regressiva-numero oswald text-light m-0" id="countdown-seconds">00</h1>
                         <span class="data-regressiva-info text-light">SEGUNDOS</span>
                     </div>
                 </div>
@@ -327,3 +327,49 @@ PERGUNTAS FREQUENTES
         </div>
     </div>
 </div>
+
+<script>
+    // Contagem regressiva para o próximo evento
+    function iniciarContagemRegressiva() {
+        {% if proximoEventoData is defined and proximoEventoData %}
+        var dataEvento = new Date('{{proximoEventoData}}').getTime();
+        
+        function atualizarContagem() {
+            var agora = new Date().getTime();
+            var diferenca = dataEvento - agora;
+            
+            if (diferenca < 0) {
+                // Evento já passou
+                document.getElementById('countdown-days').textContent = '00';
+                document.getElementById('countdown-hours').textContent = '00';
+                document.getElementById('countdown-minutes').textContent = '00';
+                document.getElementById('countdown-seconds').textContent = '00';
+                return;
+            }
+            
+            var dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            var horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            var segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+            
+            // Atualiza os valores com zero à esquerda
+            document.getElementById('countdown-days').textContent = String(dias).padStart(2, '0');
+            document.getElementById('countdown-hours').textContent = String(horas).padStart(2, '0');
+            document.getElementById('countdown-minutes').textContent = String(minutos).padStart(2, '0');
+            document.getElementById('countdown-seconds').textContent = String(segundos).padStart(2, '0');
+        }
+        
+        // Atualiza imediatamente
+        atualizarContagem();
+        
+        // Atualiza a cada segundo
+        setInterval(atualizarContagem, 1000);
+        {% else %}
+        // Se não houver data definida, mantém os valores padrão
+        console.log('Data do próximo evento não encontrada');
+        {% endif %}
+    }
+    
+    // Inicia a contagem quando a página carregar
+    document.addEventListener('DOMContentLoaded', iniciarContagemRegressiva);
+</script>

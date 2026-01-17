@@ -119,6 +119,18 @@ class index extends EndPoint
 		$params['eventos'] = Maanaim::listarEventos(['ativos' => 1]);
 		self::$params['htmlEventos'] = Render::obj('blocos/eventos_simples.html', $params);
 		self::$params['htmlAssine'] = Render::obj('blocos/form-assine-discipulado.html', $params);
+		
+		// Busca o próximo evento (futuro mais próximo)
+		$eventos = Maanaim::listarEventos(['ativos' => 1, 'futuros' => true]);
+		$proximoEvento = null;
+		if (!empty($eventos)) {
+			// Pega o primeiro evento futuro (já vem ordenado por data)
+			$proximoEvento = $eventos[0];
+			if (!empty($proximoEvento['dt_inicio_evento'])) {
+				self::$params['proximoEventoData'] = $proximoEvento['dt_inicio_evento'];
+			}
+		}
+		
 		self::$params['html'] = ""; // conteúdo html da página.
 	}
 }
