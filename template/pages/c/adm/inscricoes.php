@@ -99,10 +99,7 @@ class inscricoes extends EndPoint
 		// Sub menus da página.
 		$this->subMenu();
 
-		self::$params['html'] = "Dashboard";
-
-		// Formulário de inscrição.
-		self::$params['formInscricaoHtml'] = '';
+		$this->listar($params);
 	}
 
 	public function adicionar($params)

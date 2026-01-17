@@ -110,6 +110,41 @@
         </div>
     </div>
 
+    {# FILTROS #}
+    <div class="row mb-3">
+        <div class="col-12">
+            <h3>FILTROS</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Inscrição</td>
+                        <td>Sexo</td>
+                        <td>Nome</td>
+                        <td>Quarto</td>
+                        <td>Cidade</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="q-inscricao" id="q-inscricao" onkeyup="filtrar()"></td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="q-sexo-masculino" id="q-sexo-masculino" onclick="filtrar()">
+                                <label class="form-check-label" for="q-sexo-masculino">Masculino</label>
+                                <br>
+                                <input class="form-check-input" type="checkbox" name="q-sexo-feminino" id="q-sexo-feminino" onclick="filtrar()">
+                                <label class="form-check-label" for="q-sexo-feminino">Feminino</label>
+                            </div>
+                        </td>
+                        <td><input type="text" name="q-nome" id="q-nome" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                        <td><input type="text" name="q-quarto" id="q-quarto" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                        <td><input type="text" name="q-cidade" id="q-cidade" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Seção Masculino -->
     <div class="row mb-5">
         <div class="col-12">
@@ -126,7 +161,12 @@
                             </div>
                             <div class="column" id="column-{{ quarto }}-masculino" data-quarto="{{ quarto }}">
                                 {% for inscricao in inscricoes %}
-                                    <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                    <div class="item" draggable="true" 
+                                         data-id="{{ inscricao.id }}" 
+                                         data-sexo="M" 
+                                         data-nome="{{ inscricao.nome|upper }}" 
+                                         data-quarto="{{ quarto|upper }}" 
+                                         data-cidade="{{ inscricao.endCidade|default('')|upper }}">
                                         {{ inscricao.nome }}
                                         <br>
                                         <small>{{ inscricao.telefone }}</small>
@@ -166,7 +206,12 @@
                 <div class="column" id="column-sem-quarto-masculino" data-quarto="">
                     {% if inscricoesMasculinasSemQuarto is defined %}
                         {% for inscricao in inscricoesMasculinasSemQuarto %}
-                            <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                            <div class="item" draggable="true" 
+                                 data-id="{{ inscricao.id }}" 
+                                 data-sexo="M" 
+                                 data-nome="{{ inscricao.nome|upper }}" 
+                                 data-quarto="" 
+                                 data-cidade="{{ inscricao.endCidade|default('')|upper }}">
                                 {{ inscricao.nome }}
                                 <br>
                                 <small>{{ inscricao.telefone }}</small>
@@ -196,7 +241,12 @@
                             </div>
                             <div class="column" id="column-{{ quarto }}-feminino" data-quarto="{{ quarto }}">
                                 {% for inscricao in inscricoes %}
-                                    <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                                    <div class="item" draggable="true" 
+                                         data-id="{{ inscricao.id }}" 
+                                         data-sexo="F" 
+                                         data-nome="{{ inscricao.nome|upper }}" 
+                                         data-quarto="{{ quarto|upper }}" 
+                                         data-cidade="{{ inscricao.endCidade|default('')|upper }}">
                                         {{ inscricao.nome }}
                                         <br>
                                         <small>{{ inscricao.telefone }}</small>
@@ -235,7 +285,12 @@
                 <div class="column" id="column-sem-quarto-feminino" data-quarto="">
                     {% if inscricoesFemininasSemQuarto is defined %}
                         {% for inscricao in inscricoesFemininasSemQuarto %}
-                            <div class="item" draggable="true" data-id="{{ inscricao.id }}">
+                            <div class="item" draggable="true" 
+                                 data-id="{{ inscricao.id }}" 
+                                 data-sexo="F" 
+                                 data-nome="{{ inscricao.nome|upper }}" 
+                                 data-quarto="" 
+                                 data-cidade="{{ inscricao.endCidade|default('')|upper }}">
                                 {{ inscricao.nome }}
                                 <br>
                                 <small>{{ inscricao.telefone }}</small>
@@ -256,6 +311,86 @@
 
 
 <script>
+
+    // Filtro
+    function filtrar() {
+        // Guarda os valores da pesquisa e converte para maiúsculas (case-insensitive)
+        var id = $('#q-inscricao').val().trim();
+        var sexoMasculino = $('#q-sexo-masculino').is(':checked');
+        var sexoFeminino = $('#q-sexo-feminino').is(':checked');
+        var nome = $('#q-nome').val().trim().toUpperCase();
+        var quarto = $('#q-quarto').val().trim().toUpperCase();
+        var cidade = $('#q-cidade').val().trim().toUpperCase();
+
+        // Mostra todos os itens
+        $('.item').each(function (i) {
+            $(this).show();
+        });
+
+        // Filtra os itens
+        $('.item').each(function (i) {
+
+            // Filtra por ID - Inscrição (case-insensitive)
+            if (id) {
+                var itemId = String($(this).data("id") || '').trim();
+                var searchId = String(id).trim();
+                if (itemId.toLowerCase() !== searchId.toLowerCase()) {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por sexo
+            if (sexoMasculino || sexoFeminino) {
+                var itemSexo = String($(this).data("sexo") || '').toUpperCase();
+                if (sexoMasculino && itemSexo !== 'M') {
+                    $(this).hide();
+                    return;
+                }
+                if (sexoFeminino && itemSexo !== 'F') {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por nome (case-insensitive)
+            if (nome) {
+                var registro = String($(this).data("nome") || '').toUpperCase();
+                var pesquisa = nome.toUpperCase();
+                var match = pesquisa.split(" ").every(function (palavra) {
+                    if (!palavra) return true; // Ignora espaços vazios
+                    return registro.indexOf(palavra) !== -1;
+                });
+                if (!match) {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por Quarto (case-insensitive)
+            if (quarto) {
+                var quartoData = String($(this).data("quarto") || '').toUpperCase();
+                var searchQuarto = quarto.toUpperCase();
+                if (quartoData.indexOf(searchQuarto) === -1) {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por Cidade (case-insensitive)
+            if (cidade) {
+                var cidadeData = String($(this).data("cidade") || '').toUpperCase();
+                var searchCidade = cidade.toUpperCase();
+                if (cidadeData.indexOf(searchCidade) === -1) {
+                    $(this).hide();
+                    return;
+                }
+            }
+        });
+
+        // Atualiza a contagem após filtrar
+        atualizarContagem();
+    }
 
     const columns = document.querySelectorAll(".column");
     let draggedItem = null;

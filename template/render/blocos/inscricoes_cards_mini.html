@@ -1,8 +1,60 @@
 <div class="container">
+    {# FILTROS #}
+    <div class="row">
+        <div class="col-12">
+            <h3>FILTROS</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Inscrição</td>
+                        <td>Status</td>
+                        <td>Sexo</td>
+                        <td>Nome</td>
+                        <td>Quarto</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="q-inscricao" id="q-inscricao" onkeyup="filtrar()"></td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="q-status-sim" id="q-status-sim" onclick="filtrar()">
+                                <label class="form-check-label" for="q-status-sim">Ativo</label>
+                                <br>
+                                <input class="form-check-input" type="checkbox" name="q-status-nao" id="q-status-nao" onclick="filtrar()">
+                                <label class="form-check-label" for="q-status-nao">Inativo</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="q-sexo-sim" id="q-sexo-sim" onclick="filtrar()">
+                                <label class="form-check-label" for="q-sexo-sim">F</label>
+                                <br>
+                                <input class="form-check-input" type="checkbox" name="q-sexo-nao" id="q-sexo-nao" onclick="filtrar()">
+                                <label class="form-check-label" for="q-sexo-nao">M</label>
+                            </div>
+                        </td>
+                        <td><input type="text" name="q-nome" id="q-nome" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                        <td><input type="text" name="q-quarto" id="q-quarto" onkeyup="filtrar()" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# CARDS #}
     <div class="row" id="inscricoes">
         {% for key, inscricao in inscricoes %}
 
-        <div class="col-md-3 col-sm-4">
+        {% set sexoFirst = inscricao.sexo|first|upper %}
+        {% set quartoValue = inscricao.quarto|default('') %}
+
+        <div class="col-md-3 col-sm-4 card-inscricao" 
+             data-id="{{inscricao.id}}" 
+             data-sexo="{{sexoFirst}}" 
+             data-nome="{{inscricao.nome|upper}}" 
+             data-quarto="{{quartoValue|upper}}" 
+             data-status="{{inscricao.idStatus}}">
             <div class="card {% if inscricao.idStatus == 0 %}border border-5 border-danger{% endif %} mt-3">
                 <div class="card-body p-1">
                     <a href="{{base.url}}adm/inscricoes/editar/{{inscricao.id}}" class="h5 tituloNomeInscricao">
@@ -38,3 +90,79 @@
         display: block;
     }
 </style>
+
+<script>
+    // Filtro
+    function filtrar() {
+        // Guarda os valores da pesquisa.
+        id = $('#q-inscricao').val();
+        sexos = $('#q-sexo-sim').is(':checked');
+        sexon = $('#q-sexo-nao').is(':checked');
+        nome = $('#q-nome').val();
+        statuss = $('#q-status-sim').is(':checked');
+        statusn = $('#q-status-nao').is(':checked');
+        quarto = $('#q-quarto').val();
+
+        // Mostra todos os cards
+        $('.card-inscricao').each(function (i) {
+            $(this).show();
+        });
+
+        // Filtra os cards
+        $('.card-inscricao').each(function (i) {
+
+            // Filtra por ID - Inscrição
+            if (id && $(this).data("id") != id) {
+                $(this).hide();
+                return;
+            }
+
+            // Filtra por sexo
+            if (sexos || sexon) {
+                if (sexos && $(this).data("sexo") != 'F') {
+                    $(this).hide();
+                    return;
+                }
+                if (sexon && $(this).data("sexo") != 'M') {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por nome
+            var registro = $(this).data("nome");
+            var pesquisa = nome;
+            if (pesquisa) {
+                var match = pesquisa.split(" ").every(function (palavra) {
+                    var regex = new RegExp(palavra, "i");
+                    return regex.test(registro);
+                });
+                if (!match) {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // status
+            if (statuss || statusn) {
+                if (statuss && $(this).data("status") != 1) {
+                    $(this).hide();
+                    return;
+                }
+                if (statusn && $(this).data("status") != 0) {
+                    $(this).hide();
+                    return;
+                }
+            }
+
+            // Filtra por Quarto
+            if (quarto) {
+                var quartoData = $(this).data("quarto") || '';
+                if (quartoData.indexOf(quarto) === -1) {
+                    $(this).hide();
+                    return;
+                }
+            }
+        });
+    }
+</script>
