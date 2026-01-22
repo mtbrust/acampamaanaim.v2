@@ -1,5 +1,15 @@
 {% block top %}
 
+{# Bloco de aviso para ambiente de teste #}
+{% if BASE_BDS[0].DATABASE != 'desvco15_maanaim' %}
+<div class="bg-warning text-center py-2" style="background-color: #ffc107 !important; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; width: 100%;">
+    <strong class="text-dark">⚠️ AMBIENTE DE TESTE - Este site é de teste ⚠️</strong>
+    <br>
+    <a href="www.acampamaanaim.com.br" class="btn btn-success bg-success mx-1">Siga para www.acampamaanaim.com.br</a>
+</div>
+<div style="height: 78px;"></div>
+{% endif %}
+
 <div class="bg-vermelho">
     <div class="container">
 
