@@ -2,15 +2,15 @@
 
 {# Bloco de aviso para ambiente de teste #}
 {# Exibe o aviso em qualquer ambiente que NÃO seja produção.
-   Consideramos PRODUÇÃO quando:
-   - DATABASE = 'desvco15_maanaim' E
-   - domínio = 'www.acampamaanaim.com.br'
+   Consideramos PRODUÇÃO quando o domínio é exatamente 'www.acampamaanaim.com.br'.
    Em todos os demais casos (local, homolog, teste, etc.), mostra o banner. #}
-{% if not (BASE_BDS[0].DATABASE == 'desvco15_maanaim' and base.domain == 'www.acampamaanaim.com.br') %}
+{% if base.domain != 'www.acampamaanaim.com.br' %}
 <div class="bg-warning text-center py-2" style="background-color: #ffc107 !important; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; width: 100%;">
     <strong class="text-dark">⚠️ AMBIENTE DE TESTE - Este site é de teste ⚠️</strong>
     <br>
-    <a href="https://www.acampamaanaim.com.br" class="btn btn-success bg-success mx-1">Siga para www.acampamaanaim.com.br</a>
+    <span class="text-dark small">Database atual: <b>{{ base.domain }}</b></span>
+    <br>
+    <a href="https://www.acampamaanaim.com.br" class="btn btn-success bg-success mx-1 mt-1">Siga para www.acampamaanaim.com.br</a>
 </div>
 <div style="height: 78px;"></div>
 {% endif %}
