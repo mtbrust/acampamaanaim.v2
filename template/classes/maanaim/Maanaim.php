@@ -44,17 +44,49 @@ class Maanaim
 
         if (isset($options['quartos'])) {
             if (isset($options['pdf'])) {
-                $select = 'id, nome, sexo, quarto, telefone, endCidade, cpf, dtNascimento';
-                $groupBy .= ' id, sexo, quarto, endCidade, nome, cpf, dtNascimento';
+                $select = 'id, nome, sexo, quarto, telefone, endCidade, cpf, dtNascimento, idIngresso';
+                $groupBy .= ' id, sexo, quarto, endCidade, nome, cpf, dtNascimento, idIngresso';
             } else {
-                $select = 'id, nome, sexo, quarto, telefone, endCidade';
-                $groupBy .= 'sexo, quarto, endCidade, nome';
+                $select = 'id, nome, sexo, quarto, telefone, endCidade, idIngresso';
+                $groupBy .= 'sexo, quarto, endCidade, nome, idIngresso';
             }
         }
 
         $inscricoes = $bdInscricoes->select($select, $where, null, null, $groupBy, 1000);
+
         // Garante que sempre retorna um array, mesmo que vazio
-        return is_array($inscricoes) ? $inscricoes : [];
+        if (!is_array($inscricoes) || empty($inscricoes)) {
+            return [];
+        }
+
+        // Acrescenta informações do ingresso (id, título e valor) em cada inscrição.
+        $bdIngressos = new BdIngressos();
+        $cacheIngressos = [];
+
+        foreach ($inscricoes as $key => $linha) {
+            if (isset($linha['idIngresso']) && $linha['idIngresso']) {
+                $idIngresso = $linha['idIngresso'];
+
+                if (!isset($cacheIngressos[$idIngresso])) {
+                    $ingresso = $bdIngressos->selectById($idIngresso);
+                    $cacheIngressos[$idIngresso] = $ingresso ?: [];
+                }
+
+                $ingressoInfo = $cacheIngressos[$idIngresso];
+
+                $inscricoes[$key]['ingresso_id'] = $ingressoInfo['id'] ?? $linha['idIngresso'];
+                $inscricoes[$key]['ingresso_titulo'] = $ingressoInfo['titulo'] ?? '';
+                $inscricoes[$key]['ingresso_valor'] = isset($ingressoInfo['valor_ingresso'])
+                    ? $ingressoInfo['valor_ingresso']
+                    : null;
+            } else {
+                $inscricoes[$key]['ingresso_id'] = null;
+                $inscricoes[$key]['ingresso_titulo'] = '';
+                $inscricoes[$key]['ingresso_valor'] = null;
+            }
+        }
+
+        return $inscricoes;
     }
 
     static function acompanhar($cpf, $id)
