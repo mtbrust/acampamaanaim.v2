@@ -41,7 +41,7 @@
   <header>
     <div style="position: absolute; top: 0px; left: 0px;">
       <h1>
-        ID Inscrição: {{inscricao.id}}
+        {% if inscricao.id is defined and inscricao.id %}ID Inscrição: {{inscricao.id}}{% endif %}
       </h1>
     </div>
     <center>
@@ -60,7 +60,7 @@
         <h1>TERMO DE INSCRIÇÃO, RESPONSABILIDADE, AUTORIZAÇÕES E CONSENTIMENTOS</h1>
         <h2>Acampamento Maanaim de Machado/MG</h2>
         <p><b>CNPJ: 08.397.191/0001-89</b></p>
-        <p><b>ID da Inscrição: {{inscricao.id}}</b></p>
+        {% if inscricao.id is defined and inscricao.id %}<p><b>ID da Inscrição: {{inscricao.id}}</b></p>{% endif %}
         
       </div>
 
@@ -69,17 +69,17 @@
       {# Tópico 1 - Dados Pessoais #}
       <p><b>1. Dados Pessoais do Inscrito</b></p>
       <div class="espacamento">
-        <p>• <b>Nome completo</b>: {{inscricao.nome}}</p>
-        <p>• <b>Data de nascimento</b>: {{inscricao.dtNascimento|date("d/m/Y")}}</p>
-        <p>• <b>Sexo</b>: {{inscricao.sexo}}</p>
-        <p>• <b>CPF</b>: {{inscricao.cpf}}</p>
-        <p>• <b>Endereço completo</b>: {{inscricao.endRua}}, {% if inscricao.endNumero %}nº {{inscricao.endNumero}}{% endif %}{% if inscricao.endComplemento %}, {{inscricao.endComplemento}}{% endif %}, {{inscricao.endBairro}}, {{inscricao.endCidade}}/{{inscricao.endEstado}} – CEP {{inscricao.endCEP}}</p>
-        <p>• <b>Cidade/Estado</b>: {{inscricao.endCidade}}/{{inscricao.endEstado}}</p>
-        <p>• <b>E-mail</b>: {{inscricao.email}}</p>
-        <p>• <b>Telefone</b>: {{inscricao.telefone}}</p>
-        <p>• <b>Telefone para emergência</b>: {{inscricao.telefoneContato}}</p>
-        <p>• <b>Nome do pai</b>: {{inscricao.paiNome}}</p>
-        <p>• <b>Nome da mãe</b>: {{inscricao.maeNome}}</p>
+        <p>• <b>Nome completo</b>: {% if inscricao.nome is defined and inscricao.nome %}{{inscricao.nome}}{% else %}_________________________________________________{% endif %}</p>
+        <p>• <b>Data de nascimento</b>: {% if inscricao.dtNascimento is defined and inscricao.dtNascimento %}{{inscricao.dtNascimento|date("d/m/Y")}}{% else %}__/__/____{% endif %}</p>
+        <p>• <b>Sexo</b>: {% if inscricao.sexo is defined and inscricao.sexo %}{{inscricao.sexo}}{% else %}_________________{% endif %}</p>
+        <p>• <b>CPF</b>: {% if inscricao.cpf is defined and inscricao.cpf %}{{inscricao.cpf}}{% else %}_________________{% endif %}</p>
+        <p>• <b>Endereço completo</b>: {% if inscricao.endRua is defined and inscricao.endRua %}{{inscricao.endRua}}{% if inscricao.endNumero is defined and inscricao.endNumero %}, nº {{inscricao.endNumero}}{% endif %}{% if inscricao.endComplemento is defined and inscricao.endComplemento %}, {{inscricao.endComplemento}}{% endif %}{% if inscricao.endBairro is defined and inscricao.endBairro %}, {{inscricao.endBairro}}{% endif %}{% if inscricao.endCidade is defined and inscricao.endCidade %}, {{inscricao.endCidade}}{% endif %}{% if inscricao.endEstado is defined and inscricao.endEstado %}/{{inscricao.endEstado}}{% endif %}{% if inscricao.endCEP is defined and inscricao.endCEP %} – CEP {{inscricao.endCEP}}{% endif %}{% else %}_________________________________________________________________________________{% endif %}</p>
+        <p>• <b>Cidade/Estado</b>: {% if inscricao.endCidade is defined and inscricao.endCidade and inscricao.endEstado is defined and inscricao.endEstado %}{{inscricao.endCidade}}/{{inscricao.endEstado}}{% else %}_________________/__{% endif %}</p>
+        <p>• <b>E-mail</b>: {% if inscricao.email is defined and inscricao.email %}{{inscricao.email}}{% else %}_________________________________________________{% endif %}</p>
+        <p>• <b>Telefone</b>: {% if inscricao.telefone is defined and inscricao.telefone %}{{inscricao.telefone}}{% else %}_________________{% endif %}</p>
+        <p>• <b>Telefone para emergência</b>: {% if inscricao.telefoneContato is defined and inscricao.telefoneContato %}{{inscricao.telefoneContato}}{% else %}_________________{% endif %}</p>
+        <p>• <b>Nome do pai</b>: {% if inscricao.paiNome is defined and inscricao.paiNome %}{{inscricao.paiNome}}{% else %}_________________________________________________{% endif %}</p>
+        <p>• <b>Nome da mãe</b>: {% if inscricao.maeNome is defined and inscricao.maeNome %}{{inscricao.maeNome}}{% else %}_________________________________________________{% endif %}</p>
       </div>
       
 
@@ -88,20 +88,68 @@
       {# Tópico 2 - Informações Médicas #}
       <p><b>2. Informações Médicas e Autorizações</b></p>
       <div class="espacamento">
-        <p><b>2.1 Alergias</b>: {% if inscricao.alergiaR %}Sim. Qual? {{inscricao.alergia}}{% else %}Não possui.{% endif %}</p>
-        <p><b>2.2 Uso de medicamentos contínuos</b>: {% if inscricao.medicamentoR %}Sim. Qual? {{inscricao.medicamento}}{% else %}Não utiliza.{% endif %}</p>
+        {# 2.1 Alergias #}
+        {% if termo_em_branco is defined and termo_em_branco %}
+        <p><b>2.1 Alergias</b>: (  ) Sim. Qual? _________________ (  ) Não possui.</p>
+        {% elseif inscricao.alergiaR is defined and (inscricao.alergiaR == '1' or inscricao.alergiaR == 1) %}
+        <p><b>2.1 Alergias</b>: Sim. Qual? {{inscricao.alergia|default('')}}</p>
+        {% elseif inscricao.alergiaR is defined and (inscricao.alergiaR == '0' or inscricao.alergiaR == 0) %}
+        <p><b>2.1 Alergias</b>: (  ) Sim. Qual? _________________ (X) Não possui.</p>
+        {% else %}
+        <p><b>2.1 Alergias</b>: (  ) Sim. Qual? _________________ (  ) Não possui.</p>
+        {% endif %}
+
+        {# 2.2 Uso de medicamentos #}
+        {% if termo_em_branco is defined and termo_em_branco %}
+        <p><b>2.2 Uso de medicamentos</b>: (  ) Sim. Qual? _________________ (  ) Não utiliza.</p>
+        {% elseif inscricao.medicamentoR is defined and (inscricao.medicamentoR == '1' or inscricao.medicamentoR == 1) %}
+        <p><b>2.2 Uso de medicamentos</b>: Sim. Qual? {{inscricao.medicamento|default('')}}</p>
+        {% elseif inscricao.medicamentoR is defined and (inscricao.medicamentoR == '0' or inscricao.medicamentoR == 0) %}
+        <p><b>2.2 Uso de medicamentos</b>: (  ) Sim. Qual? _________________ (X) Não utiliza.</p>
+        {% else %}
+        <p><b>2.2 Uso de medicamentos</b>: (  ) Sim. Qual? _________________ (  ) Não utiliza.</p>
+        {% endif %}
         
         <p><b>2.3 Responsabilidade sobre condições de saúde e acomodações</b></p>
-        <p>É de inteira responsabilidade do inscrito, ou do representante legal (no caso de menor de idade), verificar se as instalações, acomodações, estruturas físicas, atividades e ambientes do Acampamento Maanaim são adequados às necessidades médicas, físicas e psicológicas do participante.</p>
+        <p>É de inteira responsabilidade do inscrito, ou do representante legal (no caso de menor de idade), verificar se as instalações, acomodações, estruturas físicas, atividades e ambientes do evento são adequados às necessidades médicas, físicas e psicológicas do participante.</p>
         <p>O inscrito ou representante legal declara que:</p>
         <p>• Analisará as acomodações no momento do check-in;</p>
-        <p>• Terá o prazo de 1 (uma) hora após o check-in para informar à equipe organizadora qualquer incompatibilidade que possa causar risco à saúde do inscrito;</p>
-        <p>• Caso não haja comunicação dentro desse período, considera-se que as acomodações e atividades foram avaliadas e consideradas adequadas.</p>
+        <p>• Informará imediatamente à equipe organizadora qualquer incompatibilidade que possa causar risco à saúde do inscrito;</p>
+        <p>• Caso não haja comunicação de incompatibilidades, considera-se que as acomodações e atividades foram avaliadas e consideradas adequadas pelo participante ou seu representante legal.</p>
         
         <p><b>2.4 Autorizações Específicas</b></p>
-        <p>• <b>Participação em atividades com água</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
-        <p>• <b>Participação no açude</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
-        <p>• <b>Participação na piscina</b>: {% if inscricao.nadarR %}Autorizado{% else %}Não autorizado{% endif %}</p>
+        {# Participação em atividades com água #}
+        {% if termo_em_branco is defined and termo_em_branco %}
+        <p>• <b>Participação em atividades com água</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% elseif inscricao.nadarR is defined and (inscricao.nadarR == '1' or inscricao.nadarR == 1) %}
+        <p>• <b>Participação em atividades com água</b>: Autorizado</p>
+        {% elseif inscricao.nadarR is defined and (inscricao.nadarR == '0' or inscricao.nadarR == 0) %}
+        <p>• <b>Participação em atividades com água</b>: (  ) Autorizado (X) Não autorizado</p>
+        {% else %}
+        <p>• <b>Participação em atividades com água</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% endif %}
+
+        {# Participação no açude #}
+        {% if termo_em_branco is defined and termo_em_branco %}
+        <p>• <b>Participação no açude</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% elseif inscricao.nadarA is defined and (inscricao.nadarA == '1' or inscricao.nadarA == 1) %}
+        <p>• <b>Participação no açude</b>: Autorizado</p>
+        {% elseif inscricao.nadarA is defined and (inscricao.nadarA == '0' or inscricao.nadarA == 0) %}
+        <p>• <b>Participação no açude</b>: (  ) Autorizado (X) Não autorizado</p>
+        {% else %}
+        <p>• <b>Participação no açude</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% endif %}
+
+        {# Participação na piscina #}
+        {% if termo_em_branco is defined and termo_em_branco %}
+        <p>• <b>Participação na piscina</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% elseif inscricao.nadarP is defined and (inscricao.nadarP == '1' or inscricao.nadarP == 1) %}
+        <p>• <b>Participação na piscina</b>: Autorizado</p>
+        {% elseif inscricao.nadarP is defined and (inscricao.nadarP == '0' or inscricao.nadarP == 0) %}
+        <p>• <b>Participação na piscina</b>: (  ) Autorizado (X) Não autorizado</p>
+        {% else %}
+        <p>• <b>Participação na piscina</b>: (  ) Autorizado (  ) Não autorizado</p>
+        {% endif %}
       </div>
       
 
@@ -113,7 +161,7 @@
         <p><b>3.1 Idade mínima</b>: Caso seja constatada falsidade ou divergência na idade declarada, o acampamento poderá cancelar a inscrição.</p>
         <p><b>3.2 Quarteis masculinos e femininos</b>: Proibida a entrada de participantes do sexo oposto nos dormitórios.</p>
         <p><b>3.3 Permanência no local</b>: Qualquer saída deve ser previamente autorizada pela equipe organizadora.</p>
-        <p><b>3.4 Vestimenta e comportamento</b>: Conduta e roupas devem respeitar os padrões cristãos do evento.</p>
+        <p><b>3.4 Vestimenta e comportamento</b>: Conduta e roupas devem respeitar os padrões éticos e morais estabelecidos pela organização do evento.</p>
         <p><b>3.5 Penalidades</b>: O inscrito poderá ser retirado após três advertências ou imediatamente em caso de conduta grave.</p>
         <p><b>3.6 Autoridade</b>: O inscrito deve acatar orientações da diretoria, líderes e funcionários.</p>
         <p><b>3.7 Pertences</b>: O acampamento não se responsabiliza por objetos pessoais.</p>
@@ -121,7 +169,7 @@
         <p><b>3.9 Substâncias proibidas</b>: É proibido portar ou consumir álcool, cigarros ou entorpecentes.</p>
         <p><b>3.10 Itens obrigatórios</b>: Roupa de cama, cobertor, toalha, itens de higiene, prato, talheres e copo.</p>
         <p><b>3.11 Atividades aquáticas</b>: Permitidas apenas com autorização e traje adequado.</p>
-        <p><b>3.12 Realização do evento</b>: O evento ocorrerá apenas com no mínimo 150 inscritos; caso contrário, o valor será devolvido.</p>
+        <p><b>3.12 Realização do evento</b>: O evento poderá ser cancelado ou adiado caso não atinja o número mínimo de participantes necessário para sua realização; nesses casos, os valores pagos serão devolvidos conforme política de reembolso estabelecida.</p>
         <p><b>3.13 Aceitação</b>: A inscrição implica concordância total com este termo.</p>
       </div>
       
@@ -132,9 +180,10 @@
       <p><b>4. Responsabilidade Civil</b></p>
       <div class="espacamento">
         <p>O inscrito ou o representante legal declara estar ciente de que:</p>
-        <p>• O Acampamento Maanaim não se responsabiliza por acidentes decorrentes de comportamento inadequado, descumprimento das regras ou uso indevido das instalações.</p>
-        <p>• As atividades podem envolver esforço físico moderado e contato com ambientes naturais (como mata, açude, piscina e trilhas).</p>
-        <p>• O inscrito participa por livre e espontânea vontade, assumindo integral responsabilidade por eventuais danos causados a si mesmo, a terceiros ou ao patrimônio.</p>
+        <p>• A organização do evento se responsabiliza pela manutenção adequada das instalações e pela supervisão das atividades, nos limites de sua capacidade de controle e prevenção.</p>
+        <p>• A organização não se responsabiliza por acidentes decorrentes de comportamento inadequado, descumprimento das regras estabelecidas, uso indevido das instalações ou atos de terceiros alheios ao controle da organização.</p>
+        <p>• As atividades podem envolver esforço físico moderado e contato com ambientes naturais, sendo de responsabilidade do participante ou seu representante legal avaliar sua capacidade física e psicológica para participar.</p>
+        <p>• O inscrito participa por livre e espontânea vontade, assumindo os riscos inerentes às atividades, nos limites permitidos pela legislação vigente.</p>
       </div>
       
 
@@ -143,8 +192,8 @@
       {# Tópico 5 - Autorização Médica #}
       <p><b>5. Autorização para Atendimento Médico</b></p>
       <div class="espacamento">
-        <p>Autorizo a equipe do acampamento a prestar primeiros socorros e, se necessário, encaminhar o inscrito para atendimento hospitalar, sendo as despesas de responsabilidade do inscrito ou do representante legal.</p>
-        <p>Hospitais de referência: Machado/MG e Alfenas/MG.</p>
+        <p>Autorizo a equipe organizadora do evento a prestar primeiros socorros e, em caso de necessidade, encaminhar o inscrito para atendimento médico-hospitalar, sendo as despesas decorrentes de responsabilidade do inscrito ou do representante legal.</p>
+        <p>Em caso de emergência, o atendimento será realizado no estabelecimento de saúde mais próximo e adequado à situação, conforme critério médico.</p>
       </div>
       
 
@@ -153,7 +202,8 @@
       {# Tópico 6 - Direito de Imagem #}
       <p><b>6. Autorização de Uso de Imagem (Direito de Imagem)</b></p>
       <div class="espacamento">
-        <p>Autorizo o Acampamento Maanaim a utilizar imagens, vídeos e gravações do inscrito para fins institucionais, promocionais e publicitários, de forma gratuita, sem restrição de prazo ou mídia.</p>
+        <p>Autorizo a organização do evento a utilizar imagens, vídeos e gravações do inscrito capturadas durante o evento, para fins institucionais, promocionais e publicitários relacionados ao evento, em qualquer mídia (impressa, digital, redes sociais, televisão, etc.), de forma gratuita e pelo prazo de 5 (cinco) anos, contados a partir da data do evento.</p>
+        <p>Esta autorização pode ser revogada a qualquer momento mediante comunicação escrita à organização, sendo que a revogação não afetará o uso de imagens já publicadas anteriormente.</p>
       </div>
       
 
@@ -163,23 +213,25 @@
       <p><b>7. Cláusula de Proteção de Dados (LGPD – Lei 13.709/2018)</b></p>
       <div class="espacamento">
         <p>O inscrito, ou seu representante legal, declara ciência de que:</p>
-        <p><b>1. Os dados fornecidos serão utilizados exclusivamente para:</b></p>
-        <p>• identificação do inscrito,</p>
-        <p>• registro da participação no evento,</p>
-        <p>• questões de segurança, saúde e contato,</p>
-        <p>• cumprimento de obrigações legais.</p>
-        <p><b>2. O Acampamento Maanaim compromete-se a:</b></p>
-        <p>• armazenar e tratar os dados de forma segura;</p>
-        <p>• não compartilhar informações com terceiros, salvo por exigência legal ou necessidade médica emergencial;</p>
-        <p>• permitir, mediante solicitação, acesso, correção ou exclusão dos dados conforme a LGPD.</p>
-        <p><b>3. O titular dos dados concede autorização expressa para o tratamento das informações aqui fornecidas.</b></p>
+        <p><b>1. Os dados pessoais fornecidos serão utilizados exclusivamente para:</b></p>
+        <p>• identificação e registro da participação no evento;</p>
+        <p>• questões de segurança, saúde e contato durante e após o evento;</p>
+        <p>• cumprimento de obrigações legais e regulamentares;</p>
+        <p>• comunicação sobre o evento e futuros eventos relacionados, mediante consentimento expresso.</p>
+        <p><b>2. A organização do evento compromete-se a:</b></p>
+        <p>• armazenar e tratar os dados pessoais de forma segura, adotando medidas técnicas e administrativas adequadas;</p>
+        <p>• não compartilhar informações pessoais com terceiros, salvo por exigência legal, ordem judicial ou necessidade médica emergencial;</p>
+        <p>• permitir, mediante solicitação do titular, o exercício dos direitos previstos na LGPD, incluindo acesso, correção, exclusão, portabilidade e revogação do consentimento.</p>
+        <p><b>3. O titular dos dados pessoais concede autorização expressa e informada para o tratamento das informações aqui fornecidas, podendo revogar tal autorização a qualquer momento, mediante comunicação escrita à organização.</b></p>
+        <p><b>4. Os dados pessoais serão mantidos pelo prazo necessário para cumprimento das finalidades descritas ou conforme exigência legal, sendo posteriormente eliminados de forma segura.</b></p>
       </div>
       
 
       <p><br></p>
 
       {# Tópico 8 - Representante Legal #}
-      {% if inscricao.menor %}
+      {# Mostra se: (tem dados e é menor) OU (é termo em branco e tipo_idade é menor) #}
+      {% if (inscricao.menor is defined and inscricao.menor) or (termo_em_branco is defined and termo_em_branco and tipo_idade is defined and tipo_idade == 'menor') %}
       <p><b>8. Representante Legal (para menores de 18 anos)</b></p>
       <div class="espacamento">
         <p>Se o inscrito for menor de idade, o representante legal declara que:</p>
@@ -187,16 +239,20 @@
         <p>• É responsável pelo menor durante todo o evento, inclusive pelo fornecimento de informações reais e completas sobre sua saúde;</p>
         <p>• Autoriza a participação em todas as atividades descritas;</p>
         <p>• Assume responsabilidade civil pelos atos praticados pelo menor durante o acampamento.</p>
-        <p><b>Nome do responsável legal</b>: {{inscricao.RepNome}}</p>
-        <p><b>CPF</b>: {{inscricao.RepCpf}}</p>
-        <p><b>Telefone</b>: {{inscricao.RepTelefone}}</p>
+        <p><b>Nome do responsável legal</b>: {% if inscricao.RepNome is defined and inscricao.RepNome %}{{inscricao.RepNome}}{% else %}_________________________________________________{% endif %}</p>
+        <p><b>CPF</b>: {% if inscricao.RepCpf is defined and inscricao.RepCpf %}{{inscricao.RepCpf}}{% else %}_________________{% endif %}</p>
+        <p><b>Telefone</b>: {% if inscricao.RepTelefone is defined and inscricao.RepTelefone %}{{inscricao.RepTelefone}}{% else %}_________________{% endif %}</p>
       </div>
       
       <p><br></p>
       {% endif %}
 
-      {# Tópico 9 - Assinatura Digital #}
+      {# Tópico 9 - Assinatura Digital (ajusta numeração se não tiver representante legal) #}
+      {% if (inscricao.menor is defined and inscricao.menor) or (termo_em_branco is defined and termo_em_branco and tipo_idade is defined and tipo_idade == 'menor') %}
       <p><b>9. Assinatura Digital com Validade Jurídica</b></p>
+      {% else %}
+      <p><b>8. Assinatura Digital com Validade Jurídica</b></p>
+      {% endif %}
       <div class="espacamento">
         <p>Este documento será assinado digitalmente, pelo inscrito ou responsável legal, mediante aceite eletrônico e registro no sistema.</p>
         <p>A assinatura digital:</p>
@@ -208,8 +264,12 @@
 
       <p><br></p>
 
-      {# Tópico 10 - Declaração Final #}
+      {# Tópico 10 - Declaração Final (ajusta numeração se não tiver representante legal) #}
+      {% if (inscricao.menor is defined and inscricao.menor) or (termo_em_branco is defined and termo_em_branco and tipo_idade is defined and tipo_idade == 'menor') %}
       <p><b>10. Declaração Final</b></p>
+      {% else %}
+      <p><b>9. Declaração Final</b></p>
+      {% endif %}
       <div class="espacamento">
         <p>Declaro que li, compreendi e concordo com todos os termos acima.</p>
         <p><b>Data</b>: {{info.dataAtual}} de {{info.anoAtual}}</p>
@@ -223,22 +283,20 @@
       <p><br></p>
 
       <p style="text-align: center;">
-        <img src="{{assinaturaRepresentante.dataUri}}" style="max-width: 300px;">
-        <br>
+        {% if assinaturaRepresentante is defined and assinaturaRepresentante.dataUri is defined %}<img src="{{assinaturaRepresentante.dataUri}}" style="max-width: 300px;"><br>{% endif %}
         <b>_____________________________________________________________</b>
       </p>
       <p style="text-align: center;">
         <b>Inscrito / Representante Legal:</b><br>
-        <b>Nome</b>: {% if inscricao.menor %}{{inscricao.RepNome}}{% else %}{{inscricao.nome}}{% endif %}<br>
-        <b>CPF</b>: {% if inscricao.menor %}{{inscricao.RepCpf}}{% else %}{{inscricao.cpf}}{% endif %}<br>
-        <b>Assinatura Digital</b>
+        <b>Nome</b>: {% if inscricao.menor is defined and inscricao.menor and inscricao.RepNome is defined and inscricao.RepNome %}{{inscricao.RepNome}}{% elseif inscricao.nome is defined and inscricao.nome %}{{inscricao.nome}}{% else %}_________________________________________________{% endif %}<br>
+        <b>CPF</b>: {% if inscricao.menor is defined and inscricao.menor and inscricao.RepCpf is defined and inscricao.RepCpf %}{{inscricao.RepCpf}}{% elseif inscricao.cpf is defined and inscricao.cpf %}{{inscricao.cpf}}{% else %}_________________{% endif %}<br>
+        <b>{% if assinaturaRepresentante is defined and assinaturaRepresentante.dataUri is defined %}Assinatura Digital{% else %}Assinatura{% endif %}</b>
       </p>
 
       <p><br></p>
 
       <p style="text-align: center;">
-        <img src="{{assinaturaPresidente.dataUri}}" style="max-width: 300px;">
-        <br>
+        {% if assinaturaPresidente is defined and assinaturaPresidente.dataUri is defined %}<img src="{{assinaturaPresidente.dataUri}}" style="max-width: 300px;"><br>{% endif %}
         <b>_____________________________________________________________</b>
       </p>
       <p style="text-align: center;">

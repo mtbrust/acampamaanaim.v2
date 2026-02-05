@@ -1,0 +1,145 @@
+{{html|raw}}
+
+
+{# 
+    TERMOS E COMPROMISSOS
+    *****************************************************************************    
+#}
+
+<div class="py-90">
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <h1 class="oswald text-bold text-center">
+                    TERMOS E COMPROMISSOS
+                </h1>
+                <p class="text-center mt-3">
+                    Escolha uma das opções abaixo para visualizar ou baixar os termos e compromissos.
+                </p>
+            </div>
+        </div>
+
+        {# Botões de Download e Visualização #}
+        <div class="row my-5">
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Menor de 18 anos</h5>
+                        <p class="card-text">Termo para menores de 18 anos (com representante legal)</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{base.url}}termos/api/download-menor/" class="btn btn-primary" target="_blank" download="Termos-e-Compromissos-Menor-18.pdf">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                            <button type="button" class="btn btn-secondary" onclick="mostrarTermo('menor')">
+                                <i class="fas fa-eye"></i> Ver Termo na Página
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Maior de 18 anos</h5>
+                        <p class="card-text">Termo para maiores de 18 anos</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{base.url}}termos/api/download-maior/" class="btn btn-primary" target="_blank" download="Termos-e-Compromissos-Maior-18.pdf">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                            <button type="button" class="btn btn-secondary" onclick="mostrarTermo('maior')">
+                                <i class="fas fa-eye"></i> Ver Termo na Página
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Área para exibir os termos em HTML #}
+        <div class="row my-5">
+            <div class="col-12">
+                {# Termo Menor de 18 #}
+                <div id="termo-menor" style="display: none;">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Termo para Menor de 18 anos</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="termo-html-content" style="max-height: 800px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; background: #fff;">
+                                {{htmlTermoMenor|raw}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Termo Maior de 18 #}
+                <div id="termo-maior" style="display: none;">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0">Termo para Maior de 18 anos</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="termo-html-content" style="max-height: 800px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; background: #fff;">
+                                {{htmlTermoMaior|raw}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function mostrarTermo(tipo) {
+    // Esconde ambos os termos
+    document.getElementById('termo-menor').style.display = 'none';
+    document.getElementById('termo-maior').style.display = 'none';
+    
+    // Mostra o termo selecionado
+    if (tipo === 'menor') {
+        document.getElementById('termo-menor').style.display = 'block';
+        // Scroll suave até o termo
+        document.getElementById('termo-menor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (tipo === 'maior') {
+        document.getElementById('termo-maior').style.display = 'block';
+        // Scroll suave até o termo
+        document.getElementById('termo-maior').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+
+<style>
+.termo-html-content {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.6;
+}
+
+.termo-html-content h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.termo-html-content h2 {
+    font-size: 16pt;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.termo-html-content p {
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+.termo-html-content .espacamento {
+    margin-left: 30px;
+}
+
+.termo-html-content b {
+    font-weight: bold;
+}
+</style>

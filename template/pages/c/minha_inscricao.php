@@ -339,12 +339,6 @@ class minha_inscricao extends EndPoint
 				$fontBase64 = base64_encode($data);
 				self::$params['font_arizonia'] = 'data:font/ttf;base64, ' . $fontBase64;
 
-				// DevHelper::printr(self::$params['font_arizonia']);
-
-				// DevHelper::printr(self::$params);
-				// DevHelper::printr(self::$params['inscricao']);
-				// DevHelper::printr(self::$params['evento']);
-
 				// Se for menor de idade, usa o nome do representante
 				$nomeAssinatura = $inscricao['nome'];
 				if (!empty($inscricao['menor']) && $inscricao['menor'] == 1 && !empty($inscricao['RepNome'])) {
@@ -371,15 +365,6 @@ class minha_inscricao extends EndPoint
 
 
 				$htmlTermos = Render::obj('docs/termos-e-compromissos.html', self::$params);
-				// self::$params['render']['content_type'] = 'text/html';
-				// DevHelper::printr($htmlTermos);
-				// DevHelper::printr(self::$params['base']['dir'] . self::$params['config']['image']);
-				// DevHelper::printr(self::$params['base']['dir']);
-				// $arquivos = scandir(self::$params['base']['dir'] . 'template/assets/midias/logo/');
-				// echo $_SERVER['DOCUMENT_ROOT'];
-				// $arquivos = scandir('../../desv/acampamaanaim.v2/template/assets/midias/logo/');
-				// $arquivos = scandir('../../');
-				// DevHelper::printr($arquivos);
 
 				self::$params['render']['content_type'] = 'application/pdf';
 				$ret = PDF::arquivo($htmlTermos);
