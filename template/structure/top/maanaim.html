@@ -1,6 +1,8 @@
 {% block top %}
 
 {# Bloco de aviso para ambiente de teste #}
+{# Exibe o aviso em qualquer ambiente que NÃO esteja usando o banco de produção.
+   Produção usa o DATABASE 'desvco15_maanaim'. Em todos os demais, mostra o banner. #}
 {% if BASE_BDS[0].DATABASE != 'desvco15_maanaim' %}
 <div class="bg-warning text-center py-2" style="background-color: #ffc107 !important; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; width: 100%;">
     <strong class="text-dark">⚠️ AMBIENTE DE TESTE - Este site é de teste ⚠️</strong>
