@@ -4,6 +4,7 @@
 {# Exibe o aviso em qualquer ambiente que NÃO seja produção.
    Consideramos PRODUÇÃO quando o domínio é 'www.acampamaanaim.com.br' ou 'acampamaanaim.com.br'.
    Em todos os demais casos (local, homolog, teste, etc.), mostra o banner. #}
+   <!-- Atualizado -->
 {% if base.domain not in ['www.acampamaanaim.com.br', 'acampamaanaim.com.br'] %}
 <div class="bg-warning text-center py-2" style="background-color: #ffc107 !important; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; width: 100%;">
     <strong class="text-dark">⚠️ AMBIENTE DE TESTE - Este site é de teste ⚠️</strong>
