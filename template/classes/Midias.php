@@ -81,6 +81,10 @@ class Midias
         // Verifica se a pasta existe.
         self::checkFolderExists();
 
+        if (self::$result['error']) {
+            return self::$result;
+        }
+
         // Verifica se consegiu salvar a imagem.
         self::checkUploadFile();
 
@@ -214,20 +218,14 @@ class Midias
      */
     static function checkFolderExists()
     {
-        $pastas = explode('/', self::$options['path']);
+        $path = rtrim(self::$options['path'], '/\\');
 
-        // Guarda início do diretório.
-        $temp_pasta = '';
-
-        // Percorre cada pasta para criar a pasta solicitada se não existir.
-        foreach ($pastas as $pasta) {
-            // Caso tenha valor
-            if ($pasta) {
-                $temp_pasta .= $pasta . '/';
-                // Verifica se diretório existe e já cria.
-                if (!file_exists($temp_pasta)) {
-                    mkdir($temp_pasta, 0755, true);
-                }
+        // Caminhos absolutos (ex.: /home/.../midias/eventos) precisam manter a barra inicial.
+        // O loop antigo com explode perdia o "/" e criava pastas no lugar errado.
+        if ($path !== '' && !is_dir($path)) {
+            if (!mkdir($path, 0755, true) && !is_dir($path)) {
+                self::$result['msg'] .= 'Não foi possível criar a pasta de destino. ';
+                self::$result['error'] = 1;
             }
         }
     }
