@@ -156,29 +156,72 @@ class Maanaim
 
     static function adicionarInscricao($inscricao, $options = [])
     {
+        self::$error = false;
+        self::$msg = [];
+        self::$inserir = true;
+
         // Prepara e trata os campos.
         self::preparaInscricao($inscricao, $options);
 
-        // todo - Apenas para teste.
-        // self::$inserir = false;
-
-        // Insere evento.
+        // Insere inscrição.
         if (self::$inserir) {
-            // Inserir a inscrição no banco de dados.
+            self::sanitizarInscricaoParaInsert();
+
             $bdInscricao = new BdInscricoes();
             $idInscricao = $bdInscricao->insert(self::$inscricao);
-            self::$inscricao['id'] = $idInscricao;
-            self::$msg[] = 'Acompanhe sua inscrição no menu <br><b>"MINHA INSCRIÇÃO"</b><br>Logo após informe o <br>cpf: <b>"' . self::$inscricao['cpf'] . '"</b> e o <br>identificador: <b>"' . $idInscricao . '"</b>.';
+
+            if (!$idInscricao) {
+                self::$error = true;
+                self::$msg[] = 'Erro ao salvar a inscrição no banco de dados. Entre em contato conosco ou tente novamente.';
+                if (defined('BASE_CONFIG') && !empty(BASE_CONFIG['SHOW_ERRORS'])) {
+                    self::$msg[] = 'Detalhe técnico: ' . \desv\controllers\DataBase::$sql;
+                }
+            } else {
+                self::$inscricao['id'] = $idInscricao;
+                self::$msg[] = 'Acompanhe sua inscrição no menu <br><b>"MINHA INSCRIÇÃO"</b><br>Logo após informe o <br>cpf: <b>"' . self::$inscricao['cpf'] . '"</b> e o <br>identificador: <b>"' . $idInscricao . '"</b>.';
+            }
         }
 
         // Retornar informações do cadastro e status da inscrição.
         return [
             'error'       => self::$error,
-            'idInscricao' => isset(self::$inscricao['id']) ? self::$inscricao['id'] : 0, // 0 - não foi inserido.
-            'cpf'         => self::$inscricao['cpf'],
+            'idInscricao' => !empty(self::$inscricao['id']) ? self::$inscricao['id'] : 0,
+            'cpf'         => self::$inscricao['cpf'] ?? '',
             'inscricao'   => self::$inscricao,
             'msg'         => self::$msg,
         ];
+    }
+
+    /**
+     * sanitizarInscricaoParaInsert
+     *
+     * Ajusta campos vazios antes do INSERT (MariaDB/MySQL strict rejeita '' em DATE/BOOLEAN).
+     */
+    static private function sanitizarInscricaoParaInsert()
+    {
+        if (empty(self::$inscricao['id'])) {
+            unset(self::$inscricao['id']);
+        }
+
+        $camposData = [
+            'dtNascimento', 'paiDtNascimento', 'maeDtNascimento', 'RepDtNascimento',
+        ];
+        foreach ($camposData as $campo) {
+            if (isset(self::$inscricao[$campo]) && self::$inscricao[$campo] === '') {
+                self::$inscricao[$campo] = null;
+            }
+        }
+
+        $camposBoolean = ['menor', 'menorLimite', 'termos', 'pago', 'documentacao', 'checkin'];
+        foreach ($camposBoolean as $campo) {
+            if (isset(self::$inscricao[$campo]) && self::$inscricao[$campo] === '') {
+                self::$inscricao[$campo] = null;
+            }
+        }
+
+        if (isset(self::$inscricao['obs']) && strlen(self::$inscricao['obs']) > 255) {
+            self::$inscricao['obs'] = substr(self::$inscricao['obs'], 0, 255);
+        }
     }
 
     static public function preparaInscricao($inscricao, $options)
@@ -205,6 +248,9 @@ class Maanaim
 
         // Verificar os campos obrigatórios.
         self::verificaCamposObrigatorios();
+
+        // Verificar se o ingresso está na janela de venda (já liberado e não encerrado).
+        self::verificaValidadeIngresso($options);
 
         // Limpar campos.
         self::limparCampos();
@@ -362,6 +408,32 @@ class Maanaim
         }
 
         return !self::$error;
+    }
+
+    /**
+     * verificaValidadeIngresso
+     *
+     * Impede inscrição em ingresso ainda não liberado ou já encerrado.
+     */
+    static public function verificaValidadeIngresso($options = [])
+    {
+        if (!self::$inserir || !empty($options['editar']) || !empty($options['admin'])) {
+            return true;
+        }
+
+        if (empty(self::$inscricao['idIngresso'])) {
+            return false;
+        }
+
+        $ingresso = self::listarIngresso(self::$inscricao['idIngresso'], ['validade' => true]);
+        if (!$ingresso) {
+            self::$error = true;
+            self::$msg[] = 'Este ingresso ainda não está disponível para inscrição ou já foi encerrado.';
+            self::$inserir = false;
+            return false;
+        }
+
+        return true;
     }
 
     static public function limparCampos()
@@ -569,6 +641,10 @@ class Maanaim
                 self::incluirMidiasEvento($evento);
                 $eventos[$key] = $evento;
 
+                $agora = self::agoraDb();
+                $eventos[$key]['evento_futuro'] = !empty($evento['dt_fim_evento'])
+                    && $evento['dt_fim_evento'] > $agora;
+
                 $optionsIngresso = [
                     'validade' => $options['ingressoValidade'],
                 ];
@@ -651,12 +727,32 @@ class Maanaim
         return $id;
     }
 
+    /**
+     * agoraDb
+     *
+     * Horário atual no fuso da aplicação (America/Sao_Paulo).
+     * Usado nas comparações de validade do ingresso para não depender do time_zone do MySQL/PHP.
+     */
+    static private function agoraDb()
+    {
+        $tz = (defined('BASE_CONFIG') && !empty(BASE_CONFIG['TIMEZONE']))
+            ? BASE_CONFIG['TIMEZONE']
+            : 'America/Sao_Paulo';
+
+        return (new \DateTime('now', new \DateTimeZone($tz)))->format('Y-m-d H:i:s');
+    }
+
     static function maiorValorIngresso($idEvento)
     {
         // Instancia da tabela de Ingressos.
         $bdIngressos = new BdIngressos();
 
-        $where = "id_evento = " . $idEvento . " and  dt_fim_ingresso > NOW()";
+        $agora = self::agoraDb();
+        // Apenas ingressos já liberados e ainda não encerrados.
+        $where = "id_evento = " . (int) $idEvento
+            . " AND idStatus = 1"
+            . " AND dt_ini_ingresso <= '" . $agora . "'"
+            . " AND dt_fim_ingresso > '" . $agora . "'";
         $orderby = 'valor_ingresso DESC';
 
         // Obtém ingressos.
@@ -675,11 +771,11 @@ class Maanaim
         // Valores default para envio de imagens.
         $optionsDefault = [
             'ativos'   => false,   // Apenas idStatus 1 [Ativo].
-            'validade' => true,    // Dentro da validade do ingresso.
+            'validade' => true,    // Dentro da janela de venda (já iniciou e não encerrou).
             'qtd'      => 10,      // Quantidade de resultados.
             'page'     => 1,       // Página.
             'id'       => 0,       // ID de evento específico.
-            'futuros'  => true,   // Apenas ingressos com data de fim maior que hoje.
+            'futuros'  => false,   // true = inclui ingressos ainda não liberados (dt_ini no futuro).
         ];
         $options = array_merge($optionsDefault, $options);
 
@@ -692,16 +788,17 @@ class Maanaim
         // Instancia da tabela de Ingressos.
         $bdIngressos = new BdIngressos();
 
-        $where[] = "id_evento = " . $idEvento;
+        $where[] = "id_evento = " . (int) $idEvento;
 
-        // Dentro da validade do ingresso.
+        $agora = self::agoraDb();
+
+        // Janela de venda: início já chegou e fim ainda não.
         if ($options['validade']) {
-            $where[] = "dt_fim_ingresso > NOW()";
-        }
-
-        // Dentro da validade do ingresso.
-        if (!$options['futuros']) {
-            $where[] = "dt_ini_ingresso < NOW()";
+            $where[] = "dt_fim_ingresso > '" . $agora . "'";
+            // Por padrão não lista ingresso antes da hora de liberação.
+            if (!$options['futuros']) {
+                $where[] = "dt_ini_ingresso <= '" . $agora . "'";
+            }
         }
 
         $orderby = 'dt_ini_ingresso ASC';
@@ -723,11 +820,13 @@ class Maanaim
         // Instancia da tabela de Ingressos.
         $bdIngressos = new BdIngressos();
 
-        $where = "id = " . $idIngresso . "";
+        $where = "id = " . (int) $idIngresso;
 
-        // Caso seja dentro da validade, busca ingressos válidos.
+        // Caso seja dentro da validade, busca ingressos já liberados e não encerrados.
         if ($options['validade']) {
-            $where .= " and dt_fim_ingresso > NOW()";
+            $agora = self::agoraDb();
+            $where .= " AND dt_ini_ingresso <= '" . $agora . "'"
+                . " AND dt_fim_ingresso > '" . $agora . "'";
         }
 
         $orderby = 'dt_ini_ingresso ASC';

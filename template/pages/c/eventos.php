@@ -155,6 +155,7 @@ class eventos extends EndPoint
 		$evento['maior_valor'] = Maanaim::maiorValorIngresso($idEvento);
 		$options = [
 			'ativos' => true,
+			'validade' => true,
 			'futuros' => false,
 		];
 		$evento['ingressos'] = Maanaim::listarIngressosEvento($idEvento, $options);

@@ -36,9 +36,9 @@
                         <h2 class="oswald text-success text-bold">R$ {{ingresso.valor_ingresso|number_format(2, ',', '.')}}</h2>
                         <span>{{ingresso.desc_ingresso}}</span>
                         <br>
-                        <span>Este ingresso está disponível do dia <b>{{ ingresso.dt_ini_ingresso|date("d/m/Y à\\s H:m") }}</b> até dia <b>{{ ingresso.dt_fim_ingresso|date("d/m/Y à\\s H:m") }}</b></span>
+                        <span>Este ingresso está disponível do dia <b>{{ ingresso.dt_ini_ingresso|date("d/m/Y à\\s H:i") }}</b> até dia <b>{{ ingresso.dt_fim_ingresso|date("d/m/Y à\\s H:i") }}</b></span>
                         <br>
-                        <span>Este ingresso deve ser pago até a data final <b>{{ ingresso.dt_limit_pagamento|date("d/m/Y à\\s H:m") }}</b>.</span>
+                        <span>Este ingresso deve ser pago até a data final <b>{{ ingresso.dt_limit_pagamento|date("d/m/Y à\\s H:i") }}</b>.</span>
                         <br>
                         <span class="text-success">{{ingresso.desc_tipo_pagamento}}</span>
                     </div>

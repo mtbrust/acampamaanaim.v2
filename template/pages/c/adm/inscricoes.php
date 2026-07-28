@@ -144,25 +144,42 @@ class inscricoes extends EndPoint
 			$this->listar($params);
 		} else {
 
-			// self::$params['inscricao'] = MaanaimCarga::fakeInscricao();
-			// DevHelper::printr(self::$params['inscricao']);
-
 			// Pega a inscrição pelo id passado por url.
 			$id = $params['infoUrl']['attr'][1];
 			self::$params['inscricao'] = Maanaim::getInscricaoPorId($id);
-			// DevHelper::printr(self::$params['inscricao']);
+
+			if (!self::$params['inscricao']) {
+				self::$params['html'] = 'Inscrição #' . htmlspecialchars($id) . ' não encontrada.';
+				return;
+			}
+
 			$options = [
 				'ingressoValidade' => false,    // Ingresso dentro da validade.
 			];
 			self::$params['eventos'] = json_encode(Maanaim::listarEventos($options));
 			self::$params['formInscricao'] = true;
-			self::$params['ingressoInfo'] = Maanaim::listarIngresso(self::$params['inscricao']['idIngresso'], ['validade' => false]);
+
+			self::$params['evento'] = Maanaim::listarEvento(self::$params['inscricao']['idEvento']);
+			if (empty(self::$params['evento'])) {
+				self::$params['evento'] = [
+					'ingressos'   => [],
+					'maior_valor' => 0,
+					'idade_minima' => 0,
+				];
+			}
+
+			self::$params['ingressoInfo'] = Maanaim::listarIngresso(
+				self::$params['inscricao']['idIngresso'],
+				['validade' => false]
+			);
+
 			self::$params['evento']['ingressos'] = [];
-			self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
-			self::$params['evento']['maior_valor'] = self::$params['evento']['ingressos'][0]['valor_ingresso'];
-
-
-			// DevHelper::printr(self::$params['inscricao']);
+			if (self::$params['ingressoInfo']) {
+				self::$params['evento']['ingressos'][0] = self::$params['ingressoInfo'];
+				self::$params['evento']['maior_valor'] = self::$params['ingressoInfo']['valor_ingresso'] ?? 0;
+			} else {
+				self::$params['evento']['maior_valor'] = Maanaim::maiorValorIngresso(self::$params['inscricao']['idEvento']);
+			}
 
 			self::$params['inscricaoStatus'] = Maanaim::$statusInscricao;
 			self::$params['urlApiInscricao'] = self::$params['base']['url'] . 'adm/inscricoes/api/';

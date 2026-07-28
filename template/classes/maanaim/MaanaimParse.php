@@ -128,7 +128,7 @@ class MaanaimParse
             "obsCheckin"    => (isset($post['f-obsCheckin'])) ? $post['f-obsCheckin'] : '',
         ];
 
-        if (isset($post['f-id'])) {
+        if (!empty($post['f-id'])) {
             $inscricao['id'] = $post['f-id'];
         }
 
