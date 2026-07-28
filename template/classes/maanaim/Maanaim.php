@@ -354,7 +354,9 @@ class Maanaim
         self::validarCampos(self::$inscricao);
 
         // Verificar se ainda existe vagas. Caso não exista, a inscrição é cadastrada com status fila de espera.
-        self::verificarVagas(self::$inscricao['idEvento'], $options);
+        if (self::$inserir) {
+            self::verificarVagas(self::$inscricao['idEvento'] ?? 0, $options);
+        }
 
         // Acrescentar informações padrão.
         $options = [];
@@ -379,10 +381,10 @@ class Maanaim
         $inscrito = $bdInscricoes->select($fields, $where, null, null, null, 1000);
 
         if (isset($inscrito[0]['cpf'])) {
-
-            self::$inscricao = $inscrito[0];
+            // Mantém os dados do formulário; só acrescenta o id já existente.
+            self::$inscricao['id'] = $inscrito[0]['id'];
             self::$error = true;
-            self::$msg[] = 'Já existe uma inscrição neste evento com este cpf [' . self::$inscricao['cpf'] . '] - Identificador [' . self::$inscricao['id'] . '].';
+            self::$msg[] = 'Já existe uma inscrição neste evento com este cpf [' . $inscrito[0]['cpf'] . '] - Identificador [' . $inscrito[0]['id'] . '].';
             self::$msg[] = 'Acompanhe a sua inscrição ou entre em contato conosco.';
             self::$inserir = false;
         }

@@ -35,13 +35,23 @@ function ajaxDados(url_api, dados, callback, type = 'POST', alert = true) {
             }
         },
         error: function (response) {
-            // Caso não tenha mensagem da api.
-            if (!response || !response.responseText || !JSON.parse(response.responseText).msg) {
-                // Mensagem padrão
-                response = { response: '', msg: 'Erro na chamada AJAX.' };
+            // Caso a resposta não seja JSON válido (ex.: Warning PHP em HTML), evita quebrar o callback.
+            var parsed = null;
+            try {
+                if (response && response.responseJSON) {
+                    parsed = response.responseJSON;
+                } else if (response && response.responseText) {
+                    parsed = JSON.parse(response.responseText);
+                }
+            } catch (e) {
+                console.error('Resposta AJAX inválida (não é JSON):', response && response.responseText ? response.responseText.substring(0, 500) : response);
+                parsed = null;
+            }
+
+            if (!parsed || !parsed.msg) {
+                response = { body: { error: true }, msg: 'Erro na chamada AJAX.', status: response ? response.status : 0 };
             } else {
-                // Mensagem do servidor.
-                response = { response: response.responseJSON, msg: JSON.parse(response.responseText).msg, status: response.status };
+                response = { body: parsed.body || parsed.response || parsed, msg: parsed.msg, status: response.status };
             }
             this.myCallback(response);
 
