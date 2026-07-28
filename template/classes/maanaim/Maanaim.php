@@ -136,8 +136,9 @@ class Maanaim
         // Prepara e trata os campos.
         self::preparaInscricao($inscricao, $options);
 
-        // Edita evento.
+        // Edita inscrição.
         if (self::$inserir) {
+            self::sanitizarInscricaoParaInsert();
             // Inserir a inscrição no banco de dados.
             $bdInscricao = new BdInscricoes();
             $idInscricao = $bdInscricao->update(self::$inscricao['id'], self::$inscricao);
@@ -170,12 +171,20 @@ class Maanaim
             $bdInscricao = new BdInscricoes();
             $idInscricao = $bdInscricao->insert(self::$inscricao);
 
+            $debug = null;
             if (!$idInscricao) {
                 self::$error = true;
-                self::$msg[] = 'Erro ao salvar a inscrição no banco de dados. Entre em contato conosco ou tente novamente.';
-                if (defined('BASE_CONFIG') && !empty(BASE_CONFIG['SHOW_ERRORS'])) {
-                    self::$msg[] = 'Detalhe técnico: ' . \desv\controllers\DataBase::$sql;
-                }
+                self::$msg[] = 'Erro ao salvar a inscrição. Tente novamente ou entre em contato conosco.';
+                $pdoError = \desv\controllers\DataBase::$lastError ?? null;
+                $debug = [
+                    'mysql' => is_array($pdoError) ? ($pdoError[2] ?? '') : '',
+                    'sql'   => \desv\controllers\DataBase::$sql,
+                    'pdo'   => $pdoError,
+                ];
+                \desv\classes\ManagerLogs::registerError(
+                    'inscricao/insert',
+                    '[mysql] ' . $debug['mysql'] . ' [sql] ' . $debug['sql']
+                );
             } else {
                 self::$inscricao['id'] = $idInscricao;
                 self::$msg[] = 'Acompanhe sua inscrição no menu <br><b>"MINHA INSCRIÇÃO"</b><br>Logo após informe o <br>cpf: <b>"' . self::$inscricao['cpf'] . '"</b> e o <br>identificador: <b>"' . $idInscricao . '"</b>.';
@@ -189,13 +198,15 @@ class Maanaim
             'cpf'         => self::$inscricao['cpf'] ?? '',
             'inscricao'   => self::$inscricao,
             'msg'         => self::$msg,
+            'debug'       => $debug ?? null,
         ];
     }
 
     /**
      * sanitizarInscricaoParaInsert
      *
-     * Ajusta campos vazios antes do INSERT (MariaDB/MySQL strict rejeita '' em DATE/BOOLEAN).
+     * Ajusta campos vazios/inválidos antes do INSERT (MariaDB strict rejeita '' em DATE/BOOLEAN
+     * e corta/rejeita valores maiores que o tamanho da coluna).
      */
     static private function sanitizarInscricaoParaInsert()
     {
@@ -219,9 +230,93 @@ class Maanaim
             }
         }
 
+        if (isset(self::$inscricao['valorPago']) && self::$inscricao['valorPago'] === '') {
+            self::$inscricao['valorPago'] = null;
+        }
+
+        // CEP: apenas números, máx. 8 (coluna VARCHAR(8)).
+        if (isset(self::$inscricao['endCEP'])) {
+            self::$inscricao['endCEP'] = substr(preg_replace('/\D/', '', self::$inscricao['endCEP']), 0, 8);
+        }
+
+        // Telefones: apenas números (colunas VARCHAR(14)).
+        foreach (['telefone', 'telefoneContato', 'RepTelefone'] as $campoTel) {
+            if (isset(self::$inscricao[$campoTel]) && self::$inscricao[$campoTel] !== '') {
+                self::$inscricao[$campoTel] = substr(preg_replace('/\D/', '', self::$inscricao[$campoTel]), 0, 14);
+            }
+        }
+
+        // UF: coluna VARCHAR(2) — aceita sigla ou nome do estado.
+        if (isset(self::$inscricao['endEstado']) && self::$inscricao['endEstado'] !== '') {
+            self::$inscricao['endEstado'] = self::normalizarUf(self::$inscricao['endEstado']);
+        }
+
         if (isset(self::$inscricao['obs']) && strlen(self::$inscricao['obs']) > 255) {
             self::$inscricao['obs'] = substr(self::$inscricao['obs'], 0, 255);
         }
+    }
+
+    /**
+     * normalizarUf
+     *
+     * Converte nome/sigla de estado para UF de 2 letras.
+     */
+    static private function normalizarUf($estado)
+    {
+        $estado = trim((string) $estado);
+        if ($estado === '') {
+            return '';
+        }
+
+        if (strlen($estado) === 2) {
+            return strtoupper($estado);
+        }
+
+        $mapa = [
+            'acre' => 'AC',
+            'alagoas' => 'AL',
+            'amapa' => 'AP',
+            'amazonas' => 'AM',
+            'bahia' => 'BA',
+            'ceara' => 'CE',
+            'distrito federal' => 'DF',
+            'espirito santo' => 'ES',
+            'goias' => 'GO',
+            'maranhao' => 'MA',
+            'mato grosso' => 'MT',
+            'mato grosso do sul' => 'MS',
+            'minas gerais' => 'MG',
+            'para' => 'PA',
+            'paraiba' => 'PB',
+            'parana' => 'PR',
+            'pernambuco' => 'PE',
+            'piaui' => 'PI',
+            'rio de janeiro' => 'RJ',
+            'rio grande do norte' => 'RN',
+            'rio grande do sul' => 'RS',
+            'rondonia' => 'RO',
+            'roraima' => 'RR',
+            'santa catarina' => 'SC',
+            'sao paulo' => 'SP',
+            'sergipe' => 'SE',
+            'tocantins' => 'TO',
+        ];
+
+        $chave = mb_strtolower($estado, 'UTF-8');
+        $chave = preg_replace('/[áàãâä]/u', 'a', $chave);
+        $chave = preg_replace('/[éèêë]/u', 'e', $chave);
+        $chave = preg_replace('/[íìîï]/u', 'i', $chave);
+        $chave = preg_replace('/[óòõôö]/u', 'o', $chave);
+        $chave = preg_replace('/[úùûü]/u', 'u', $chave);
+        $chave = preg_replace('/[ç]/u', 'c', $chave);
+        $chave = preg_replace('/[^a-z0-9\s]/', '', $chave);
+        $chave = trim(preg_replace('/\s+/', ' ', $chave));
+
+        if (isset($mapa[$chave])) {
+            return $mapa[$chave];
+        }
+
+        return strtoupper(substr($estado, 0, 2));
     }
 
     static public function preparaInscricao($inscricao, $options)

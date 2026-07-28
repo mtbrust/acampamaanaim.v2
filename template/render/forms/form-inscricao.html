@@ -1223,8 +1223,16 @@
 		// dados.append('adicionar', 'adicionar'); // Token para uso de API
 		// ajaxDados('{{global.URL_RAIZ}}inscricao/api/post/inscricao', dados, function (ret) {
 		ajaxDados('{{urlApiInscricao}}' + endpoint + '/', dados, function (ret) {
-			// Para testes
-			// console.log(ret);
+			// Detalhe técnico (Network / Console) — não exibido ao usuário.
+			if (ret.body && ret.body.debug) {
+				console.error('Inscrição debug:', ret.body.debug);
+			}
+
+			// Mensagem amigável para o usuário.
+			var msgUsuario = ret.msg;
+			if (!msgUsuario && ret.body && ret.body.msg) {
+				msgUsuario = Array.isArray(ret.body.msg) ? ret.body.msg.join('<br>') : ret.body.msg;
+			}
 
 			// Verifica se não teve erro.
 			if (!ret.body.error) {
@@ -1232,7 +1240,7 @@
 				Swal.fire({
 					icon: "success",
 					title: "Sucesso",
-					html: ret.body.msg,
+					html: Array.isArray(ret.body.msg) ? ret.body.msg.join('<br>') : ret.body.msg,
 					showConfirmButton: true,
 					confirmButtonText: "Acompanhar Inscrição",
 
@@ -1258,7 +1266,7 @@
 			Swal.fire({
 				icon: 'warning',
 				title: 'Atenção',
-				html: ret.msg,
+				html: msgUsuario,
 				showConfirmButton: true,
 				confirmButtonText: "Acompanhar Inscrição",
 			}).then((result) => {
@@ -1273,7 +1281,7 @@
 			Swal.fire({
 				icon: 'error',
 				title: 'Erro',
-				html: ret.msg,
+				html: msgUsuario,
 				showConfirmButton: true,
 				confirmButtonText: "Revisar",
 			}).then((result) => {
